@@ -116,9 +116,9 @@
                 insertDialog,
                 deleteDialog
             );
+        });       
                 var employees = $.ajax({ url: '<%= Url.Action("GetList","Employee") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the employees.'); } }).responseText;
                 var costCenters = $.ajax({ url: '<%= Url.Action("GetList","CostCenter") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the costCenters.'); } }).responseText;
-        });       
     </script>
 
     <div id="dialog" title="Status">

@@ -116,8 +116,8 @@
                 deleteDialog
             );
 
-                var accounts = $.ajax({ url: '<%= ResolveUrl("~/Master/Account/GetList") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the accounts.'); } }).responseText;
         });
+                var accounts = $.ajax({ url: '<%= ResolveUrl("~/Master/Account/GetList") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the accounts.'); } }).responseText;
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="title" runat="server">

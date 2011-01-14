@@ -113,9 +113,9 @@
                 insertDialog,
                 deleteDialog
             );
+        });       
 
                 var departments = $.ajax({ url: '<%= Url.Action("GetList","Department") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the Department.'); } }).responseText;
-        });       
     </script>
     <div id="dialog" title="Status">
         <p></p>

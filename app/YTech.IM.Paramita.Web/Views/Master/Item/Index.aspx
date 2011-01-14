@@ -115,12 +115,12 @@
                 insertDialog,
                 deleteDialog
             );
+        });
 
             var itemCats = $.ajax({ url: '<%= Url.Action("GetList","MItemCat") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the ItemCats.'); } }).responseText;
             var brands = $.ajax({ url: '<%= Url.Action("GetList","Brand") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the Brands.'); } }).responseText;
 
 //            alert(brands.toString());
-        });
     </script>
     <div id="dialog" title="Status">
         <p>
