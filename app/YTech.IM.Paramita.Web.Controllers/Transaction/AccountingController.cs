@@ -190,8 +190,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             {
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Failed;
             }
-
-            return RedirectToAction(journal.JournalType);
+            return View("Status");
+            //return RedirectToAction(journal.JournalType);
         }
 
         private TJournal SetNewJournal(EnumJournalType journalType)
@@ -250,7 +250,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                             det.AccountId != null ? det.AccountId.AccountName : null,
                          det.JournalDetEvidenceNo,
                          det.JournalDetStatus,
-                         det.JournalDetAmmount.Value.ToString() ,
+                         det.JournalDetAmmount.Value.ToString(Helper.CommonHelper.NumberFormat) ,
                         det.JournalDetStatus == "D" ? det.JournalDetAmmount.Value.ToString(Helper.CommonHelper.NumberFormat) : "",
                            det.JournalDetStatus == "K" ?   det.JournalDetAmmount.Value.ToString(Helper.CommonHelper.NumberFormat) : "",
                             det.JournalDetDesc
@@ -271,8 +271,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Insert(TJournalDet viewModel, FormCollection formCollection)
         {
+            UpdateNumericData(viewModel, formCollection);
             TJournalDet journalDet = new TJournalDet();
-
 
             TransferFormValuesTo(journalDet, viewModel);
             journalDet.SetAssignedIdTo(Guid.NewGuid().ToString());
@@ -285,6 +285,16 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
             ListJournalDet.Add(journalDet);
             return Content("success");
+        }
+
+        private void UpdateNumericData(TJournalDet viewModel, FormCollection formCollection)
+        {
+            if (!string.IsNullOrEmpty(formCollection["JournalDetAmmount"]))
+            {
+                string amm = formCollection["JournalDetAmmount"].Replace(",", "");
+                decimal? ammount = Convert.ToDecimal(amm);
+                viewModel.JournalDetAmmount = ammount;
+            }
         }
 
         private void TransferFormValuesTo(TJournalDet journalDet, TJournalDet viewModel)
@@ -304,6 +314,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Update(TJournalDet viewModel, FormCollection formCollection)
         {
+            UpdateNumericData(viewModel, formCollection);
             TJournalDet journalDet = new TJournalDet();
             TransferFormValuesTo(journalDet, viewModel);
             journalDet.SetAssignedIdTo(Guid.NewGuid().ToString());

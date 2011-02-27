@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/MyMaster.master" Inherits="System.Web.Mvc.ViewPage<YTech.IM.Paramita.Web.Controllers.ViewModel.UserAdministration.IndexViewModel>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/MyMaster.master" Inherits="System.Web.Mvc.ViewPage<YTech.IM.Paramita.Web.Controllers.ViewModel.UserAdministration.IndexViewModel>" %>
 
 <asp:Content ContentPlaceHolderID="title" runat="server">
 	Administrasi User

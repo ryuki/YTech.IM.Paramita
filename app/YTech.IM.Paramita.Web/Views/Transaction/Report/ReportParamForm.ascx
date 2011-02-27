@@ -2,6 +2,7 @@
 <% using (Html.BeginForm())
    { %>
 <%= Html.AntiForgeryToken() %>
+<%= Html.Hidden("TransStatus", ViewData.Model.TransStatus )%>
 <table>
     <tr>
         <td>

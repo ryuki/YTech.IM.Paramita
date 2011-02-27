@@ -70,6 +70,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Master\MCostCenter.cs" />
+    <Compile Include="Master\MCustomer.cs" />
     <Compile Include="Master\MDepartment.cs" />
     <Compile Include="Master\MEmployee.cs" />
     <Compile Include="Master\MItem.cs">
@@ -91,6 +92,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RepositoryInterfaces\IMCostCenterRepository.cs" />
+    <Compile Include="RepositoryInterfaces\IMCustomerRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMDepartmentRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMEmployeeRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMItemCatRepository.cs" />
@@ -117,6 +119,8 @@
     <Compile Include="RepositoryInterfaces\ITTransDetRepository.cs" />
     <Compile Include="RepositoryInterfaces\ITTransRefRepository.cs" />
     <Compile Include="RepositoryInterfaces\ITTransRepository.cs" />
+    <Compile Include="RepositoryInterfaces\ITTransUnitRepository.cs" />
+    <Compile Include="RepositoryInterfaces\ITUnitRepository.cs" />
     <Compile Include="Transaction\Accounting\TJournal.cs" />
     <Compile Include="Transaction\Accounting\TJournalDet.cs" />
     <Compile Include="Transaction\Accounting\TJournalRef.cs" />
@@ -130,6 +134,8 @@
     <Compile Include="Transaction\Inventory\TTransDet.cs" />
     <Compile Include="Transaction\Inventory\TTransRef.cs" />
     <Compile Include="Transaction\TReference.cs" />
+    <Compile Include="Transaction\Unit\TTransUnit.cs" />
+    <Compile Include="Transaction\Unit\TUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YTech.IM.Paramita.Enums\YTech.IM.Paramita.Enums.csproj">

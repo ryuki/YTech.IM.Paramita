@@ -7,6 +7,7 @@ namespace YTech.IM.Paramita.Enums
 {
     public enum EnumTransactionStatus
     {
+        None,
         Sales,
         Purchase,
         PurchaseOrder,

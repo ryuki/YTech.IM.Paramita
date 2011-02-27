@@ -1,4 +1,4 @@
-using Castle.Windsor;
+﻿using Castle.Windsor;
 using SharpArch.Core.CommonValidator;
 using SharpArch.Core.NHibernateValidator.CommonValidatorAdapter;
 using CommonServiceLocator.WindsorAdapter;

@@ -16,21 +16,28 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
     [HandleError]
     public class ItemController : Controller
     {
-        public ItemController() : this(new MItemRepository(),new MItemCatRepository(), new MBrandRepository ())
-        {}
+        public ItemController()
+            : this(new MItemRepository(), new MItemCatRepository(), new MBrandRepository(), new TTransDetRepository(), new MWarehouseRepository())
+        { }
 
         private readonly IMItemRepository _mItemRepository;
         private readonly IMItemCatRepository _mItemCatRepository;
         private readonly IMBrandRepository _mBrandRepository;
-        public ItemController(IMItemRepository mItemRepository, IMItemCatRepository mItemCatRepository, IMBrandRepository mBrandRepository)
+        private readonly ITTransDetRepository _tTransDetRepository;
+        private readonly IMWarehouseRepository _mWarehouseRepository;
+        public ItemController(IMItemRepository mItemRepository, IMItemCatRepository mItemCatRepository, IMBrandRepository mBrandRepository, ITTransDetRepository tTransDetRepository, IMWarehouseRepository mWarehouseRepository)
         {
             Check.Require(mItemRepository != null, "mItemRepository may not be null");
             Check.Require(mItemCatRepository != null, "mItemCatRepository may not be null");
             Check.Require(mBrandRepository != null, "mBrandRepository may not be null");
+            Check.Require(tTransDetRepository != null, "tTransDetRepository may not be null");
+            Check.Require(mWarehouseRepository != null, "mWarehouseRepository may not be null");
 
             this._mItemRepository = mItemRepository;
             this._mItemCatRepository = mItemCatRepository;
             this._mBrandRepository = mBrandRepository;
+            this._tTransDetRepository = tTransDetRepository;
+            this._mWarehouseRepository = mWarehouseRepository;
         }
 
 
@@ -236,9 +243,37 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                 if (mItem.ItemUoms.Count > 0)
                 {
                     if (mItem.ItemUoms[0].ItemUomPurchasePrice.HasValue)
-                        return Content(mItem.ItemUoms[0].ItemUomPurchasePrice.Value.ToString(Helper.CommonHelper.NumberFormat).Replace(",",""));
+                        return Content(mItem.ItemUoms[0].ItemUomPurchasePrice.Value.ToString(Helper.CommonHelper.NumberFormat).Replace(",", ""));
                 }
             }
+            return Content("0");
+        }
+
+        [Transaction]
+        public virtual ActionResult GetTotalBudget(string itemId, string warehouseId)
+        {
+           return GetTotalQty(itemId, warehouseId, EnumTransactionStatus.Budgeting);
+        }
+
+        [Transaction]
+        public virtual ActionResult GetTotalUsed(string itemId, string warehouseId)
+        {
+            return GetTotalQty(itemId, warehouseId, EnumTransactionStatus.Using);
+        }
+
+        private ActionResult GetTotalQty(string itemId, string warehouseId, EnumTransactionStatus transactionStatus)
+        {
+            if (!string.IsNullOrEmpty(itemId) && !string.IsNullOrEmpty(warehouseId))
+            {
+                MItem mItem = _mItemRepository.Get(itemId);
+                MWarehouse warehouse = _mWarehouseRepository.Get(warehouseId);
+                decimal? totalUsed = _tTransDetRepository.GetTotalUsed(mItem, warehouse, transactionStatus.ToString());
+                if (totalUsed.HasValue)
+                {
+                    return Content(totalUsed.Value.ToString(Helper.CommonHelper.NumberFormat));
+                }
+            }
+
             return Content("0");
         }
     }

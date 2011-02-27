@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using FluentNHibernate;
 using FluentNHibernate.Automapping;
 using SharpArch.Core.DomainModel;

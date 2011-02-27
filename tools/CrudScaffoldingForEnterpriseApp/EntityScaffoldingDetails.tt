@@ -1,4 +1,4 @@
-<#@ assembly name="$(SolutionDir)lib\SharpArch.dll" #>
+﻿<#@ assembly name="$(SolutionDir)lib\SharpArch.dll" #>
 <#@ assembly name="$(SolutionDir)lib\Inflector.Net.dll" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System" #>

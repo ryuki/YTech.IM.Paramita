@@ -100,7 +100,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             MEmployee mEmployeeToInsert = new MEmployee();
             TransferFormValuesTo(mEmployeeToInsert, viewModel);
             mEmployeeToInsert.DepartmentId = _mDepartmentRepository.Get(formCollection["DepartmentId"]);
-            mEmployeeToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
+            mEmployeeToInsert.SetAssignedIdTo(viewModel.Id);
             mEmployeeToInsert.CreatedDate = DateTime.Now;
             mEmployeeToInsert.CreatedBy = User.Identity.Name;
             mEmployeeToInsert.DataStatus = EnumDataStatus.New.ToString();

@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	LAYOUT STATE MANAGEMENT
  *
  *	@requires json2.js - http://www.json.org/json2.js

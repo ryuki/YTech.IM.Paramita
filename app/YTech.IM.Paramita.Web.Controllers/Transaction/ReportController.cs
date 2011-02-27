@@ -71,9 +71,13 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         }
 
         [Transaction]
-        public ActionResult Report(EnumReports reports)
+        public ActionResult ReportTrans(EnumReports reports, EnumTransactionStatus TransStatus)
         {
             ReportParamViewModel viewModel = ReportParamViewModel.CreateReportParamViewModel(_mCostCenterRepository, _mWarehouseRepository, _mSupplierRepository, _tRecPeriodRepository, _mItemRepository);
+            if (TransStatus != EnumTransactionStatus.None)
+            {
+                viewModel.TransStatus = TransStatus;
+            }
             string title = string.Empty;
             switch (reports)
             {
@@ -117,6 +121,18 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ShowItem = true;
                     viewModel.ShowWarehouse = true;
                     break;
+                case EnumReports.RptTransDetail:
+                    //switch (viewModel.TransStatus)
+                    //{
+                    //    case EnumTransactionStatus.PurchaseOrder:
+                            title = "Lap. Detail";
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                    //        break;
+                    //}
+
+                    break;
             }
             ViewData["CurrentItem"] = title;
 
@@ -126,6 +142,20 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return View(viewModel);
         }
 
+        [Transaction]
+        public ActionResult Report(EnumReports reports)
+        {
+            return ReportTrans(reports, EnumTransactionStatus.None);
+        }
+        
+        [ValidateAntiForgeryToken]      // Helps avoid CSRF attacks
+        [Transaction]                   // Wraps a transaction around the action
+        [AcceptVerbs(HttpVerbs.Post)]
+        [ValidateInput(false)]
+        public ActionResult ReportTrans(EnumReports reports, ReportParamViewModel viewModel, FormCollection formCollection)
+        {
+            return Report(reports, viewModel, formCollection);
+        }
 
         [ValidateAntiForgeryToken]      // Helps avoid CSRF attacks
         [Transaction]                   // Wraps a transaction around the action
@@ -161,6 +191,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumReports.RptAnalyzeBudgetDetail:
                     localReport.DataSources.Add(GetTransDetForBudget(viewModel.ItemId, viewModel.WarehouseId));
+                    break;
+                case EnumReports.RptTransDetail:
+                    EnumTransactionStatus stat =
+                        (EnumTransactionStatus)Enum.Parse(typeof(EnumTransactionStatus), formCollection["TransStatus"]);
+                    localReport.DataSources.Add(GetTransTotal(viewModel.DateFrom, viewModel.DateTo, viewModel.WarehouseId, stat));
                     break;
             }
 
@@ -200,6 +235,55 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return File(renderedBytes, mimeType);
         }
 
+        private ReportDataSource GetTransTotal(DateTime? dateFrom, DateTime? dateTo, string warehouseId, EnumTransactionStatus transStatus)
+        {
+            Check.Require(transStatus != EnumTransactionStatus.None, "transStatus may not be None");
+            IList<TTransDet> dets; 
+            MWarehouse warehouse = null; 
+            if (!string.IsNullOrEmpty(warehouseId))
+                warehouse = _mWarehouseRepository.Get(warehouseId);
+            dets = _tTransDetRepository.GetByDateWarehouse(dateFrom, dateTo, warehouse, transStatus.ToString());
+
+            var list = from det in dets
+                       select new
+                       {
+                           det.TransDetNo,
+                           det.TransDetQty,
+                           det.TransDetDesc,
+                           det.TransDetTotal,
+                           det.TransDetPrice,
+                           det.TransDetDisc,
+                           ItemId = det.ItemId.Id,
+                           det.ItemId.ItemName,
+                           SupplierName = det.TransId.TransBy,
+                           det.TransId.TransFactur,
+                           det.TransId.TransDate,
+                           WarehouseId = det.TransId.WarehouseId.Id,
+                           det.TransId.WarehouseId.WarehouseName,
+                           WarehouseToName = det.TransId.WarehouseIdTo != null ? det.TransId.WarehouseIdTo.WarehouseName : null,
+                           det.TransId.TransStatus,
+                           det.TransId.TransDesc,
+                           det.TransId.TransSubTotal,
+                           det.TransId.TransPaymentMethod,
+                           ViewWarehouse = SetView(det.TransId.TransStatus, EnumViewTrans.ViewWarehouse),
+                           ViewWarehouseTo = SetView(det.TransId.TransStatus, EnumViewTrans.ViewWarehouseTo),
+                           ViewSupplier = SetView(det.TransId.TransStatus, EnumViewTrans.ViewSupplier),
+                           ViewDate = SetView(det.TransId.TransStatus, EnumViewTrans.ViewDate),
+                           ViewFactur = SetView(det.TransId.TransStatus, EnumViewTrans.ViewFactur),
+                           ViewPrice = SetView(det.TransId.TransStatus, EnumViewTrans.ViewPrice),
+                           ViewPaymentMethod = SetView(det.TransId.TransStatus, EnumViewTrans.ViewPaymentMethod)
+                       }
+            ;
+
+            ReportDataSource reportDataSource = new ReportDataSource("TransTotalViewModel", list);
+            return reportDataSource;
+        }
+
+        private bool SetView(string TransStatus, EnumViewTrans viewTrans)
+        {
+            return true;
+        }
+
         private ReportDataSource GetTransDetForBudget(string itemId, string warehouseId)
         {
             IList<TTransDet> dets;
@@ -224,7 +308,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       det.ItemId.ItemName,
                                       WarehouseId = det.TransId.WarehouseId.Id,
                                       det.TransId.WarehouseId.WarehouseName,
-                                      TotalUsed = _tTransDetRepository.GetTotalUsed(det.ItemId, det.TransId.WarehouseId)
+                                      TotalUsed = _tTransDetRepository.GetTotalUsed(det.ItemId, det.TransId.WarehouseId, EnumTransactionStatus.Using.ToString())
                                   }
             ;
 
@@ -370,5 +454,16 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return reportDataSource;
         }
 
+    }
+
+    public enum EnumViewTrans
+    {
+        ViewWarehouse,
+        ViewWarehouseTo,
+        ViewSupplier,
+        ViewDate,
+        ViewFactur,
+        ViewPrice,
+        ViewPaymentMethod
     }
 }

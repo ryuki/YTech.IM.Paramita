@@ -1,12 +1,29 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl<YTech.IM.Paramita.Web.Controllers.ViewModel.TransactionFormViewModel>" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl<TransactionFormViewModel>" %>
 
-<%= Html.Partial("~/Views/Shared/Status.ascx",Model) %>
-<% using (Html.BeginForm())
-   { %>
+<%--<% using (Html.BeginForm())
+   { %>--%>
+   <% using (Ajax.BeginForm(new AjaxOptions
+                                       {
+                                           UpdateTargetId = "status",
+                                           InsertionMode = InsertionMode.Replace,
+                                           OnBegin = "ajaxValidate",
+                                           OnSuccess = "onSavedSuccess"
+                                       }
+
+          ))
+   {%>
+   <div id="status">
+</div>
+<div class="ui-state-highlight ui-corner-all" style="padding: 5pt; margin-bottom: 5pt;
+    display: none;" id="error">
+    <p>
+        <span class="ui-icon ui-icon-error" style="float: left; margin-right: 0.3em;"></span>
+        <span id="error_msg"></span>.<br clear="all" />
+    </p>
+</div>
 <%= Html.AntiForgeryToken() %>
 <%= Html.Hidden("Trans.Id", (ViewData.Model.Trans != null) ? ViewData.Model.Trans.Id : "")%>
 <%= Html.Hidden("Trans.TransStatus", (ViewData.Model.Trans != null) ? ViewData.Model.Trans.TransStatus : "")%>
-
 <div>
     <span id="toolbar" class="ui-widget-header ui-corner-all"><a id="newTrans" href="<%= Url.Action(ViewData.Model.Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString()) ? "Index" : Model.Trans.TransStatus.ToString(), "Inventory") %>">
         Baru</a>
@@ -120,10 +137,55 @@
 </div>
 <% } %>
 <script language="javascript" type="text/javascript">
+
+
+function onSavedSuccess() {
+ $("#Save").attr('disabled', 'disabled');
+}
+
+
+function ajaxValidate() {
+var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
+    return $('form').validate({
+    rules: {
+     <% if (ViewData.Model.ViewDate)
+                   {	%>
+        "Trans.TransDate": { required: true }, <% } %>
+       <% if (ViewData.Model.ViewFactur)
+                   {	%> "Trans.TransFactur": { required: true  },<% } %>
+         <% if (ViewData.Model.ViewSupplier)
+                   {	%> "Trans.TransBy": { required: true  }, <% } %>
+         <% if (ViewData.Model.ViewWarehouse)
+                   {	%>"Trans.WarehouseId": { required: true  },<% } %>
+        <% if (ViewData.Model.ViewWarehouseTo)
+                   {	%> "Trans.WarehouseIdTo": { required: true  }<% } %>
+    },
+    messages: {
+       <% if (ViewData.Model.ViewDate) {	%> "Trans.TransDate": "<img id='TransDateerror' src='"+imgerror+"' hovertext='Tanggal tidak boleh kosong' />"  ,<% } %>
+        <% if (ViewData.Model.ViewFactur) {	%>  "Trans.TransFactur": "<img id='TransFacturerror' src='"+imgerror+"' hovertext='No Faktur harus diisi' />",<% } %>
+        <% if (ViewData.Model.ViewSupplier) {	%>  "Trans.TransBy": "<img id='TransByerror' src='"+imgerror+"' hovertext='Pilih Supplier' />",<% } %>
+        <% if (ViewData.Model.ViewWarehouse) {	%>  "Trans.WarehouseId": "<img id='WarehouseIderror' src='"+imgerror+"' hovertext='Pilih Gudang' />",<% } %>
+        <% if (ViewData.Model.ViewWarehouseTo) {	%>  "Trans.WarehouseIdTo": "<img id='WarehouseIdToerror' src='"+imgerror+"' hovertext='Pilih Gudang Tujuan' />"<% } %>
+        },        invalidHandler: function(form, validator) {          var errors = validator.numberOfInvalids();
+						  if (errors) {
+                          var message = "Validasi data kurang";
+				$("div#error span#error_msg").html(message);
+                  $("div#error").dialog("open");
+			} else {
+                  $("div#error").dialog("close");
+			}
+            		},
+		errorPlacement: function(error, element) { 
+			error.insertAfter(element);
+		}
+    }).form();
+}
+
+
     function CalculateTotal() {
-        var price = $('#TransDetPrice').attr('value');
-        var qty = $('#TransDetQty').attr('value');
-        var disc = $('#TransDetDisc').attr('value');
+        var price = $('#TransDetPrice').val().replace(",","");
+        var qty = $('#TransDetQty').val().replace(",","");
+        var disc = $('#TransDetDisc').val().replace(",","");
         var subtotal = (price * qty)
         var total = subtotal - (disc * subtotal / 100);
 
@@ -137,11 +199,17 @@
     });
 
     $(document).ready(function () {
+     $("form").mouseover(function () {
+                generateTooltips();
+            });
         $("#dialog").dialog({
             autoOpen: false
         });
+        $("div#error").dialog({
+            autoOpen: false
+        });
 
-        var editDialog = {
+      var editDialog = {
             url: '<%= Url.Action("Update", "Inventory") %>'
                 , closeAfterAdd: true
                 , closeAfterEdit: true
@@ -180,10 +248,32 @@
                     $('#TransDetDisc').attr('value', '0');
                     $('#TransDetTotal').attr('value', '0');
 
+                       <% if (ViewData.Model.ViewPrice)
+               {%> 
                     $('#ItemId').change(function () {
                         var price = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/Get") %>/' + $('#ItemId :selected').val(), async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
                         $('#TransDetPrice').attr('value', price);
                         CalculateTotal();
+
+                        <% if (ViewData.Model.Trans.TransStatus == EnumTransactionStatus.PurchaseOrder.ToString())
+{%>
+                    var itemId = $('#ItemId :selected').val();
+                    var itemName = $('#ItemId :selected').text();
+                    var warehouseId  = $('#Trans_WarehouseId option:selected').val();
+                    var warehouseName  = $('#Trans_WarehouseId option:selected').text();
+//                    alert(itemId);
+//                    alert(warehouseId);
+                    var totalQtyBudget = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/GetTotalBudget") %>?itemId=' + itemId + '&warehouseId='+ warehouseId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the totalQtyBudget.'); } }).responseText;
+                    var totalQtyUsed = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/GetTotalUsed") %>?itemId=' + itemId + '&warehouseId='+ warehouseId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the totalQtyUsed.'); } }).responseText;
+                    var displayText = "Detail "+ itemName + " di gudang " + warehouseName ;
+                     displayText += "<br />Total Anggaran : " + totalQtyBudget;
+                    displayText += "<br />Total Pemakaian : " + totalQtyUsed;
+
+                    $('#dialog p:first').html(displayText);
+                    $("#dialog").dialog("open");
+//                    setTimeout("$('#dialog').dialog('close');",5000);
+               <%
+}%>
                     });
                     $('#TransDetPrice').change(function () {
                         CalculateTotal();
@@ -194,6 +284,8 @@
                     $('#TransDetDisc').change(function () {
                         CalculateTotal();
                     });
+                   <%
+               }%>  
                    <%
                }%>  
                     
@@ -223,10 +315,6 @@
         $.jgrid.del.msg = "Anda yakin menghapus Detail yang dipilih?";
         $("#list").jqGrid({
             url: '<%= Url.Action("List", "Inventory", new { usePrice = ViewData.Model.ViewPrice} ) %>',
-//                postData: {
-//                    UsePrice: function () { return <% if (ViewData.Model.ViewPrice) {%>' true' <%} else { %>                                                      'false'
-//                                                      <% } %>; }
-//                },
             datatype: 'json',
             mtype: 'GET',
             colNames: ['Id', 'Produk', 'Produk', 'Kuantitas',
@@ -239,11 +327,39 @@
                     { name: 'Id', index: 'Id', width: 100, align: 'left', key: true, editrules: { required: true, edithidden: false }, hidedlg: true, hidden: true, editable: false },
                     { name: 'ItemId', index: 'ItemId', width: 200, align: 'left', editable: true, edittype: 'select', editrules: { edithidden: true }, hidden: true },
                     { name: 'ItemName', index: 'ItemName', width: 200, align: 'left', editable: false, edittype: 'select', editrules: { edithidden: true} },
-                     { name: 'TransDetQty', index: 'TransDetQty', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false, number: true }, formatter: 'number' },
+                     { name: 'TransDetQty', index: 'TransDetQty', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false  },
+                       editoptions: {
+                           dataInit: function (elem) {
+                               $(elem).autoNumeric();
+                               $(elem).attr("style","text-align:right;");
+                           }
+                       }
+                        },
                    <% if (ViewData.Model.ViewPrice) {%> 
-                   { name: 'TransDetPrice', index: 'TransDetPrice', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false, number: true }, formatter: 'number' },
-                   { name: 'TransDetDisc', index: 'TransDetDisc', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false, number: true }, formatter: 'number' },
-                   { name: 'TransDetTotal', index: 'TransDetTotal', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false, number: true }, formatter: 'number' },
+                   { name: 'TransDetPrice', index: 'TransDetPrice', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false  },
+                       editoptions: {
+                           dataInit: function (elem) {
+                               $(elem).autoNumeric();
+                               $(elem).attr("style","text-align:right;");
+                           }
+                       }
+                        }, 
+                   { name: 'TransDetDisc', index: 'TransDetDisc', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false },
+                       editoptions: {
+                           dataInit: function (elem) {
+                               $(elem).autoNumeric();
+                               $(elem).attr("style","text-align:right;");
+                           }
+                       }
+                        },
+                   { name: 'TransDetTotal', index: 'TransDetTotal', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false },
+                       editoptions: {
+                           dataInit: function (elem) {
+                               $(elem).autoNumeric();
+                               $(elem).attr("style","text-align:right;");
+                           }
+                       }
+                        },
                    <%}%> 
                 { name: 'TransDetDesc', index: 'TransDetDesc', width: 200, sortable: false, align: 'left', editable: true, edittype: 'textarea', editoptions: { rows: "3", cols: "20" }, editrules: { required: false}}],
 
@@ -275,4 +391,26 @@
 
     });
         var items = $.ajax({ url:  '<%= ResolveUrl("~/Master/Item/GetList") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
+
+                      
+//function to generate tooltips
+		function generateTooltips() {
+		  //make sure tool tip is enabled for any new error label//          alert('s');
+			$("img[id*='error']").tooltip({
+				showURL: false,
+				opacity: 0.99,
+				fade: 150,
+				positionRight: true,
+					bodyHandler: function() {
+						return $("#"+this.id).attr("hovertext");
+					}
+			});
+			//make sure tool tip is enabled for any new valid label
+			$("img[src*='tick.gif']").tooltip({
+				showURL: false,
+					bodyHandler: function() {
+						return "OK";
+					}
+			});
+		}
 </script>

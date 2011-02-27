@@ -83,6 +83,8 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public SelectList RecPeriodList { get; internal set; }
         public SelectList ItemList { get; internal set; }
 
+        public EnumTransactionStatus TransStatus { get; internal set; }
+
         
     }
 }

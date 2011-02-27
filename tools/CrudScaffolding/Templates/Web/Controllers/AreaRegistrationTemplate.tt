@@ -1,4 +1,4 @@
-<#@ import namespace="System.Collections" #>
+﻿<#@ import namespace="System.Collections" #>
 
 <#+
 public class AreaRegistrationTemplate : BaseTemplate

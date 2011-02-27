@@ -1,4 +1,4 @@
-using FluentNHibernate.Conventions.Inspections;
+﻿using FluentNHibernate.Conventions.Inspections;
 
 namespace YTech.IM.Paramita.Data.NHibernateMaps.Conventions
 {

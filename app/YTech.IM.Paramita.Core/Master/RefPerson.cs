@@ -23,6 +23,13 @@ namespace YTech.IM.Paramita.Core.Master
         public virtual string PersonIdCardNo { get; set; }
         public virtual string PersonDesc { get; set; }
 
+        public virtual string PersonName
+        {
+            get
+            {
+                return string.Format("{0} {1}", PersonFirstName, PersonLastName);
+            }
+        }
 
         public virtual string DataStatus { get; set; }
         public virtual string CreatedBy { get; set; }

@@ -53,6 +53,7 @@
     <Compile Include="EnumReports.cs" />
     <Compile Include="EnumSaveState.cs" />
     <Compile Include="EnumTransactionStatus.cs" />
+    <Compile Include="EnumUnitStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

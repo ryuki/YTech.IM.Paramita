@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using FluentNHibernate;
 
 namespace YTech.IM.Paramita.Data.NHibernateMaps.Conventions

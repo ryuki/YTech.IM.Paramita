@@ -25,6 +25,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
         {
             get { return "N2"; }
         }
+        public static string IntegerFormat
+        {
+            get { return "N0"; }
+        }
 
         public static TReference GetReference(EnumReferenceType referenceType)
         {

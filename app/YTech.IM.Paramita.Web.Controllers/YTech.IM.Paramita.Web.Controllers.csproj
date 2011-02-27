@@ -81,6 +81,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Master\CustomerController.cs" />
     <Compile Include="Transaction\AccountingController.cs" />
     <Compile Include="ControllerEnums.cs" />
     <Compile Include="Helper\CommonHelper.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Transaction\ReportController.cs" />
     <Compile Include="Transaction\InventoryController.cs" />
     <Compile Include="Transaction\TransactionAreaRegistration.cs" />
+    <Compile Include="Transaction\UnitController.cs" />
     <Compile Include="Utility\UserAccountController.cs" />
     <Compile Include="Utility\UserAdministrationController.cs" />
     <Compile Include="Utility\UtilityAreaRegistration.cs" />
@@ -111,12 +113,15 @@
     <Compile Include="ViewModel\ClosingViewModel.cs" />
     <Compile Include="ViewModel\GeneralLedgerViewModel.cs" />
     <Compile Include="ViewModel\ReportParamViewModel.cs" />
+    <Compile Include="ViewModel\Reports\CashJournalViewModel.cs" />
     <Compile Include="ViewModel\Reports\JournalDetViewModel.cs" />
     <Compile Include="ViewModel\Reports\RecAccountViewModel.cs" />
     <Compile Include="ViewModel\Reports\StockCardViewModel.cs" />
     <Compile Include="ViewModel\Reports\StockItemViewModel.cs" />
     <Compile Include="ViewModel\Reports\TransDetViewModel.cs" />
+    <Compile Include="ViewModel\Reports\TransTotalViewModel.cs" />
     <Compile Include="ViewModel\TransactionFormViewModel.cs" />
+    <Compile Include="ViewModel\UnitSalesFormViewModel.cs" />
     <Compile Include="ViewModel\UserAdministration\DetailsViewModel.cs" />
     <Compile Include="ViewModel\UserAdministration\IndexViewModel.cs" />
     <Compile Include="ViewModel\UserAdministration\RoleViewModel.cs" />

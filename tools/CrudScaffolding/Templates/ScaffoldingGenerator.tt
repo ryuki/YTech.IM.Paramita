@@ -1,4 +1,4 @@
-<#@ include file="./Templates/BaseTemplate.tt" #>
+﻿<#@ include file="./Templates/BaseTemplate.tt" #>
 <#@ include file="./Templates/Web/Controllers/ControllerTemplate.tt" #>
 <#@ include file="./Templates/Web/Controllers/AreaRegistrationTemplate.tt" #>
 <#@ include file="./Templates/Core/DomainObjectTemplate.tt" #>

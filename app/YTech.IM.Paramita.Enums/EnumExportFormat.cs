@@ -7,7 +7,8 @@ namespace YTech.IM.Paramita.Enums
 {
     public enum EnumExportFormat
     {
+        Excel,
         PDF,
-        Excel,Word
+        Word
     }
 }

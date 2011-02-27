@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/MyMaster.Master" Inherits="System.Web.Mvc.ViewPage<YTech.IM.Paramita.Web.Controllers.ViewModel.UserAdministration.DetailsViewModel>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/MyMaster.Master" Inherits="System.Web.Mvc.ViewPage<YTech.IM.Paramita.Web.Controllers.ViewModel.UserAdministration.DetailsViewModel>" %>
 <%@ Import Namespace="System.Globalization" %>
 
 <asp:Content ContentPlaceHolderID="title" runat="server">

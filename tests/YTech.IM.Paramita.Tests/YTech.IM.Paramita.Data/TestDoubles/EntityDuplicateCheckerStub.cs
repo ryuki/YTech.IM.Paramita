@@ -1,4 +1,4 @@
-using SharpArch.Core.PersistenceSupport;
+﻿using SharpArch.Core.PersistenceSupport;
 using SharpArch.Core.DomainModel;
 
 namespace Tests.YTech.IM.Paramita.Data.TestDoubles

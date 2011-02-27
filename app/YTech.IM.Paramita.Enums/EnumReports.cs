@@ -14,6 +14,7 @@ namespace YTech.IM.Paramita.Enums
         RptLR,
         RptStockCard,
         RptStockItem,
-        RptAnalyzeBudgetDetail
+        RptAnalyzeBudgetDetail,
+        RptTransDetail
     }
 }

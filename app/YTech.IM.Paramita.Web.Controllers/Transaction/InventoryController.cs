@@ -384,10 +384,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                                          det.Id,
                                                          det.ItemId != null ? det.ItemId.Id : null,
                                                          det.ItemId != null ? det.ItemId.ItemName : null,
-                                                        det.TransDetPrice.HasValue ?  det.TransDetPrice.Value.ToString() : null,
-                                                         det.TransDetQty.HasValue ?  det.TransDetQty.Value.ToString() : null,
-                                                        det.TransDetDisc.HasValue ?   det.TransDetDisc.Value.ToString() : null,
-                                                        det.TransDetTotal.HasValue ?   det.TransDetTotal.Value.ToString() : null,
+                                                        det.TransDetPrice.HasValue ?  det.TransDetPrice.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
+                                                         det.TransDetQty.HasValue ?  det.TransDetQty.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
+                                                        det.TransDetDisc.HasValue ?   det.TransDetDisc.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
+                                                        det.TransDetTotal.HasValue ?   det.TransDetTotal.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                                                          det.TransDetDesc
                                                      }
                                       });
@@ -403,7 +403,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                                          det.Id,
                                                          det.ItemId != null ? det.ItemId.Id : null,
                                                          det.ItemId != null ? det.ItemId.ItemName : null,
-                                                       det.TransDetQty.HasValue ?    det.TransDetQty.Value.ToString() : null,
+                                                       det.TransDetQty.HasValue ?    det.TransDetQty.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                                                          det.TransDetDesc
                                                      }
                            });
@@ -479,6 +479,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Insert(TTransDet viewModel, FormCollection formCollection)
         {
+            UpdateNumericData(viewModel, formCollection);
+
             TTransDet transDetToInsert = new TTransDet();
             TransferFormValuesTo(transDetToInsert, viewModel);
             transDetToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
@@ -490,6 +492,34 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
             ListDetTrans.Add(transDetToInsert);
             return Content("success");
+        }
+
+        private static void UpdateNumericData(TTransDet viewModel, FormCollection formCollection)
+        {
+            if (!string.IsNullOrEmpty(formCollection["TransDetQty"]))
+            {
+                string wide = formCollection["TransDetQty"].Replace(",", "");
+                decimal? qty = Convert.ToDecimal(wide);
+                viewModel.TransDetQty = qty;
+            }
+            if (!string.IsNullOrEmpty(formCollection["TransDetPrice"]))
+            {
+                string wide = formCollection["TransDetPrice"].Replace(",", "");
+                decimal? price = Convert.ToDecimal(wide);
+                viewModel.TransDetPrice = price;
+            }
+            if (!string.IsNullOrEmpty(formCollection["TransDetDisc"]))
+            {
+                string wide = formCollection["TransDetDisc"].Replace(",", "");
+                decimal? disc= Convert.ToDecimal(wide);
+                viewModel.TransDetDisc = disc;
+            }
+            if (!string.IsNullOrEmpty(formCollection["TransDetTotal"]))
+            {
+                string wide = formCollection["TransDetTotal"].Replace(",", "");
+                decimal? total = Convert.ToDecimal(wide);
+                viewModel.TransDetTotal = total;
+            }
         }
 
         public ActionResult InsertTransRef(TTransRef viewModel, FormCollection formCollection)
@@ -637,11 +667,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 _tTransRepository.DbContext.RollbackTransaction();
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Failed;
             }
-            if (!Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString()))
-            {
-                return RedirectToAction(Trans.TransStatus.ToString());
-            }
-            return RedirectToAction("Index");
+            //if (!Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString()))
+            //{
+            //    return RedirectToAction(Trans.TransStatus.ToString());
+            //}
+            return View("Status");
         }
 
         private void SaveStock(TTrans Trans, TTransDet det, bool addStock, MWarehouse mWarehouse)
