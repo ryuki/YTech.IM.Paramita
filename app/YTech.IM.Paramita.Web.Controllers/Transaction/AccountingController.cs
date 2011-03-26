@@ -19,9 +19,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
     [HandleError]
     public class AccountingController : Controller
     {
-        public AccountingController()
-            : this(new TJournalRepository(), new TJournalDetRepository(), new MCostCenterRepository(), new MAccountRepository(), new TRecAccountRepository(), new TRecPeriodRepository(), new MAccountCatRepository())
-        { }
+        //public AccountingController()
+        //    : this(new TJournalRepository(), new TJournalDetRepository(), new MCostCenterRepository(), new MAccountRepository(), new TRecAccountRepository(), new TRecPeriodRepository(), new MAccountCatRepository())
+        //{ }
 
         private readonly ITJournalRepository _tJournalRepository;
         private readonly ITJournalDetRepository _tJournalDetRepository;

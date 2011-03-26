@@ -304,6 +304,7 @@
     <Content Include="Views\Shared\Menu.ascx" />
     <Content Include="Views\Shared\Status.ascx" />
     <Content Include="Views\Transaction\Inventory\Received.aspx" />
+    <Content Include="Views\Transaction\Real\Index.aspx" />
     <Content Include="Views\Transaction\Report\ReportTrans.aspx" />
     <Content Include="Views\Transaction\Report\ReportParamForm.ascx" />
     <Content Include="Views\Transaction\Report\Report.aspx" />
@@ -382,6 +383,8 @@
     <Content Include="Views\Transaction\Report\RptJournal.rdlc" />
     <Content Include="Views\Transaction\Report\RptLR.rdlc" />
     <Content Include="Views\Transaction\Report\RptNeraca.rdlc" />
+    <Content Include="Views\Transaction\Report\RptItem.rdlc" />
+    <Content Include="Views\Transaction\Report\RptBukuBesar.rdlc" />
     <Content Include="Views\Transaction\Report\RptStockCard.rdlc" />
     <Content Include="Views\Transaction\Report\RptStockItem.rdlc" />
   </ItemGroup>

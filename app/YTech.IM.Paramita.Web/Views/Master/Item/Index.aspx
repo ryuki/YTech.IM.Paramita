@@ -87,7 +87,14 @@
                     { name: 'BrandName', index: 'BrandName', width: 200, align: 'left', editable: false, edittype: 'select', editrules: { edithidden: true} },
                     { name: 'ItemUomId', index: 'ItemUomId', width: 200, align: 'left', editable: false, editrules: { edithidden: true }, hidden: true },
                     { name: 'ItemUomName', index: 'ItemUomName', width: 200, editable: true, editrules: { edithidden: true} },
-                    { name: 'ItemUomPurchasePrice', index: 'ItemUomPurchasePrice', width: 200, editable: true, editrules: { edithidden: true, number: true }, formatter: 'number' },
+                    { name: 'ItemUomPurchasePrice', index: 'ItemUomPurchasePrice', width: 200, editable: true, editrules: { edithidden: true },
+                        editoptions: {
+                            dataInit: function (elem) {
+                                $(elem).autoNumeric();
+                                $(elem).attr("style", "text-align:right;");
+                            }
+                        }
+                    },
                    { name: 'ItemDesc', index: 'ItemDesc', width: 200, sortable: false, align: 'left', editable: true, edittype: 'textarea', editoptions: { rows: "3", cols: "20" }, editrules: { required: false}}],
 
                 pager: $('#listPager'),

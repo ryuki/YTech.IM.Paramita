@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using YTech.IM.Paramita.Core.Transaction;
 using YTech.IM.Paramita.Enums;
@@ -19,7 +20,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
         }
         public static string DateTimeFormat
         {
-            get { return "dd-MMM-yyyy HH24:mm"; }
+            get { return "dd-MMM-yyyy HH:mm"; }
+        }
+        public static string PeriodFormat
+        {
+            get { return "MMM-yyyy"; }
         }
         public static string NumberFormat
         {
@@ -105,30 +110,28 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
             }
             return factur;
         }
+        /// <summary>
+        /// Will get the string value for a given enums value, this will
+        /// only work if you assign the StringValue attribute to
+        /// the items in your enum.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetStringValue(Enum value)
+        {
+            // Get the type
+            Type type = value.GetType();
 
-        //public static IEnumerable<T> WriteHtmlLi<T>(IEnumerable<T> composites)
-        //{
-        //    foreach (var composite in composites)
-        //    {
-        //        yield return composite;
-        //    }
-        //}
+            // Get fieldinfo for this type
+            FieldInfo fieldInfo = type.GetField(value.ToString());
 
-        //public class Functional
-        //{
+            // Get the stringvalue attributes
+            StringValueAttribute[] attribs = fieldInfo.GetCustomAttributes(
+                typeof(StringValueAttribute), false) as StringValueAttribute[];
 
-        //    private delegate Func<A, R> Recursive<A, R>(Recursive<A, R> r);
-
-        //    public static Func<A, R> Y<A, R>(Func<Func<A, R>, Func<A, R>> f)
-        //    {
-
-        //        Recursive<A, R> rec = r => a => f(r(r))(a);
-
-        //        return rec(rec);
-
-        //    }
-
-        //}
+            // Return the first if there was a match.
+            return attribs.Length > 0 ? attribs[0].StringValue : value.ToString();
+        }
 
 
 

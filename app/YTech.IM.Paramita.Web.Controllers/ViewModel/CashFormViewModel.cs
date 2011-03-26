@@ -12,26 +12,18 @@ using YTech.IM.Paramita.Core.RepositoryInterfaces;
 using YTech.IM.Paramita.Core.Transaction;
 using YTech.IM.Paramita.Core.Transaction.Accounting;
 using YTech.IM.Paramita.Enums;
+using YTech.IM.Paramita.Web.Controllers.Helper;
 
 namespace YTech.IM.Paramita.Web.Controllers.ViewModel
 {
-  public  class CashFormViewModel
+    public class CashFormViewModel
     {
-      public static CashFormViewModel CreateCashFormViewModel(ITJournalRepository tJournalRepository, IMCostCenterRepository mCostCenterRepository,IMAccountRepository mAccountRepository)
+        public static CashFormViewModel CreateCashFormViewModel(ITJournalRepository tJournalRepository, IMCostCenterRepository mCostCenterRepository, IMAccountRepository mAccountRepository)
         {
             CashFormViewModel viewModel = new CashFormViewModel();
 
-            IList<MCostCenter> list = mCostCenterRepository.GetAll();
-            MCostCenter costCenter = new MCostCenter();
-            costCenter.CostCenterName = "-Pilih Cost Center-";
-            list.Insert(0, costCenter);
-            viewModel.CostCenterList = new SelectList(list, "Id", "CostCenterName");
-
-            IList<MAccount> listAcc = mAccountRepository.GetAll();
-            MAccount account = new MAccount();
-            account.AccountName = "-Pilih Akun Kas-";
-            listAcc.Insert(0, account);
-            viewModel.AccountList = new SelectList(listAcc, "Id", "AccountName");
+            viewModel.CostCenterList = FillHelper.GetCostCenters(mCostCenterRepository, "-Pilih Cost Center-");
+            viewModel.AccountList = FillHelper.GetAccounts(mAccountRepository, "-Pilih Akun Kas-");
 
             return viewModel;
         }

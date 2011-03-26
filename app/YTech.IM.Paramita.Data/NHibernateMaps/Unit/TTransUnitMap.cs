@@ -27,7 +27,9 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Unit
             mapping.Map(x => x.TransUnitDate, "TRANS_UNIT_DATE");
             mapping.Map(x => x.TransUnitPrice, "TRANS_UNIT_PRICE");
             mapping.Map(x => x.TransUnitStatus, "TRANS_UNIT_STATUS");
-            mapping.Map(x => x.TransUnitDesc, "TRANS_UNIT_DESC"); 
+            mapping.Map(x => x.TransUnitDesc, "TRANS_UNIT_DESC");
+            mapping.References(x => x.CostCenterId, "COST_CENTER_ID");
+            mapping.Map(x => x.TransUnitPaymentMethod, "TRANS_UNIT_PAYMENT_METHOD");
 
             mapping.Map(x => x.DataStatus, "DATA_STATUS");
             mapping.Map(x => x.CreatedBy, "CREATED_BY");

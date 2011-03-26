@@ -29,16 +29,19 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private readonly ITUnitRepository _tUnitRepository;
         private readonly IMCustomerRepository _mCustomerRepository;
         private readonly ITTransUnitRepository _tTransUnitRepository;
+        private readonly IMCostCenterRepository _mCostCenterRepository;
 
-        public UnitController(ITUnitRepository tUnitRepository, IMCustomerRepository mCustomerRepository, ITTransUnitRepository tTransUnitRepository)
+        public UnitController(ITUnitRepository tUnitRepository, IMCustomerRepository mCustomerRepository, ITTransUnitRepository tTransUnitRepository, IMCostCenterRepository mCostCenterRepository)
         {
             Check.Require(tUnitRepository != null, "tUnitRepository may not be null");
             Check.Require(mCustomerRepository != null, "mCustomerRepository may not be null");
             Check.Require(tTransUnitRepository != null, "itTransUnitRepository may not be null");
+            Check.Require(mCostCenterRepository != null, "mCostCenterRepository may not be null");
 
             this._tUnitRepository = tUnitRepository;
             this._mCustomerRepository = mCustomerRepository;
             this._tTransUnitRepository = tTransUnitRepository;
+            this._mCostCenterRepository = mCostCenterRepository;
         }
 
         public ActionResult Index()
@@ -205,7 +208,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [Transaction]
         public ActionResult UnitSales(string unitId)
         {
-            UnitSalesFormViewModel viewModel = UnitSalesFormViewModel.CreateUnitSalesFormViewModel(_mCustomerRepository);
+            UnitSalesFormViewModel viewModel = UnitSalesFormViewModel.CreateUnitSalesFormViewModel(_mCustomerRepository, _mCostCenterRepository);
 
             TempData["UnitId"] = "id=" + unitId;
             return View(viewModel);
@@ -235,6 +238,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             transUnit.TransUnitFactur = formCollection["TransUnit.TransUnitFactur"];
             transUnit.TransUnitPrice = Convert.ToDecimal(formCollection["TransUnit.TransUnitPrice"]);
             transUnit.TransUnitDesc = formCollection["TransUnit.TransUnitDesc"];
+            transUnit.TransUnitPaymentMethod = formCollection["TransUnit.TransUnitPaymentMethod"];
+            if (!string.IsNullOrEmpty(formCollection["TransUnit.CostCenterId"]))
+            {
+                transUnit.CostCenterId = _mCostCenterRepository.Get(formCollection["TransUnit.CostCenterId"]);
+            }
             transUnit.CreatedDate = DateTime.Now;
             transUnit.CreatedBy = User.Identity.Name;
             transUnit.DataStatus = EnumDataStatus.New.ToString();

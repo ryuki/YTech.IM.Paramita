@@ -73,7 +73,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                            itemCat.BrandId != null ? itemCat.BrandId.BrandName : null,
                          itemCat.ItemUoms.Count > 0 ?   itemCat.ItemUoms[0].Id : null,
                            itemCat.ItemUoms.Count > 0 ? itemCat.ItemUoms[0].ItemUomName : null,
-                       itemCat.ItemUoms.Count > 0 ?    itemCat.ItemUoms[0].ItemUomPurchasePrice.Value.ToString() : "0",
+                       itemCat.ItemUoms.Count > 0 ?    itemCat.ItemUoms[0].ItemUomPurchasePrice.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                             itemCat.ItemDesc
                         }
                     }).ToArray()
@@ -103,7 +103,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
 
             MItemUom itemUom = new MItemUom(mItemToInsert);
             itemUom.ItemUomName = formCollection["ItemUomName"];
-            itemUom.ItemUomPurchasePrice = Convert.ToDecimal(formCollection["ItemUomPurchasePrice"]);
+            UpdateNumericData(itemUom, formCollection);
+            //itemUom.ItemUomPurchasePrice = Convert.ToDecimal(formCollection["ItemUomPurchasePrice"]);
             itemUom.SetAssignedIdTo(Guid.NewGuid().ToString());
 
             mItemToInsert.ItemUoms.Add(itemUom);
@@ -126,6 +127,20 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             }
 
             return Content("success");
+        }
+
+        private void UpdateNumericData(MItemUom itemUom, FormCollection formCollection)
+        {
+            if (!string.IsNullOrEmpty(formCollection["ItemUomPurchasePrice"]))
+            {
+                string wide = formCollection["ItemUomPurchasePrice"].Replace(",", "");
+                decimal? budget = Convert.ToDecimal(wide);
+                itemUom.ItemUomPurchasePrice = budget;
+            }
+            else
+            {
+                itemUom.ItemUomPurchasePrice = null;
+            }
         }
 
         [Transaction]
@@ -155,7 +170,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
 
         [Transaction]
         public ActionResult Update(MItem viewModel, FormCollection formCollection)
-        {
+        { 
             MItem mItemToUpdate = _mItemRepository.Get(viewModel.Id);
             mItemToUpdate.ItemCatId = _mItemCatRepository.Get(formCollection["ItemCatId"]);
             mItemToUpdate.BrandId = _mBrandRepository.Get(formCollection["BrandId"]);
@@ -187,7 +202,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                 itemUom = mItemToUpdate.ItemUoms[0];
             }
             itemUom.ItemUomName = formCollection["ItemUomName"];
-            itemUom.ItemUomPurchasePrice = Convert.ToDecimal(formCollection["ItemUomPurchasePrice"]);
+            UpdateNumericData(itemUom, formCollection);
+            //itemUom.ItemUomPurchasePrice = Convert.ToDecimal(formCollection["ItemUomPurchasePrice"]);
 
             mItemToUpdate.ItemUoms.Clear();
             mItemToUpdate.ItemUoms.Add(itemUom);

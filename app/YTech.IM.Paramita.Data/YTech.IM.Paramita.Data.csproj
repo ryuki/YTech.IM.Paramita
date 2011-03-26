@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="NHibernateMaps\Master\RefAddressMap.cs" />
     <Compile Include="NHibernateMaps\Master\RefPersonMap.cs" />
+    <Compile Include="NHibernateMaps\Transaction\TRealMap.cs" />
     <Compile Include="NHibernateMaps\Transaction\TJournalDetMap.cs" />
     <Compile Include="NHibernateMaps\Transaction\TJournalMap.cs" />
     <Compile Include="NHibernateMaps\Transaction\TJournalRefMap.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="NHibernateMaps\Unit\TTransUnitMap.cs" />
     <Compile Include="NHibernateMaps\Unit\TUnitMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\TRealRepository.cs" />
     <Compile Include="Repository\MAccountCatRepository.cs" />
     <Compile Include="Repository\MCustomerRepository.cs" />
     <Compile Include="Repository\TRecAccountRepository.cs" />

@@ -70,7 +70,11 @@
         </Field>
         <Field Name="TransDetId">
           <DataField>TransDetId</DataField>
-          <rd:TypeName>YTech.IM.Paramita.Core.Transaction.TTransDet</rd:TypeName>
+          <rd:TypeName>YTech.IM.Paramita.Core.Transaction.Inventory.TTransDet</rd:TypeName>
+        </Field>
+        <Field Name="TransFactur">
+          <DataField>TransFactur</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="WarehouseId">
           <DataField>WarehouseId</DataField>
@@ -608,14 +612,14 @@ Fields!StockCardQty.Value,
                                                     </TablixCell>
                                                     <TablixCell>
                                                       <CellContents>
-                                                        <Textbox Name="StockCardDesc">
+                                                        <Textbox Name="TransFactur">
                                                           <CanGrow>true</CanGrow>
                                                           <KeepTogether>true</KeepTogether>
                                                           <Paragraphs>
                                                             <Paragraph>
                                                               <TextRuns>
                                                                 <TextRun>
-                                                                  <Value>=Fields!StockCardDesc.Value</Value>
+                                                                  <Value>=Fields!TransFactur.Value</Value>
                                                                   <Style>
                                                                     <FontFamily>Verdana</FontFamily>
                                                                     <FontSize>9pt</FontSize>
@@ -626,7 +630,7 @@ Fields!StockCardQty.Value,
                                                               <Style />
                                                             </Paragraph>
                                                           </Paragraphs>
-                                                          <rd:DefaultName>StockCardDesc</rd:DefaultName>
+                                                          <rd:DefaultName>TransFactur</rd:DefaultName>
                                                           <Style>
                                                             <Border>
                                                               <Color>#e5e5e5</Color>
@@ -638,6 +642,7 @@ Fields!StockCardQty.Value,
                                                             <PaddingBottom>2pt</PaddingBottom>
                                                           </Style>
                                                         </Textbox>
+                                                        <rd:Selected>true</rd:Selected>
                                                       </CellContents>
                                                     </TablixCell>
                                                   </TablixCells>
@@ -664,7 +669,7 @@ Fields!StockCardQty.Value,
                                                 </TablixMember>
                                               </TablixMembers>
                                             </TablixRowHierarchy>
-                                            <DataSetName>StockCard</DataSetName>
+                                            <DataSetName>StockCardViewModel</DataSetName>
                                             <Top>0.33412in</Top>
                                             <Left>0.1271in</Left>
                                             <Height>0.5in</Height>
@@ -740,9 +745,8 @@ Fields!StockCardQty.Value,
                               </TablixMember>
                             </TablixMembers>
                           </TablixRowHierarchy>
-                          <DataSetName>StockCard</DataSetName>
+                          <DataSetName>StockCardViewModel</DataSetName>
                           <Top>0.27778in</Top>
-                          <Left>0in</Left>
                           <Height>1in</Height>
                           <Width>6.1271in</Width>
                           <Style>

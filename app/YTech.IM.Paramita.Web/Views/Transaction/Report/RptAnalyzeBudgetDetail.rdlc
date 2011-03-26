@@ -48,6 +48,10 @@
           <DataField>ModifiedDate</DataField>
           <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
+        <Field Name="RealPercentValue">
+          <DataField>RealPercentValue</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="RowVersion">
           <DataField>RowVersion</DataField>
           <rd:TypeName>System.Byte[]</rd:TypeName>
@@ -82,7 +86,7 @@
         </Field>
         <Field Name="TransId">
           <DataField>TransId</DataField>
-          <rd:TypeName>YTech.IM.Paramita.Core.Transaction.TTrans</rd:TypeName>
+          <rd:TypeName>YTech.IM.Paramita.Core.Transaction.Inventory.TTrans</rd:TypeName>
         </Field>
         <Field Name="WarehouseId">
           <DataField>WarehouseId</DataField>
@@ -110,12 +114,12 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>5.21698in</Width>
+              <Width>7.21698in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>1.05529in</Height>
+              <Height>1.12736in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -201,6 +205,12 @@
                               </TablixColumn>
                               <TablixColumn>
                                 <Width>1.35849in</Width>
+                              </TablixColumn>
+                              <TablixColumn>
+                                <Width>1in</Width>
+                              </TablixColumn>
+                              <TablixColumn>
+                                <Width>1in</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
@@ -345,6 +355,82 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>Textbox7</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#7292cc</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <BackgroundColor>#4c68a2</BackgroundColor>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox8">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>Persen Pemakaian (%)</Value>
+                                                <Style>
+                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>White</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Center</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox8</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#7292cc</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <BackgroundColor>#4c68a2</BackgroundColor>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox4">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>Realisasi (%)</Value>
+                                                <Style>
+                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>White</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Center</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox4</rd:DefaultName>
                                         <Style>
                                           <Border>
                                             <Color>#7292cc</Color>
@@ -510,12 +596,89 @@
                                       </Textbox>
                                     </CellContents>
                                   </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox9">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=sum(Fields!TotalUsed.Value)/Fields!TransDetQty.Value*100</Value>
+                                                <Style>
+                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Format>N2</Format>
+                                                  <Color>#4d4d4d</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Right</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox9</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#e5e5e5</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                      <rd:Selected>true</rd:Selected>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="RealPercentValue1">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=max(Fields!RealPercentValue.Value)</Value>
+                                                <Style>
+                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Format>N2</Format>
+                                                  <Color>#4d4d4d</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Right</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>RealPercentValue1</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#e5e5e5</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
                                 </TablixCells>
                               </TablixRow>
                             </TablixRows>
                           </TablixBody>
                           <TablixColumnHierarchy>
                             <TablixMembers>
+                              <TablixMember />
+                              <TablixMember />
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
@@ -539,7 +702,7 @@
                           <DataSetName>TransDetViewModel</DataSetName>
                           <Top>0.29166in</Top>
                           <Height>0.5in</Height>
-                          <Width>5.21698in</Width>
+                          <Width>7.21698in</Width>
                           <ZIndex>2</ZIndex>
                           <Style>
                             <Border>
@@ -579,8 +742,8 @@
         </TablixRowHierarchy>
         <DataSetName>TransDetViewModel</DataSetName>
         <Top>0.12717in</Top>
-        <Height>1.05529in</Height>
-        <Width>5.21698in</Width>
+        <Height>1.12736in</Height>
+        <Width>7.21698in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -591,7 +754,7 @@
     <Height>1.7519in</Height>
     <Style />
   </Body>
-  <Width>6.5in</Width>
+  <Width>7.21698in</Width>
   <Page>
     <PageHeader>
       <Height>0.43396in</Height>

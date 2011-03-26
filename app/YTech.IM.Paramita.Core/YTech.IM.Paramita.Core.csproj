@@ -85,6 +85,7 @@
     <Compile Include="Master\MSupplier.cs" />
     <Compile Include="Master\RefPerson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryInterfaces\ITRealRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMAccountCatRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMAccountRefRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMAccountRepository.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Transaction\Accounting\TJournalRef.cs" />
     <Compile Include="Transaction\Accounting\TRecAccount.cs" />
     <Compile Include="Transaction\Accounting\TRecPeriod.cs" />
+    <Compile Include="Transaction\Inventory\TReal.cs" />
     <Compile Include="Transaction\Inventory\TStock.cs" />
     <Compile Include="Transaction\Inventory\TStockCard.cs" />
     <Compile Include="Transaction\Inventory\TStockItem.cs" />

@@ -19,6 +19,8 @@ namespace YTech.IM.Paramita.Core.Transaction.Unit
         public virtual decimal? TransUnitPrice { get; set; }
         public virtual string TransUnitStatus { get; set; }
         public virtual string TransUnitDesc { get; set; }
+        public virtual MCostCenter CostCenterId { get; set; }
+        public virtual string TransUnitPaymentMethod { get; set; }
 
         public virtual string DataStatus { get; set; }
         public virtual string CreatedBy { get; set; }

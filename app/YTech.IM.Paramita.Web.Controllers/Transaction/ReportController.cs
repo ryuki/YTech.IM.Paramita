@@ -21,9 +21,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
     [HandleError]
     public class ReportController : Controller
     {
-        public ReportController()
-            : this(new TJournalRepository(), new TJournalDetRepository(), new MCostCenterRepository(), new MAccountRepository(), new TRecAccountRepository(), new TRecPeriodRepository(), new MBrandRepository(), new MSupplierRepository(), new MWarehouseRepository(), new MItemRepository(), new TStockCardRepository(), new TStockItemRepository(), new TTransDetRepository())
-        { }
+        //public ReportController()
+        //    : this(new TJournalRepository(), new TJournalDetRepository(), new MCostCenterRepository(), new MAccountRepository(), new TRecAccountRepository(), new TRecPeriodRepository(), new MBrandRepository(), new MSupplierRepository(), new MWarehouseRepository(), new MItemRepository(), new TStockCardRepository(), new TStockItemRepository(), new TTransDetRepository())
+        //{ }
 
         private readonly ITJournalRepository _tJournalRepository;
         private readonly ITJournalDetRepository _tJournalDetRepository;
@@ -38,8 +38,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private readonly ITStockCardRepository _tStockCardRepository;
         private readonly ITStockItemRepository _tStockItemRepository;
         private readonly ITTransDetRepository _tTransDetRepository;
+        private readonly ITRealRepository _tRealRepository;
 
-        public ReportController(ITJournalRepository tJournalRepository, ITJournalDetRepository tJournalDetRepository, IMCostCenterRepository mCostCenterRepository, IMAccountRepository mAccountRepository, ITRecAccountRepository tRecAccountRepository, ITRecPeriodRepository tRecPeriodRepository, IMBrandRepository mBrandRepository, IMSupplierRepository mSupplierRepository, IMWarehouseRepository mWarehouseRepository, IMItemRepository mItemRepository, ITStockCardRepository tStockCardRepository, ITStockItemRepository tStockItemRepository, ITTransDetRepository tTransDetRepository)
+        public ReportController(ITJournalRepository tJournalRepository, ITJournalDetRepository tJournalDetRepository, IMCostCenterRepository mCostCenterRepository, IMAccountRepository mAccountRepository, ITRecAccountRepository tRecAccountRepository, ITRecPeriodRepository tRecPeriodRepository, IMBrandRepository mBrandRepository, IMSupplierRepository mSupplierRepository, IMWarehouseRepository mWarehouseRepository, IMItemRepository mItemRepository, ITStockCardRepository tStockCardRepository, ITStockItemRepository tStockItemRepository, ITTransDetRepository tTransDetRepository, ITRealRepository tRealRepository)
         {
             Check.Require(tJournalRepository != null, "tJournalRepository may not be null");
             Check.Require(tJournalDetRepository != null, "tJournalDetRepository may not be null");
@@ -54,6 +55,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             Check.Require(tStockCardRepository != null, "tStockCardRepository may not be null");
             Check.Require(tStockItemRepository != null, "tStockItemRepository may not be null");
             Check.Require(tTransDetRepository != null, "tTransDetRepository may not be null");
+            Check.Require(tRealRepository != null, "tRealRepository may not be null");
 
             this._tJournalRepository = tJournalRepository;
             this._tJournalDetRepository = tJournalDetRepository;
@@ -68,6 +70,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             this._tStockCardRepository = tStockCardRepository;
             this._tStockItemRepository = tStockItemRepository;
             this._tTransDetRepository = tTransDetRepository;
+            this._tRealRepository = tRealRepository;
         }
 
         [Transaction]
@@ -132,7 +135,17 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     //        break;
                     //}
 
-                    break;
+                            break;
+                case EnumReports.RptItem:
+                            title = "Daftar Master Produk";
+
+                            break;
+                case EnumReports.RptBukuBesar:
+                            title = "Lap. Buku Besar";
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowCostCenter = true;
+                            break;
             }
             ViewData["CurrentItem"] = title;
 
@@ -197,6 +210,12 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                         (EnumTransactionStatus)Enum.Parse(typeof(EnumTransactionStatus), formCollection["TransStatus"]);
                     localReport.DataSources.Add(GetTransTotal(viewModel.DateFrom, viewModel.DateTo, viewModel.WarehouseId, stat));
                     break;
+                case EnumReports.RptItem:
+                    localReport.DataSources.Add(GetItemViewModel());
+                    break;
+                case EnumReports.RptBukuBesar:
+                    localReport.DataSources.Add(GetJournalDet(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId));
+                    break;
             }
 
             string reportType = formCollection["ExportFormat"];
@@ -235,6 +254,27 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return File(renderedBytes, mimeType);
         }
 
+        private ReportDataSource GetItemViewModel()
+        {
+            IList<MItem> listItems = _mItemRepository.GetAll();
+
+            var list = from det in listItems
+                       select new
+                       {
+                           det.Id,
+                           det.ItemName,
+                           det.ItemDesc,
+                          ItemCatId= det.ItemCatId.Id,
+                           det.ItemCatId.ItemCatName,
+                           det.ItemUoms[0].ItemUomPurchasePrice
+                       }
+         ;
+
+            ReportDataSource reportDataSource = new ReportDataSource("ItemViewModel", list);
+            return reportDataSource;
+
+        }
+
         private ReportDataSource GetTransTotal(DateTime? dateFrom, DateTime? dateTo, string warehouseId, EnumTransactionStatus transStatus)
         {
             Check.Require(transStatus != EnumTransactionStatus.None, "transStatus may not be None");
@@ -265,6 +305,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                            det.TransId.TransDesc,
                            det.TransId.TransSubTotal,
                            det.TransId.TransPaymentMethod,
+                           TransId = det.TransId.Id,
                            ViewWarehouse = SetView(det.TransId.TransStatus, EnumViewTrans.ViewWarehouse),
                            ViewWarehouseTo = SetView(det.TransId.TransStatus, EnumViewTrans.ViewWarehouseTo),
                            ViewSupplier = SetView(det.TransId.TransStatus, EnumViewTrans.ViewSupplier),
@@ -308,7 +349,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       det.ItemId.ItemName,
                                       WarehouseId = det.TransId.WarehouseId.Id,
                                       det.TransId.WarehouseId.WarehouseName,
-                                      TotalUsed = _tTransDetRepository.GetTotalUsed(det.ItemId, det.TransId.WarehouseId, EnumTransactionStatus.Using.ToString())
+                                      TotalUsed = _tTransDetRepository.GetTotalUsed(det.ItemId, det.TransId.WarehouseId, EnumTransactionStatus.Using.ToString()),
+                                      RealPercentValue = _tRealRepository.GetByCostCenter(det.TransId.WarehouseId.CostCenterId) != null ? _tRealRepository.GetByCostCenter(det.TransId.WarehouseId.CostCenterId).RealPercentValue : null
                                   }
             ;
 
@@ -367,7 +409,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                            WarehouseId = card.WarehouseId.Id,
                            card.WarehouseId.WarehouseName,
                            card.StockCardSaldo,
-                           card.StockCardDesc
+                           card.StockCardDesc,
+                           card.TransDetId.TransId.TransFactur
                        }
             ;
 

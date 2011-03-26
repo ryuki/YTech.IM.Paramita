@@ -28,6 +28,16 @@
     <table>
         <tr>
             <td >
+             <label for="TransUnit_CostCenterId">
+                            Cara Pembayaran :</label> 
+                      </td>
+            <td>
+                        <%= Html.DropDownList("TransUnit.CostCenterId", Model.CostCenterList)%>
+                        <%= Html.ValidationMessage("TransUnit.CostCenterId")%>
+                    </td>
+        </tr>
+        <tr>
+            <td >
              <label for="TransUnit_TransUnitDate">
                             Tanggal Jual :</label> 
                       </td>
@@ -66,6 +76,16 @@
                         <%= Html.ValidationMessage("TransUnit.TransUnitPrice")%>
                     </td>
                 </tr>
+        <tr>
+            <td >
+             <label for="TransUnit_TransUnitPaymentMethod">
+                            Cara Pembayaran :</label> 
+                      </td>
+            <td>
+                        <%= Html.DropDownList("TransUnit.TransUnitPaymentMethod", Model.PaymentMethodList)%>
+                        <%= Html.ValidationMessage("TransUnit.TransUnitPaymentMethod")%>
+                    </td>
+        </tr>
          <tr>
                     <td>
                         <label for="TransUnit_TransUnitDesc">

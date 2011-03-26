@@ -14,5 +14,6 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel.Reports
         public decimal TotalUsed { get; set; }
         public string WarehouseId { get; set; }
         public string WarehouseName { get; set; }
+        public string RealPercentValue { get; set; }
     }
 }

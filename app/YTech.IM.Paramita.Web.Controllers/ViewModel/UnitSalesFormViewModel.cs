@@ -18,7 +18,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
 {
     public class UnitSalesFormViewModel
     {
-        public static UnitSalesFormViewModel CreateUnitSalesFormViewModel(IMCustomerRepository mCustomerRepository)
+        public static UnitSalesFormViewModel CreateUnitSalesFormViewModel(IMCustomerRepository mCustomerRepository, IMCostCenterRepository mCostCenterRepository)
         {
             UnitSalesFormViewModel viewModel = new UnitSalesFormViewModel();
             
@@ -36,13 +36,26 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
             //cust.CustomerDesc = "-Pilih Pembeli-";
             //vals.Union( .Insert(0, cust));
             viewModel.CustomerList = new SelectList(vals, "ID", "Name");
-            
+          
+            IList<MCostCenter> list = mCostCenterRepository.GetAll();
+            MCostCenter costCenter = new MCostCenter();
+            costCenter.CostCenterName = "-Pilih Cost Center-";
+            list.Insert(0, costCenter);
+            viewModel.CostCenterList = new SelectList(list, "Id", "CostCenterName");
+
+            var values = from EnumPaymentMethod e in Enum.GetValues(typeof(EnumPaymentMethod))
+                         select new { ID = e, Name = e.ToString() };
+
+            viewModel.PaymentMethodList = new SelectList(values, "Id", "Name");
+
             return viewModel;
         }
 
-        public TTransUnit TransUnit { get; internal set; } 
+        public TTransUnit TransUnit { get; internal set; }
 
-        public SelectList CustomerList { get; internal set; } 
+        public SelectList CustomerList { get; internal set; }
+        public SelectList CostCenterList { get; internal set; }
+        public SelectList PaymentMethodList { get; internal set; } 
         public string Title { get; internal set; }
     }
 }

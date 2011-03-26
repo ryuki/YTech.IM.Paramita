@@ -2,7 +2,6 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <asp:ContentPlaceHolder ID="head" runat="server">
-   
     </asp:ContentPlaceHolder>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="title" runat="server">
@@ -10,8 +9,15 @@
     </asp:ContentPlaceHolder>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="SampleContent" runat="server">
-  
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
-       
+    <asp:ContentPlaceHolder ID="MainContent" runat="server">
+    </asp:ContentPlaceHolder>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(':text').keyup(function () {
+                //alert($(this).val());
+                $(this).val($(this).val().toUpperCase());
+                //alert($(this).val().toUpperCase());
+            });
+        });
+    </script>
 </asp:Content>

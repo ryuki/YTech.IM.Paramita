@@ -11,5 +11,6 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel.Reports
     {
         public string ItemName { get; set; }
         public string WarehouseName { get; set; }
+        public string TransFactur { get; set; }
     }
 }

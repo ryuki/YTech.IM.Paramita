@@ -57,7 +57,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                         cell = new string[] {
                             sup.Id, 
                             sup.SupplierName, 
-                            sup.SupplierMaxDebt.HasValue ? sup.SupplierMaxDebt.Value.ToString() : null,
+                            sup.SupplierMaxDebt.HasValue ? sup.SupplierMaxDebt.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                             sup.SupplierStatus,
                           sup.AddressId != null?  sup.AddressId.AddressLine1 : null,
                           sup.AddressId != null?  sup.AddressId.AddressLine2 : null,
@@ -76,6 +76,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         [Transaction]
         public ActionResult Insert(MSupplier viewModel, FormCollection formCollection)
         {
+            UpdateNumericData(viewModel, formCollection);
             RefAddress address = new RefAddress();
             TransferFormValuesTo(address, formCollection);
             address.SetAssignedIdTo(Guid.NewGuid().ToString());
@@ -150,6 +151,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         [Transaction]
         public ActionResult Update(MSupplier viewModel, FormCollection formCollection)
         {
+            UpdateNumericData(viewModel, formCollection);
             MSupplier mSupplierToUpdate = _mSupplierRepository.Get(viewModel.Id);
             TransferFormValuesTo(mSupplierToUpdate, viewModel);
             mSupplierToUpdate.ModifiedDate = DateTime.Now;
@@ -177,6 +179,20 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             }
 
             return Content("success");
+        }
+
+        private void UpdateNumericData(MSupplier viewModel, FormCollection formCollection)
+        {
+            if (!string.IsNullOrEmpty(formCollection["SupplierMaxDebt"]))
+            {
+                string wide = formCollection["SupplierMaxDebt"].Replace(",", "");
+                decimal? budget = Convert.ToDecimal(wide);
+                viewModel.SupplierMaxDebt = budget;
+            }
+            else
+            {
+                viewModel.SupplierMaxDebt = null;
+            }
         }
 
         private static void TransferFormValuesTo(MSupplier mSupplierToUpdate, MSupplier mSupplierFromForm)

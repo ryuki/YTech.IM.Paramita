@@ -63,6 +63,11 @@
         </div>
         <div>
             <%= Html.ActionLinkForAreas<InventoryController>(c => c.Budgeting(), "Rencana Anggaran Belanja")%></div>
+              <div>
+            <hr />
+        </div>
+        <div>
+            <%= Html.ActionLinkForAreas<RealController>(c => c.Index(), "Realisasi Proyek")%></div>
     </div>
     <h3>
         <a href="#">Penjualan Unit</a></h3>
@@ -108,6 +113,9 @@
             <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptCostCenter), "Daftar Cost Center")%>
         </div>
         <div>
+            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptItem), "Daftar Produk")%>
+        </div>
+        <div>
             <hr />
         </div>
         <div>
@@ -145,6 +153,9 @@
         </div>
         <div>
             <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptJournal), "Lap. Jurnal")%>
+        </div>
+        <div>
+            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBukuBesar), "Lap. Buku Besar")%>
         </div>
         <div>
             <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptNeraca), "Lap. Neraca")%>

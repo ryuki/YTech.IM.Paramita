@@ -81,6 +81,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\FillHelper.cs" />
     <Compile Include="Master\CustomerController.cs" />
     <Compile Include="Transaction\AccountingController.cs" />
     <Compile Include="ControllerEnums.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Master\WarehouseController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteRegistrar.cs" />
+    <Compile Include="Transaction\RealController.cs" />
     <Compile Include="Transaction\ReportController.cs" />
     <Compile Include="Transaction\InventoryController.cs" />
     <Compile Include="Transaction\TransactionAreaRegistration.cs" />
@@ -112,8 +114,10 @@
     <Compile Include="ViewModel\CashFormViewModel.cs" />
     <Compile Include="ViewModel\ClosingViewModel.cs" />
     <Compile Include="ViewModel\GeneralLedgerViewModel.cs" />
+    <Compile Include="ViewModel\RealFormViewModel.cs" />
     <Compile Include="ViewModel\ReportParamViewModel.cs" />
     <Compile Include="ViewModel\Reports\CashJournalViewModel.cs" />
+    <Compile Include="ViewModel\Reports\ItemViewModel.cs" />
     <Compile Include="ViewModel\Reports\JournalDetViewModel.cs" />
     <Compile Include="ViewModel\Reports\RecAccountViewModel.cs" />
     <Compile Include="ViewModel\Reports\StockCardViewModel.cs" />

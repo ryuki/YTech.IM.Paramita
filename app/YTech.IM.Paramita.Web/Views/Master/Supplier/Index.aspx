@@ -79,7 +79,14 @@
                     { name: 'Id', index: 'Id', width: 100, align: 'left', key: true, editrules: { required: true, edithidden: false }, hidedlg: true, hidden: false, editable: true },
                     { name: 'SupplierName', index: 'SupplierName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { required: true }, formoptions: { elmsuffix: ' *'} },
 
-                   { name: 'SupplierMaxDebt', index: 'SupplierMaxDebt', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false,number : true }, formatter: 'number' },
+                   { name: 'SupplierMaxDebt', index: 'SupplierMaxDebt', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false },
+                       editoptions: {
+                           dataInit: function (elem) {
+                               $(elem).autoNumeric();
+                               $(elem).attr("style", "text-align:right;");
+                           }
+                       }
+                   },
                    { name: 'SupplierStatus', index: 'SupplierStatus', width: 200, sortable: false, align: 'left', editable: true, edittype: 'checkbox', editoptions: { value: "Aktif:Tidak Aktif" }, editrules: { required: false} },
                    { name: 'AddressLine1', index: 'AddressLine1', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { required: false} },
                    { name: 'AddressLine2', index: 'AddressLine2', width: 200, hidden: true, align: 'left', editable: true, edittype: 'text', editrules: { required: false, edithidden: true} },
