@@ -52,8 +52,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="RptBukuBesar.rdlc" />
-    <EmbeddedResource Include="RptItem.rdlc" />
+    <Content Include="RptBukuBesar.rdlc" />
+    <Content Include="RptItem.rdlc" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -63,16 +63,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="RptAnalyzeBudgetDetail.rdlc" />
-    <EmbeddedResource Include="RptBrand.rdlc" />
-    <EmbeddedResource Include="RptCostCenter.rdlc" />
-    <EmbeddedResource Include="RptJournal.rdlc" />
-    <EmbeddedResource Include="RptLR.rdlc" />
-    <EmbeddedResource Include="RptNeraca.rdlc" />
-    <EmbeddedResource Include="RptPrintCash.rdlc" />
-    <EmbeddedResource Include="RptStockCard.rdlc" />
-    <EmbeddedResource Include="RptStockItem.rdlc" />
-    <EmbeddedResource Include="RptTransDetail.rdlc" />
+    <Content Include="RptAnalyzeBudgetDetail.rdlc" />
+    <Content Include="RptBrand.rdlc" />
+    <Content Include="RptCostCenter.rdlc" />
+    <Content Include="RptJournal.rdlc" />
+    <Content Include="RptLR.rdlc" />
+    <Content Include="RptNeraca.rdlc" />
+    <Content Include="RptPrintCash.rdlc" />
+    <Content Include="RptStockCard.rdlc" />
+    <Content Include="RptStockItem.rdlc" />
+    <Content Include="RptTransDetail.rdlc" />
     <None Include="Properties\DataSources\YTech.IM.Paramita.Core.Master.MAccount.datasource" />
     <None Include="Properties\DataSources\YTech.IM.Paramita.Core.Master.MAccountRef.datasource" />
     <None Include="Properties\DataSources\YTech.IM.Paramita.Core.Master.MBrand.datasource" />

@@ -1,8 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/MyMaster.master" AutoEventWireup="true"
-    Inherits="System.Web.Mvc.ViewPage<YTech.IM.Paramita.Web.Controllers.ViewModel.TransactionFormViewModel>" %>
-
-<asp:Content ID="Content2" ContentPlaceHolderID="title" runat="server">
-</asp:Content>
+    Inherits="System.Web.Mvc.ViewPage<TransactionFormViewModel>" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script language="javascript">
 

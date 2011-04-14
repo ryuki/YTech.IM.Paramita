@@ -33,7 +33,7 @@ namespace YTech.IM.Paramita.Data.Repository
             return q.List<TTransDet>();
         }
 
-        public decimal? GetTotalUsed(MItem item, MWarehouse warehouse,string transStatus)
+        public decimal? GetTotalUsed(MItem item, MWarehouse warehouse, DateTime dateFrom, DateTime dateTo, string transStatus)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine(@"   select sum(det.TransDetQty)
@@ -44,6 +44,7 @@ namespace YTech.IM.Paramita.Data.Repository
                 sql.AppendLine(@"   and det.ItemId = :item");
             if (warehouse != null)
                 sql.AppendLine(@"   and trans.WarehouseId = :warehouse");
+            sql.AppendLine(@"   and trans.TransDate between :dateFrom and :dateTo ");
 
             IQuery q = Session.CreateQuery(sql.ToString());
             q.SetString("TransStatus", transStatus);
@@ -51,6 +52,8 @@ namespace YTech.IM.Paramita.Data.Repository
                 q.SetEntity("item", item);
             if (warehouse != null)
                 q.SetEntity("warehouse", warehouse);
+            q.SetDateTime("dateFrom", dateFrom);
+            q.SetDateTime("dateTo", dateTo);
             if (q.UniqueResult() != null)
                 return (decimal) q.UniqueResult();
             return null;

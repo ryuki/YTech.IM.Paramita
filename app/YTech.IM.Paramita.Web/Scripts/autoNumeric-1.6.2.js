@@ -495,7 +495,7 @@
 		aDec: '.',/* allowed decimal separator character */
 		aSign: '',/* allowed currency symbol */
 		pSign: 'p',/* placement of currency sign prefix or suffix */
-		mNum: 9,/* max number of numerical characters to the left of the decimal */
+		mNum: 15,/* max number of numerical characters to the left of the decimal */
 		mDec: 2,/* max number of decimal places */
 		dGroup: 3,/* digital grouping for the thousand separator used in Format */
 		mRound: 'S',/* method used for rounding */

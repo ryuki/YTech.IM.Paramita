@@ -19,8 +19,8 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Master
             mapping.Id(x => x.Id, "ACCOUNT_ID")
                  .GeneratedBy.Assigned();
 
-            mapping.References(x => x.AccountCatId, "ACCOUNT_CAT_ID").Fetch.Join();
-            mapping.References(x => x.AccountParentId, "ACCOUNT_PARENT_ID").Fetch.Join();
+            mapping.References(x => x.AccountCatId, "ACCOUNT_CAT_ID").LazyLoad();
+            mapping.References(x => x.AccountParentId, "ACCOUNT_PARENT_ID").LazyLoad();
             mapping.Map(x => x.AccountStatus, "ACCOUNT_STATUS");
             mapping.Map(x => x.AccountName, "ACCOUNT_NAME");
             mapping.Map(x => x.AccountDesc, "ACCOUNT_DESC");

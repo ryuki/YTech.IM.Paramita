@@ -23,12 +23,14 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
             CashFormViewModel viewModel = new CashFormViewModel();
 
             viewModel.CostCenterList = FillHelper.GetCostCenters(mCostCenterRepository, "-Pilih Cost Center-");
-            viewModel.AccountList = FillHelper.GetAccounts(mAccountRepository, "-Pilih Akun Kas-");
+            //viewModel.AccountList = FillHelper.GetAccounts(mAccountRepository, "-Pilih Akun Kas-");
 
             return viewModel;
         }
 
         public TJournal Journal { get; internal set; }
+        public string CashAccountId { get; internal set; }
+        public string CashAccountName { get; internal set; }
         public IList<TJournalDet> ListOfJournalDet { get; internal set; }
 
         public SelectList CostCenterList { get; internal set; }

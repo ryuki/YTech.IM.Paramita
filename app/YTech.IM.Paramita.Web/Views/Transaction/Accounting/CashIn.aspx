@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/MyMaster.master" AutoEventWireup="true"
-    Inherits="System.Web.Mvc.ViewPage<YTech.IM.Paramita.Web.Controllers.ViewModel.CashFormViewModel>" %>
+    Inherits="System.Web.Mvc.ViewPage<YTech.IM.Paramita.Web.Controllers.ViewModel.CashFormViewModel>" ValidateRequest="false" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
   
 </asp:Content>

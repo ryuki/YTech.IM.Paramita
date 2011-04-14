@@ -41,5 +41,24 @@ namespace YTech.IM.Paramita.Data.Repository
 
             return q.List<TJournalDet>();
         }
+
+        public IList<TJournalDet> GetDetailByJournalId(string journalId)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendLine(@"  select det
+                                from TJournalDet as det
+                                    inner join det.JournalId j");
+            if (journalId != null)
+            {
+                sql.AppendLine(@"   where j.Id = :journalId");
+            }
+
+            IQuery q = Session.CreateQuery(sql.ToString());
+            if (journalId != null)
+            {
+                q.SetString("journalId", journalId);
+            }
+            return q.List<TJournalDet>();
+        }
     }
 }

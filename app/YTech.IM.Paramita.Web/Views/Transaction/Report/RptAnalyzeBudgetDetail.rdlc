@@ -114,7 +114,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>7.21698in</Width>
+              <Width>8.84905in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -211,6 +211,9 @@
                               </TablixColumn>
                               <TablixColumn>
                                 <Width>1in</Width>
+                              </TablixColumn>
+                              <TablixColumn>
+                                <Width>1.63207in</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
@@ -445,6 +448,44 @@
                                       </Textbox>
                                     </CellContents>
                                   </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox1">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>Keterangan</Value>
+                                                <Style>
+                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>White</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Center</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox1</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#7292cc</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <BackgroundColor>#4c68a2</BackgroundColor>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
@@ -531,7 +572,7 @@
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value>=Fields!TransDetQty.Value</Value>
+                                                <Value>=sum(Fields!TransDetQty.Value)</Value>
                                                 <Style>
                                                   <FontFamily>Verdana</FontFamily>
                                                   <FontSize>9pt</FontSize>
@@ -557,6 +598,7 @@
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
                                       </Textbox>
+                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell>
@@ -631,7 +673,6 @@
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
                                       </Textbox>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell>
@@ -671,12 +712,49 @@
                                       </Textbox>
                                     </CellContents>
                                   </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="TransDetDesc">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!TransDetDesc.Value</Value>
+                                                <Style>
+                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Color>#4d4d4d</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Left</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>TransDetDesc</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#e5e5e5</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
                                 </TablixCells>
                               </TablixRow>
                             </TablixRows>
                           </TablixBody>
                           <TablixColumnHierarchy>
                             <TablixMembers>
+                              <TablixMember />
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
@@ -693,7 +771,7 @@
                               <TablixMember>
                                 <Group Name="Details">
                                   <GroupExpressions>
-                                    <GroupExpression>=Fields!WarehouseId.Value</GroupExpression>
+                                    <GroupExpression>=Fields!ItemId.Value</GroupExpression>
                                   </GroupExpressions>
                                 </Group>
                               </TablixMember>
@@ -702,7 +780,7 @@
                           <DataSetName>TransDetViewModel</DataSetName>
                           <Top>0.29166in</Top>
                           <Height>0.5in</Height>
-                          <Width>7.21698in</Width>
+                          <Width>8.84905in</Width>
                           <ZIndex>2</ZIndex>
                           <Style>
                             <Border>
@@ -743,7 +821,7 @@
         <DataSetName>TransDetViewModel</DataSetName>
         <Top>0.12717in</Top>
         <Height>1.12736in</Height>
-        <Width>7.21698in</Width>
+        <Width>8.84905in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -754,7 +832,7 @@
     <Height>1.7519in</Height>
     <Style />
   </Body>
-  <Width>7.21698in</Width>
+  <Width>8.84905in</Width>
   <Page>
     <PageHeader>
       <Height>0.43396in</Height>

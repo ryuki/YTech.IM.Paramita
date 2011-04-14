@@ -152,7 +152,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewWarehouseTo = false;
                     viewModel.ViewSupplier = false;
                     viewModel.ViewDate = false;
-                    viewModel.ViewFactur = false;
+                    viewModel.ViewFactur = true;
                     viewModel.ViewPrice = true;
                     viewModel.ViewPaymentMethod = false;
                     break;

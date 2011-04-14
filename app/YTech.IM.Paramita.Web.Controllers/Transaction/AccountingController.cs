@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Microsoft.Reporting.WebForms;
 using SharpArch.Core;
 using SharpArch.Web.NHibernate;
 using YTech.IM.Paramita.Core.Master;
@@ -88,7 +89,20 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult CashIn(TJournal journal, FormCollection formCollection)
         {
-            return SaveJournal(journal, formCollection);
+            if (formCollection["btnSave"] != null)
+                return SaveJournal(journal, formCollection);
+            else if (formCollection["btnPrint"] != null)
+            {
+                //save data to session
+                SetDataForPrint(journal.Id);
+                var e = new
+                {
+                    Success = false,
+                    Message = "redirect"
+                };
+                return Json(e, JsonRequestBehavior.AllowGet);
+            }
+            return View();
         }
 
         [Transaction]
@@ -108,11 +122,67 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult CashOut(TJournal journal, FormCollection formCollection)
         {
-            return SaveJournal(journal, formCollection);
+            if (formCollection["btnSave"] != null)
+                return SaveJournal(journal, formCollection);
+            else if (formCollection["btnPrint"] != null)
+            {
+                //save data to session
+                SetDataForPrint(journal.Id);
+                var e = new
+                {
+                    Success = false,
+                    Message = "redirect"
+                };
+                return Json(e, JsonRequestBehavior.AllowGet);
+            }
+            return View();
+        }
+
+        private void SetDataForPrint(string journalId)
+        {
+            ReportDataSource[] repCol = new ReportDataSource[1];
+            IList<TJournalDet> listDets = _tJournalDetRepository.GetDetailByJournalId(journalId);
+            var detailHeaders = from det in listDets
+                                where det.JournalDetNo.Value == 0
+                                select det
+            ;
+            TJournalDet detailHeader = new TJournalDet();
+            if (detailHeaders != null)
+            {
+                detailHeader = (detailHeaders.ToList() as IList<TJournalDet>)[0];
+            }
+
+            var list = from det in listDets
+                       where det.JournalDetNo != 0
+                       select new
+                       {
+                           AccountId = detailHeader.AccountId.Id,
+                           detailHeader.AccountId.AccountName,
+                           JournalDate = det.JournalId != null ? det.JournalId.JournalDate : null,
+                           CostCenterId = det.JournalId.CostCenterId.Id,
+                           det.JournalId.CostCenterId.CostCenterName,
+                           JournalVoucherNo = det.JournalId.JournalVoucherNo,
+                           JournalId = det.JournalId.Id,
+                           det.JournalId.JournalPic,
+                           det.JournalDetAmmount,
+                           det.JournalDetDesc,
+                           det.JournalDetEvidenceNo,
+                           det.JournalDetNo,
+                           det.JournalDetStatus,
+                           DetAccountId = det.AccountId.Id,
+                           DetAccountName = det.AccountId.AccountName,
+                           JournalType = det.JournalId.JournalType
+                       }
+     ;
+            ReportDataSource reportDataSource = new ReportDataSource("CashJournalViewModel", list.ToList());
+            repCol[0] = reportDataSource;
+            Session["ReportData"] = repCol;
         }
 
         private ActionResult SaveJournal(TJournal journal, FormCollection formCollection)
         {
+            _tJournalRepository.DbContext.BeginTransaction();
+
             if (journal == null)
             {
                 journal = new TJournal();
@@ -161,7 +231,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             {
                 detToInsert = new TJournalDet(journal);
                 detToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
-                detToInsert.AccountId = _mAccountRepository.Get(formCollection["AccountId"]);
+                detToInsert.AccountId = _mAccountRepository.Get(formCollection["CashAccountId"]);
 
                 if (journal.JournalType == EnumJournalType.CashIn.ToString())
                 {
@@ -180,17 +250,31 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 detToInsert.DataStatus = Enums.EnumDataStatus.New.ToString();
                 journal.JournalDets.Add(detToInsert);
             }
+            _tJournalRepository.Save(journal);
 
+            string Message = string.Empty;
+            bool Success = true;
             try
             {
-                _tJournalRepository.Save(journal);
+                _tJournalRepository.DbContext.CommitTransaction();
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Success;
+                Message = "Data berhasil disimpan.";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _tJournalRepository.DbContext.RollbackTransaction();
+                Success = false;
+                Message = ex.GetBaseException().Message;
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Failed;
             }
-            return View("Status");
+            var e = new
+            {
+                Success,
+                Message
+            };
+            return
+                Json(e, JsonRequestBehavior.AllowGet);
+            //View("Status");
             //return RedirectToAction(journal.JournalType);
         }
 

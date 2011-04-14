@@ -148,24 +148,24 @@ function ajaxValidate() {
 var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
     return $('form').validate({
     rules: {
+       <% if (ViewData.Model.ViewFactur)
+                   {	%> "Trans.TransFactur": { required: true  } <% } %>
      <% if (ViewData.Model.ViewDate)
                    {	%>
-        "Trans.TransDate": { required: true }, <% } %>
-       <% if (ViewData.Model.ViewFactur)
-                   {	%> "Trans.TransFactur": { required: true  },<% } %>
+        ,"Trans.TransDate": { required: true } <% } %>
          <% if (ViewData.Model.ViewSupplier)
-                   {	%> "Trans.TransBy": { required: true  }, <% } %>
+                   {	%> ,"Trans.TransBy": { required: true  } <% } %>
          <% if (ViewData.Model.ViewWarehouse)
-                   {	%>"Trans.WarehouseId": { required: true  },<% } %>
+                   {	%> ,"Trans.WarehouseId": { required: true  }<% } %>
         <% if (ViewData.Model.ViewWarehouseTo)
-                   {	%> "Trans.WarehouseIdTo": { required: true  }<% } %>
+                   {	%> ,"Trans.WarehouseIdTo": { required: true  }<% } %>
     },
     messages: {
-       <% if (ViewData.Model.ViewDate) {	%> "Trans.TransDate": "<img id='TransDateerror' src='"+imgerror+"' hovertext='Tanggal tidak boleh kosong' />"  ,<% } %>
-        <% if (ViewData.Model.ViewFactur) {	%>  "Trans.TransFactur": "<img id='TransFacturerror' src='"+imgerror+"' hovertext='No Faktur harus diisi' />",<% } %>
-        <% if (ViewData.Model.ViewSupplier) {	%>  "Trans.TransBy": "<img id='TransByerror' src='"+imgerror+"' hovertext='Pilih Supplier' />",<% } %>
-        <% if (ViewData.Model.ViewWarehouse) {	%>  "Trans.WarehouseId": "<img id='WarehouseIderror' src='"+imgerror+"' hovertext='Pilih Gudang' />",<% } %>
-        <% if (ViewData.Model.ViewWarehouseTo) {	%>  "Trans.WarehouseIdTo": "<img id='WarehouseIdToerror' src='"+imgerror+"' hovertext='Pilih Gudang Tujuan' />"<% } %>
+        <% if (ViewData.Model.ViewFactur) {	%>  "Trans.TransFactur": "<img id='TransFacturerror' src='"+imgerror+"' hovertext='No Faktur harus diisi' />"<% } %>
+       <% if (ViewData.Model.ViewDate) {	%> ,"Trans.TransDate": "<img id='TransDateerror' src='"+imgerror+"' hovertext='Tanggal tidak boleh kosong' />" <% } %>
+        <% if (ViewData.Model.ViewSupplier) {	%>  ,"Trans.TransBy": "<img id='TransByerror' src='"+imgerror+"' hovertext='Pilih Supplier' />"<% } %>
+        <% if (ViewData.Model.ViewWarehouse) {	%>  ,"Trans.WarehouseId": "<img id='WarehouseIderror' src='"+imgerror+"' hovertext='Pilih Gudang' />"<% } %>
+        <% if (ViewData.Model.ViewWarehouseTo) {	%>  ,"Trans.WarehouseIdTo": "<img id='WarehouseIdToerror' src='"+imgerror+"' hovertext='Pilih Gudang Tujuan' />"<% } %>
         },        invalidHandler: function(form, validator) {          var errors = validator.numberOfInvalids();
 						  if (errors) {
                           var message = "Validasi data kurang";

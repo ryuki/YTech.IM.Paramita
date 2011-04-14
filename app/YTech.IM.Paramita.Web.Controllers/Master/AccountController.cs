@@ -34,6 +34,13 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         }
 
 
+        public ActionResult Search()
+        {
+            IList<MAccountCat> list = _mAccountCatRepository.GetAll();
+            ViewData["AccountCatList"] = new SelectList(list, "Id", "AccountCatName");
+            return View();
+        }
+
         public ActionResult Index()
         {
             IList<MAccountCat> list = _mAccountCatRepository.GetAll();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SharpArch.Core.PersistenceSupport.NHibernate;
 using YTech.IM.Paramita.Core.Master;
 using YTech.IM.Paramita.Core.Transaction;
@@ -10,7 +11,7 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
     {
         IList<TTransDet> GetByItemWarehouse(MItem item, MWarehouse warehouse);
 
-        decimal? GetTotalUsed(MItem item, MWarehouse warehouse, string transStatus);
+        decimal? GetTotalUsed(MItem item, MWarehouse warehouse, DateTime dateFrom, DateTime dateTo, string transStatus);
 
         IList<TTransDet> GetByDateWarehouse(System.DateTime? dateFrom, System.DateTime? dateTo, MWarehouse warehouse, string transStatus);
     }

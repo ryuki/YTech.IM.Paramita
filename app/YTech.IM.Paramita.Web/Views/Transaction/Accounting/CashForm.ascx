@@ -7,9 +7,9 @@
    {%> --%>
 <% using (Ajax.BeginForm(new AjaxOptions
                                        {
-                                           UpdateTargetId = "status",
+                                           //UpdateTargetId = "status",
                                            InsertionMode = InsertionMode.Replace,
-                                           OnBegin = "ajaxValidate",
+                                          // OnBegin = "ajaxValidate",
                                            OnSuccess = "onSavedSuccess"
                                        }
 
@@ -31,10 +31,10 @@
     <div>
         <span id="toolbar" class="ui-widget-header ui-corner-all"><a id="newJournal" href="<%= Url.Action(ViewData.Model.Journal.JournalType, "Accounting") %>">
             Baru</a>
-            <button id="Save" type="submit">
+            <button id="btnSave" name="btnSave" type="submit">
                 Simpan</button>
-            <a id="print" href="<%= Url.Action(ViewData.Model.Journal.JournalType, "Accounting") %>">
-                Cetak</a> </span>
+            <button id="btnPrint" name="btnPrint" type="submit">
+                Cetak</button></span>
     </div>
     <table>
         <tr>
@@ -84,8 +84,26 @@
                                 Akun Kas :</label>
                         </td>
                         <td>
-                            <%= Html.DropDownList("AccountId", Model.AccountList)%>
-                            <%= Html.ValidationMessage("AccountId")%>
+                            <%= Html.TextBox("CashAccountId", Model.CashAccountId)%>&nbsp;<img src='<%= Url.Content("~/Content/Images/window16.gif") %>' style='cursor:hand;' id='imgCashAccountId' />
+                            <%= Html.ValidationMessage("CashAccountId")%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> 
+                        </td>
+                        <td>
+                            <%= Html.TextBox("CashAccountName", Model.CashAccountName)%>
+                            <%= Html.ValidationMessage("CashAccountName")%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="Journal_JournalPic">
+                                Penerima Kas :</label>
+                        </td>
+                        <td>
+                            <%= Html.TextBox("Journal.JournalPic", Model.Journal.JournalPic)%>
+                            <%= Html.ValidationMessage("Journal.JournalPic")%>
                         </td>
                     </tr>
                     <tr>
@@ -116,10 +134,41 @@
     <p>
     </p>
 </div>
+<div id='popup'>
+    <iframe width='100%' height='380px' id="popup_frame" frameborder="0"></iframe>
+</div>
 <script language="javascript" type="text/javascript">
 
-function onSavedSuccess() {
- $("#Save").attr('disabled', 'disabled');
+function onSavedSuccess(e) {
+//alert(e);
+ //$("#Save").attr('disabled', 'disabled');
+    var json = e.get_response().get_object();
+//alert(json);
+    var success = json.Success;
+       // alert(json.Success);
+    if (success == false) {
+        var msg = json.Message;
+       // alert(json.Message);
+        if (msg) {
+
+            if (msg == "redirect") {
+                var urlreport = '<%= ResolveUrl("~/ReportViewer.aspx?rpt=RptPrintCash") %>';
+                //    alert(urlreport);
+                window.open(urlreport);
+            }
+            else {
+                $('#dialog p:first').text(msg);
+                $("#dialog").dialog("open"); 
+            }
+            return false ;  
+        }
+    }
+    else{
+        $("#btnSave").attr('disabled', 'disabled');
+        $("#btnPrint").attr('disabled', '');
+        $('#dialog p:first').text(msg);
+        $("#dialog").dialog("open"); 
+    }
 }
 
 
@@ -173,29 +222,67 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 
     $(function () {
         $("#newJournal").button();
-        $("#Save").button();
-        $("#print").hide();
+        $("#btnSave").button();
+        $("#btnPrint").button();
+        //$("#btnPrint").hide();
         <% if (TempData[EnumCommonViewData.SaveState.ToString()] != null)
 {
     if (TempData[EnumCommonViewData.SaveState.ToString()].Equals(EnumSaveState.Failed))
     {%>
-   $("#print").attr('disabled', 'disabled');
+   $("#btnPrint").attr('disabled', 'disabled');
     <%
     }
 } else { %>
-  $("#print").attr('disabled', 'disabled');
+  $("#btnPrint").attr('disabled', 'disabled');
 <% } %>
 
         $("#Journal_JournalDate").datepicker({ dateFormat: "dd-M-yy" });
     });
 
+//    var form = $('form');
+//    form.submit(function() {
+//    alert(form.attr('action'));
+//    alert(form.attr('method'));
+//    alert(form.serialize());
+//        $.ajax({
+//            url: form.attr('action'),
+//            type: form.attr('method'),
+//            data: form.serialize(),
+//            success: function(result) {
+//            alert(result);
+//             onSavedSuccess(result);
+//            }
+//        });
+//         return false;
+//});
+ 
     $(document).ready(function () {
+
+//     $("btnPrint").click(function () {
+//               alert($("#Journal.Id").val());
+
+//        });
+
       $("form").mouseover(function () {
                 generateTooltips();
             });
         $("#dialog").dialog({
             autoOpen: false
         });
+        
+            $("#popup").dialog({
+                autoOpen: false,
+                height: 420,
+                width: '80%',
+                modal: true,
+                close: function(event, ui) {                 
+                    $("#list").trigger("reloadGrid");
+                 }
+            });
+            
+                     $('#imgCashAccountId').click(function () {
+                                   OpenPopupCashAccountSearch();
+                               });
 
         $("div#error").dialog({
             autoOpen: false
@@ -219,6 +306,9 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 }
                 , afterShowForm: function (eparams) {
                     $('#Id').attr('disabled', 'disabled');
+                     $('#imgAccountId').click(function () {
+                                   OpenPopupAccountSearch();
+                               });
                 }
                 , width: "400"
                 , afterComplete: function (response, postdata, formid) {
@@ -234,6 +324,9 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 , afterShowForm: function (eparams) {
                     $('#Id').attr('disabled', '');
                     $('#JournalDetAmmount').attr('value', '0');
+                     $('#imgAccountId').click(function () {
+                                   OpenPopupAccountSearch();
+                               });
 
                 }
                 , afterComplete: function (response, postdata, formid) {
@@ -259,15 +352,19 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
         $.jgrid.edit.editCaption = "Edit Detail";
         $.jgrid.del.caption = "Hapus Detail";
         $.jgrid.del.msg = "Anda yakin menghapus Detail yang dipilih?";
+            var imgLov = '<%= Url.Content("~/Content/Images/window16.gif") %>';
         $("#list").jqGrid({
             url: '<%= Url.Action("List", "Accounting") %>',
             datatype: 'json',
             mtype: 'GET',
             colNames: ['Id', 'Akun', 'Akun', 'No Bukti', 'Status', 'Jumlah', 'Debet', 'Kredit', 'Keterangan'],
             colModel: [
-                    { name: 'Id', index: 'Id', width: 100, align: 'left', key: true, editrules: { required: true, edithidden: false }, hidedlg: true, hidden: true, editable: false },
-                    { name: 'AccountId', index: 'AccountId', width: 200, align: 'left', editable: true, edittype: 'select', editrules: { edithidden: true }, hidden: true },
-                    { name: 'AccountName', index: 'AccountName', width: 200, align: 'left', editable: false, sortable: false, edittype: 'select', editrules: { edithidden: true} },
+                    { name: 'Id', index: 'Id', width: 100, align: 'left', key: true, editrules: { required: true, edithidden: false }, hidedlg: true, hidden: true, editable: false },                 
+                   { name: 'AccountId', index: 'AccountId', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { required: false },
+                       formoptions: {
+                        "elmsuffix": "&nbsp;<img src='" + imgLov + "' style='cursor:hand;' id='imgAccountId' />"
+                    } },
+                   { name: 'AccountName', index: 'AccountName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { required: false} },
                     { name: 'JournalDetEvidenceNo', index: 'JournalDetEvidenceNo', width: 200, sortable: false, align: 'left', editable: true, editrules: { edithidden: true} },
                     { name: 'JournalDetStatus', index: 'JournalDetStatus', width: 200, align: 'left', editable: true, edittype: 'select', editoptions: { value: "D:Debet;K:Kredit" }, editrules: { edithidden: true }, hidden: true, editable: false },
                     { name: 'JournalDetAmmount', index: 'JournalDetAmmount', width: 200, align: 'left', editable: true, editrules: { edithidden: true }, hidden: false,
@@ -293,7 +390,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             caption: 'Daftar Detail',
             autowidth: true,
             loadComplete: function () {
-                $('#list').setColProp('AccountId', { editoptions: { value: accounts} });
+               // $('#list').setColProp('AccountId', { editoptions: { value: accounts} });
                 $('#listPager_center').hide();
             },
             ondblClickRow: function (rowid, iRow, iCol, e) {
@@ -309,7 +406,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             );
     });
 
-                var accounts = $.ajax({ url: '<%= ResolveUrl("~/Master/Account/GetList") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the accounts.'); } }).responseText;
+                //var accounts = $.ajax({ url: '<%= ResolveUrl("~/Master/Account/GetList") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the accounts.'); } }).responseText;
 
                 
 //function to generate tooltips
@@ -332,4 +429,37 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 					}
 			});
 		}
+        
+        function OpenPopupCashAccountSearch()
+  {
+          $("#popup_frame").attr("src", "<%= ResolveUrl("~/Master/Account/Search") %>?src=CashAccountId");
+            $("#popup").dialog("open");
+            return false;   
+        }
+
+         function OpenPopupAccountSearch()
+        {
+          $("#popup_frame").attr("src", "<%= ResolveUrl("~/Master/Account/Search") %>?src=AccountId");
+            $("#popup").dialog("open");
+            return false;   
+        }
+
+         function SetAccountDetail(src,accountId, accountName)
+        {
+//        alert(itemId);
+//        alert(itemName);
+//        alert(price);
+  $("#popup").dialog("close");
+  if (src == 'AccountId') {
+     $('#AccountId').attr('value', accountId);
+          $('#AccountName').attr('value', accountName); 
+}
+         
+ else if (src == 'CashAccountId') {
+     $('#CashAccountId').attr('value', accountId);
+          $('#CashAccountName').attr('value', accountName);
+
+  }
+       
+        } 
 </script>

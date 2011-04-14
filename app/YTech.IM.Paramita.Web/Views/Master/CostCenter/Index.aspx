@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/MyMaster.master" AutoEventWireup="true"
-    Inherits="System.Web.Mvc.ViewPage<IEnumerable<MCostCenter>>" %>
+    Inherits="System.Web.Mvc.ViewPage" %>
 
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
     <table id="list" class="scroll" cellpadding="0" cellspacing="0">

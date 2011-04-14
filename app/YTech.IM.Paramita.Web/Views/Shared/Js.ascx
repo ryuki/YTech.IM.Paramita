@@ -12,14 +12,15 @@
     <link rel="Stylesheet" type="text/css" href="<%= Url.Content("~/Content/css/layout-default-latest.css")%>" />
     <link rel="Stylesheet" type="text/css" href="<%= Url.Content("~/Content/css/complex.css")%>" />
    
+    <script src="<%= Url.Content("~/Scripts/json2.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/MicrosoftAjax.debug.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/MicrosoftMvcAjax.debug.js") %>" type="text/javascript"></script>
-   <%-- <script src="<% = Url.Content("~/Scripts/Templates/MicrosoftAjaxAdoNet.js") %>" type="text/javascript"></script>
+  <%--<script src="<% = Url.Content("~/Scripts/Templates/MicrosoftAjaxAdoNet.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/Templates/MicrosoftAjaxTemplates.js") %>"
-        type="text/javascript"></script>
-    <script src="<%= Url.Content("~/Scripts/MicrosoftMvcValidation.debug.js") %>" type="text/javascript"></script>--%>
+        type="text/javascript"></script>--%>
+      <script src="<%= Url.Content("~/Scripts/MicrosoftMvcValidation.debug.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/jquery-1.4.4.min.js") %>" type="text/javascript"></script>
-   <%-- <script src="<%= Url.Content("~/Scripts/samplebrowser.js") %>" type="text/javascript"></script>--%>
+    <script src="<%= Url.Content("~/Scripts/samplebrowser.js") %>" type="text/javascript"></script>
     <link href="<%= Url.Content("~/Content/ui.jqgrid.css") %>" rel="stylesheet" type="text/css" />
     <link href="<%= Url.Content("~/Content/css/start/jquery-ui.css") %>" rel="Stylesheet"
         type="text/css" />
@@ -34,5 +35,7 @@
     <script src="<%= Url.Content("~/Scripts/jquery.layout.state.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/autoNumeric-1.6.2.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/jquery.tooltip.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/date.format.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/NumberFormat.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/default.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/complex.js") %>" type="text/javascript"></script>

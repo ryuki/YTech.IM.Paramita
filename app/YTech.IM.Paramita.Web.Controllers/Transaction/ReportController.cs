@@ -121,6 +121,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumReports.RptAnalyzeBudgetDetail:
                     title = "Lap. Analisa Budget";
+                    viewModel.ShowDateFrom = true;
+                    viewModel.ShowDateTo = true;
                     viewModel.ShowItem = true;
                     viewModel.ShowWarehouse = true;
                     break;
@@ -203,7 +205,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     localReport.DataSources.Add(GetStockItem(viewModel.ItemId, viewModel.WarehouseId));
                     break;
                 case EnumReports.RptAnalyzeBudgetDetail:
-                    localReport.DataSources.Add(GetTransDetForBudget(viewModel.ItemId, viewModel.WarehouseId));
+                    localReport.DataSources.Add(GetTransDetForBudget(viewModel.ItemId, viewModel.WarehouseId, viewModel.DateFrom.Value, viewModel.DateTo.Value));
                     break;
                 case EnumReports.RptTransDetail:
                     EnumTransactionStatus stat =
@@ -325,7 +327,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return true;
         }
 
-        private ReportDataSource GetTransDetForBudget(string itemId, string warehouseId)
+        private ReportDataSource GetTransDetForBudget(string itemId, string warehouseId, DateTime dateFrom, DateTime dateTo)
         {
             IList<TTransDet> dets;
             MItem item = null;
@@ -349,13 +351,24 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       det.ItemId.ItemName,
                                       WarehouseId = det.TransId.WarehouseId.Id,
                                       det.TransId.WarehouseId.WarehouseName,
-                                      TotalUsed = _tTransDetRepository.GetTotalUsed(det.ItemId, det.TransId.WarehouseId, EnumTransactionStatus.Using.ToString()),
-                                      RealPercentValue = _tRealRepository.GetByCostCenter(det.TransId.WarehouseId.CostCenterId) != null ? _tRealRepository.GetByCostCenter(det.TransId.WarehouseId.CostCenterId).RealPercentValue : null
+                                      TotalUsed = _tTransDetRepository.GetTotalUsed(det.ItemId, det.TransId.WarehouseId, dateFrom,dateTo, EnumTransactionStatus.Using.ToString()),
+                                      RealPercentValue = GetRealValue(det.TransId.WarehouseId.CostCenterId, dateFrom, dateTo) 
                                   }
             ;
 
             ReportDataSource reportDataSource = new ReportDataSource("TransDetViewModel", list);
             return reportDataSource;
+        }
+
+        //get real value
+        private object GetRealValue(MCostCenter mCostCenter,DateTime dateFrom,DateTime dateTo)
+        {
+            TReal real = _tRealRepository.GetByCostCenterAndDate(mCostCenter, dateFrom,dateTo);
+            if (real != null)
+            {
+                return real.RealPercentValue;
+            }
+            return null;
         }
 
         private ReportDataSource GetStockItem(string itemId, string warehouseId)

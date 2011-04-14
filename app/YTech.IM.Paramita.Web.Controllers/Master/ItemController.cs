@@ -170,7 +170,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
 
         [Transaction]
         public ActionResult Update(MItem viewModel, FormCollection formCollection)
-        { 
+        {
             MItem mItemToUpdate = _mItemRepository.Get(viewModel.Id);
             mItemToUpdate.ItemCatId = _mItemCatRepository.Get(formCollection["ItemCatId"]);
             mItemToUpdate.BrandId = _mBrandRepository.Get(formCollection["BrandId"]);
@@ -268,7 +268,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         [Transaction]
         public virtual ActionResult GetTotalBudget(string itemId, string warehouseId)
         {
-           return GetTotalQty(itemId, warehouseId, EnumTransactionStatus.Budgeting);
+            return GetTotalQty(itemId, warehouseId, EnumTransactionStatus.Budgeting);
         }
 
         [Transaction]
@@ -283,7 +283,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             {
                 MItem mItem = _mItemRepository.Get(itemId);
                 MWarehouse warehouse = _mWarehouseRepository.Get(warehouseId);
-                decimal? totalUsed = _tTransDetRepository.GetTotalUsed(mItem, warehouse, transactionStatus.ToString());
+                decimal? totalUsed = _tTransDetRepository.GetTotalUsed(mItem, warehouse, DateTime.MinValue, DateTime.MaxValue, transactionStatus.ToString());
                 if (totalUsed.HasValue)
                 {
                     return Content(totalUsed.Value.ToString(Helper.CommonHelper.NumberFormat));

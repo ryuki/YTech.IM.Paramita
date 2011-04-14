@@ -32,6 +32,12 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Master
             mapping.Map(x => x.ModifiedBy, "MODIFIED_BY");
             mapping.Map(x => x.ModifiedDate, "MODIFIED_DATE");
             mapping.Map(x => x.RowVersion, "ROW_VERSION").ReadOnly();
+
+            mapping.HasMany(x => x.Products)
+                .AsBag()
+                .Inverse()
+                .KeyColumn("COST_CENTER_ID")
+                .Cascade.All();
         }
 
         #endregion

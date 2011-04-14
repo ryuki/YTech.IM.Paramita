@@ -1,4 +1,5 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.Collections.Generic;
+using NHibernate.Validator.Constraints;
 using SharpArch.Core.DomainModel;
 using System;
 using SharpArch.Core;
@@ -16,6 +17,8 @@ namespace YTech.IM.Paramita.Core.Master
         public virtual DateTime? CostCenterStartDate { get; set; }
         public virtual DateTime? CostCenterEndDate { get; set; }
         public virtual string CostCenterDesc { get; set; }
+
+        public virtual IList<MProduct> Products { get; protected set; }
 
         public virtual string DataStatus { get; set; }
         public virtual string CreatedBy { get; set; }
