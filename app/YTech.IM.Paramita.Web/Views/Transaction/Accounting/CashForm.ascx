@@ -148,12 +148,12 @@ function onSavedSuccess(e) {
        // alert(json.Success);
     if (success == false) {
         var msg = json.Message;
-       // alert(json.Message);
+//        alert(json.Message);
         if (msg) {
 
             if (msg == "redirect") {
                 var urlreport = '<%= ResolveUrl("~/ReportViewer.aspx?rpt=RptPrintCash") %>';
-                //    alert(urlreport);
+                   // alert(urlreport);
                 window.open(urlreport);
             }
             else {
@@ -222,8 +222,8 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 
     $(function () {
         $("#newJournal").button();
-        $("#btnSave").button();
-        $("#btnPrint").button();
+//        $("#btnSave").button();
+//        $("#btnPrint").button();
         //$("#btnPrint").hide();
         <% if (TempData[EnumCommonViewData.SaveState.ToString()] != null)
 {

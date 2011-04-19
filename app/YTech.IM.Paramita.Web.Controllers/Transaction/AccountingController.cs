@@ -343,7 +343,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                  userdata = new
                                 {
                                     JournalDetEvidenceNo = "Total",
-                                    JournalDetAmmount = journalDets.Sum(det => det.JournalDetAmmount).HasValue ? journalDets.Sum(det => det.JournalDetAmmount).Value.ToString() : "0",
+                                    JournalDetAmmount = journalDets.Sum(det => det.JournalDetAmmount).HasValue ? journalDets.Sum(det => det.JournalDetAmmount).Value.ToString(Helper.CommonHelper.NumberFormat) : "0",
                                     JournalDetAmmountDebet = journalDets.Where(d => d.JournalDetStatus == "D").Sum(det => det.JournalDetAmmount).HasValue ? journalDets.Where(d => d.JournalDetStatus == "D").Sum(det => det.JournalDetAmmount).Value.ToString(Helper.CommonHelper.NumberFormat) : "0",
                                     //totalDebet.Sum().HasValue ? totalDebet.Sum().Value.ToString(Helper.CommonHelper.NumberFormat) : "0",
                                     JournalDetAmmountKredit = journalDets.Where(d => d.JournalDetStatus == "K").Sum(det => det.JournalDetAmmount).HasValue ? journalDets.Where(d => d.JournalDetStatus == "K").Sum(det => det.JournalDetAmmount).Value.ToString(Helper.CommonHelper.NumberFormat) : "0"
