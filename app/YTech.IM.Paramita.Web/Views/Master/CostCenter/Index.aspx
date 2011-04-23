@@ -121,6 +121,13 @@
                 height: 300,
                 caption: 'Daftar Cost Center',
                 autowidth: true,
+                subGrid: true,
+                subGridUrl: '',
+                subGridModel: [{ name: ['Nama', 'Total', 'Keterangan'],
+                                 width: [55, 80, 80, 80],
+                                 align: ['left', 'right', 'left', 'left'],
+                                 params: ['Id']
+                }],
                 ondblClickRow: function (rowid, iRow, iCol, e) {
                     $("#list").editGridRow(rowid, editDialog);
                 }
