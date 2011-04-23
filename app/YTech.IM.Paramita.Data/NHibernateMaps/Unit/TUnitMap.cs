@@ -22,7 +22,7 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Unit
                  .GeneratedBy.Assigned();
 
             mapping.Map(x => x.UnitNo, "UNIT_NO");
-            mapping.Map(x => x.UnitType, "UNIT_TYPE");
+            mapping.Map(x => x.UnitTypeId, "UNIT_TYPE_ID");
             mapping.Map(x => x.UnitLandWide, "UNIT_LAND_WIDE");
             mapping.Map(x => x.UnitWide, "UNIT_WIDE");
             mapping.Map(x => x.UnitLocation, "UNIT_LOCATION");

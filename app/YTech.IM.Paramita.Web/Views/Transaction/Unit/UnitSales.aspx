@@ -13,7 +13,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="PopupContent" runat="server">
+<asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <%= Html.Partial("~/Views/Shared/Status.ascx",Model) %>
     <% using (Html.BeginForm())
        {%>

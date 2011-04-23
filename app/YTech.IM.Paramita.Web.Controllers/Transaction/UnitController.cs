@@ -71,7 +71,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                         cell = new string[] {
                             unit.UnitStatus,
                             unit.Id, 
-                            unit.UnitType, 
+                            unit.UnitTypeId, 
                             unit.UnitLandWide.HasValue ?  unit.UnitLandWide.Value.ToString(Helper.CommonHelper.IntegerFormat) : null,
                             unit.UnitWide.HasValue ? unit.UnitWide.Value.ToString(Helper.CommonHelper.IntegerFormat) : null,
                             unit.UnitLocation,
@@ -197,7 +197,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         private void TransferFormValuesTo(TUnit unitToInsert, TUnit unitFrom)
         {
-            unitToInsert.UnitType = unitFrom.UnitType;
+            unitToInsert.UnitTypeId = unitFrom.UnitTypeId;
             unitToInsert.UnitLocation = unitFrom.UnitLocation;
             unitToInsert.UnitWide = unitFrom.UnitWide;
             unitToInsert.UnitLandWide = unitFrom.UnitLandWide;

@@ -13,7 +13,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Unit
         [DomainSignature]
         [NotNull, NotEmpty]
         public virtual string UnitNo { get; set; }
-        public virtual string UnitType { get; set; }
+        public virtual string UnitTypeId { get; set; }
         public virtual int? UnitLandWide { get; set; }
         public virtual int? UnitWide { get; set; }
         public virtual string UnitLocation { get; set; }
