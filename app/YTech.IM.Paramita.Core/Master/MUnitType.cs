@@ -10,6 +10,7 @@ namespace YTech.IM.Paramita.Core.Master
         [DomainSignature]
         [NotNull, NotEmpty]
         public virtual string UnitTypeId { get; set; }
+        public virtual MCostCenter CostCenterId { get; set; }
         public virtual string UnitTypeName { get; set; }
         public virtual byte[] UnitTypeTotal { get; set; }
         public virtual string UnitTypeStatus { get; set; }
