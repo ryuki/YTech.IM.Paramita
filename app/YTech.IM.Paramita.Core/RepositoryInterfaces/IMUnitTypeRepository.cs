@@ -1,9 +1,11 @@
-﻿using SharpArch.Core.PersistenceSupport.NHibernate;
+﻿using System.Collections.Generic;
+using SharpArch.Core.PersistenceSupport.NHibernate;
 using YTech.IM.Paramita.Core.Master;
 
 namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
     public interface IMUnitTypeRepository : INHibernateRepositoryWithTypedId<MUnitType, string>
     {
+        IList<MUnitType> GetByUnitTypeId(string unitTypeId);
     }
 }

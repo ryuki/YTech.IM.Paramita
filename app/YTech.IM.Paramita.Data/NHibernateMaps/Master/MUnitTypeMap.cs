@@ -16,6 +16,7 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Master
 
             mapping.Table("M_UNIT_TYPE");
             mapping.Id(x => x.Id, "UNIT_TYPE_ID").GeneratedBy.Assigned();
+            mapping.References(x => x.CostCenterId, "COST_CENTER_ID");
             mapping.Map(x => x.UnitTypeName, "UNIT_TYPE_NAME");
             mapping.Map(x => x.UnitTypeTotal, "UNIT_TYPE_TOTAL");
             mapping.Map(x => x.UnitTypeStatus, "UNIT_TYPE_STATUS");
