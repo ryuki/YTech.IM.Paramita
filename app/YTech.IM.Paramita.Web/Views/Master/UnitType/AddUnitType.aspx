@@ -130,9 +130,9 @@
                 , closeAfterEdit: true
                 , modal: true
                 , beforeSubmit: function (postdata, formid) {
-                //    postdata.CostCenterId = costCenterId;
-                    //    return [true, ''];
-                    alert('fff');
+                    postdata.CostCenterId = costCenterId;
+                        return [true, ''];
+//                    alert('fff');
                 }
                 , afterShowForm: function (eparams) {
                     $('#Id').attr('disabled', '');
@@ -175,11 +175,13 @@
                 mtype: 'GET',
                 colNames: ['Nama', 'Total', 'Keterangan'],
                 colModel: [
-                    { name: 'UnitName', index: 'UnitName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { edithidden: true} },
+                    { name: 'UnitTypeName', index: 'UnitTypeName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { edithidden: true} },
                     { name: 'UnitTypeTotal', index: 'UnitTypeTotal', width: 200, align: 'right', editable: true, edittype: 'text', editrules: { edithidden: true }, hidden: false,
                         editoptions: {
                             dataInit: function (elem) {
-                                $(elem).autoNumeric();
+                                $(elem).autoNumeric({
+                                    mDec: 0
+                                });
                                 $(elem).attr("style", "text-align:right;");
                             }
                         }
@@ -207,7 +209,7 @@
                 insertDialog,
                 deleteDialog
             );
-            alert(insertDialog);
+            //alert(insertDialog);
         });
     </script>
 </asp:Content>

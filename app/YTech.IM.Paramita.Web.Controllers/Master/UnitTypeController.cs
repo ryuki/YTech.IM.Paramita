@@ -90,6 +90,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         [Transaction]
         public ActionResult Insert(MUnitType viewModel, FormCollection formCollection)
         {
+            UpdateNumericData(viewModel, formCollection);
             MUnitType unitType = new MUnitType();
             unitType.SetAssignedIdTo(Guid.NewGuid().ToString());
             TransferFormValuesTo(unitType, viewModel);
@@ -115,8 +116,19 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             return Content("success");
         }
 
+        private void UpdateNumericData(MUnitType viewModel, FormCollection formCollection)
+        {
+            if (!string.IsNullOrEmpty(formCollection["UnitTypeTotal"]))
+            {
+                string UnitTypeTotal = formCollection["UnitTypeTotal"].Replace(",", "");
+                int? total = Convert.ToInt32(UnitTypeTotal);
+                viewModel.UnitTypeTotal = total;
+            }
+        }
+
         private void TransferFormValuesTo(MUnitType unitType, MUnitType viewModel)
         {
+            unitType.UnitTypeName = viewModel.UnitTypeName;
             unitType.UnitTypeStatus = viewModel.UnitTypeStatus;
             unitType.UnitTypeDesc = viewModel.UnitTypeDesc;
             unitType.UnitTypeTotal = viewModel.UnitTypeTotal;
