@@ -17,7 +17,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
 {
     public class TransactionFormViewModel
     {
-        public static TransactionFormViewModel CreateTransactionFormViewModel(ITTransRepository transRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository)
+        public static TransactionFormViewModel CreateTransactionFormViewModel(ITTransRepository transRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository, IMUnitTypeRepository mUnitTypeRepository)
         {
             TransactionFormViewModel viewModel = new TransactionFormViewModel();
 
@@ -34,6 +34,12 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
             listSupplier.Insert(0, mSupplier);
             viewModel.SupplierList = new SelectList(listSupplier, "Id", "SupplierName");
 
+            IList<MUnitType> listUnitType = mUnitTypeRepository.GetAll();
+            MUnitType mUnitType = new MUnitType();
+            mUnitType.UnitTypeName = "-Pilih Unit-";
+            listUnitType.Insert(0, mUnitType);
+            viewModel.UnitTypeList = new SelectList(listUnitType, "Id", "UnitTypeName");
+            
             //fill payment method
             var values = from EnumPaymentMethod e in Enum.GetValues(typeof(EnumPaymentMethod))
                          select new { ID = e, Name = e.ToString() };
@@ -55,6 +61,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public SelectList WarehouseToList { get; internal set; }
         public SelectList SupplierList { get; internal set; }
         public SelectList PaymentMethodList { get; internal set; }
+        public SelectList UnitTypeList { get; internal set; }
         public bool ViewWarehouse { get; internal set; }
         public bool ViewWarehouseTo { get; internal set; }
         public bool ViewSupplier { get; internal set; }
@@ -62,6 +69,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public bool ViewFactur { get; internal set; }
         public bool ViewPrice { get; internal set; }
         public bool ViewPaymentMethod { get; internal set; }
+        public bool ViewUnitType { get; internal set; }
         public string Title { get; internal set; }
 
     }

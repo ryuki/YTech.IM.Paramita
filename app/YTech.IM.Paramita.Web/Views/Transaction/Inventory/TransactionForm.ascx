@@ -123,6 +123,23 @@
                 <% } %>
             </table>
         </td>
+        <td>
+            <table>
+                <% if (ViewData.Model.ViewUnitType)
+                    {%>
+                <tr>
+                    <td>
+                        <label for="Trans_UnitType">
+                            Tipe Unit :</label>
+                    </td>
+                    <td>
+                        <%= Html.DropDownList("Trans.UnitType", Model.UnitTypeList) %>
+                        <%= Html.ValidationMessage("Trans.UnitType") %>
+                    </td>
+                </tr>
+                  <%}%>
+            </table>
+        </td>
     </tr>
 </table>
 <table id="list" class="scroll" cellpadding="0" cellspacing="0">

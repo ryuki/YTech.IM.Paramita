@@ -21,7 +21,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
     public class InventoryController : Controller
     {
         public InventoryController()
-            : this(new TTransRepository(), new MWarehouseRepository(), new MSupplierRepository(), new MItemRepository(), new TStockCardRepository(), new TStockItemRepository(), new TTransRefRepository(), new TStockRepository(), new TStockRefRepository())
+            : this(new TTransRepository(), new MWarehouseRepository(), new MSupplierRepository(), new MItemRepository(), new TStockCardRepository(), new TStockItemRepository(), new TTransRefRepository(), new TStockRepository(), new TStockRefRepository(), new MUnitTypeRepository())
         {
         }
 
@@ -34,8 +34,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private readonly ITTransRefRepository _tTransRefRepository;
         private readonly ITStockRepository _tStockRepository;
         private readonly ITStockRefRepository _tStockRefRepository;
+        private readonly IMUnitTypeRepository _mUnitTypeRepository;
 
-        public InventoryController(ITTransRepository tTransRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository, IMItemRepository mItemRepository, ITStockCardRepository tStockCardRepository, ITStockItemRepository tStockItemRepository, ITTransRefRepository tTransRefRepository, ITStockRepository tStockRepository, ITStockRefRepository tStockRefRepository)
+        public InventoryController(ITTransRepository tTransRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository, IMItemRepository mItemRepository, ITStockCardRepository tStockCardRepository, ITStockItemRepository tStockItemRepository, ITTransRefRepository tTransRefRepository, ITStockRepository tStockRepository, ITStockRefRepository tStockRefRepository, IMUnitTypeRepository mUnitTypeRepository)
         {
             Check.Require(tTransRepository != null, "tTransRepository may not be null");
             Check.Require(mWarehouseRepository != null, "mWarehouseRepository may not be null");
@@ -46,6 +47,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             Check.Require(tTransRefRepository != null, "tTransRefRepository may not be null");
             Check.Require(tStockRepository != null, "tStockRepository may not be null");
             Check.Require(tStockRefRepository != null, "tStockRefRepository may not be null");
+            Check.Require(mUnitTypeRepository != null, "mUnitTypeRepository may not be null");
 
             this._tTransRepository = tTransRepository;
             this._mWarehouseRepository = mWarehouseRepository;
@@ -56,11 +58,12 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             this._tTransRefRepository = tTransRefRepository;
             this._tStockRepository = tStockRepository;
             this._tStockRefRepository = tStockRefRepository;
+            _mUnitTypeRepository = mUnitTypeRepository;
         }
 
         public ActionResult Index()
         {
-            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository);
+            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository, _mUnitTypeRepository);
             viewModel.Trans = SetNewTrans(EnumTransactionStatus.PurchaseOrder);
             SetViewModelByStatus(viewModel, EnumTransactionStatus.PurchaseOrder);
 
@@ -155,6 +158,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewFactur = true;
                     viewModel.ViewPrice = true;
                     viewModel.ViewPaymentMethod = false;
+                    viewModel.ViewUnitType = true;
                     break;
             }
 
@@ -174,7 +178,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Purchase()
         {
-            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository);
+            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository, _mUnitTypeRepository);
             viewModel.Trans = SetNewTrans(EnumTransactionStatus.Purchase);
             SetViewModelByStatus(viewModel, EnumTransactionStatus.Purchase);
 
@@ -240,7 +244,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult ReturPurchase()
         {
-            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository);
+            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository, _mUnitTypeRepository);
             viewModel.Trans = SetNewTrans(EnumTransactionStatus.ReturPurchase);
             SetViewModelByStatus(viewModel, EnumTransactionStatus.ReturPurchase);
 
@@ -259,7 +263,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Using()
         {
-            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository);
+            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository, _mUnitTypeRepository);
             viewModel.Trans = SetNewTrans(EnumTransactionStatus.Using);
             SetViewModelByStatus(viewModel, EnumTransactionStatus.Using);
 
@@ -278,7 +282,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Received()
         {
-            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository);
+            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository, _mUnitTypeRepository);
             viewModel.Trans = SetNewTrans(EnumTransactionStatus.Received);
             SetViewModelByStatus(viewModel, EnumTransactionStatus.Received);
 
@@ -297,7 +301,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Mutation()
         {
-            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository);
+            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository, _mUnitTypeRepository);
             viewModel.Trans = SetNewTrans(EnumTransactionStatus.Mutation);
             SetViewModelByStatus(viewModel, EnumTransactionStatus.Mutation);
 
@@ -317,7 +321,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [Transaction]
         public ActionResult Adjusment()
         {
-            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository);
+            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository, _mUnitTypeRepository);
             viewModel.Trans = SetNewTrans(EnumTransactionStatus.Adjusment);
             SetViewModelByStatus(viewModel, EnumTransactionStatus.Adjusment);
 
@@ -803,7 +807,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Budgeting()
         {
-            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository);
+            TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository, _mUnitTypeRepository);
             viewModel.Trans = SetNewTrans(EnumTransactionStatus.Budgeting);
             SetViewModelByStatus(viewModel, EnumTransactionStatus.Budgeting);
 
