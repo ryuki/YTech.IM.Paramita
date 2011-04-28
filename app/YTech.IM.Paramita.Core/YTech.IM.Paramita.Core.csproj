@@ -79,6 +79,7 @@
     <Compile Include="Master\MItemUom.cs" />
     <Compile Include="Master\MJobType.cs" />
     <Compile Include="Master\MProduct.cs" />
+    <Compile Include="Master\MUnitType.cs" />
     <Compile Include="Master\MWarehouse.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -89,6 +90,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryInterfaces\IMJobTypeRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMProductRepository.cs" />
+    <Compile Include="RepositoryInterfaces\IMUnitTypeRepository.cs" />
     <Compile Include="RepositoryInterfaces\ITRealRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMAccountCatRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMAccountRefRepository.cs" />

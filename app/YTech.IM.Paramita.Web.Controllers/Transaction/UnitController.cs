@@ -30,18 +30,21 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private readonly IMCustomerRepository _mCustomerRepository;
         private readonly ITTransUnitRepository _tTransUnitRepository;
         private readonly IMCostCenterRepository _mCostCenterRepository;
+        private readonly IMUnitTypeRepository _mUnitTypeRepository;
 
-        public UnitController(ITUnitRepository tUnitRepository, IMCustomerRepository mCustomerRepository, ITTransUnitRepository tTransUnitRepository, IMCostCenterRepository mCostCenterRepository)
+        public UnitController(ITUnitRepository tUnitRepository, IMCustomerRepository mCustomerRepository, ITTransUnitRepository tTransUnitRepository, IMCostCenterRepository mCostCenterRepository, IMUnitTypeRepository mUnitTypeRepository)
         {
             Check.Require(tUnitRepository != null, "tUnitRepository may not be null");
             Check.Require(mCustomerRepository != null, "mCustomerRepository may not be null");
             Check.Require(tTransUnitRepository != null, "itTransUnitRepository may not be null");
             Check.Require(mCostCenterRepository != null, "mCostCenterRepository may not be null");
+            Check.Require(mUnitTypeRepository != null, "mUnitTypeRepository may not be null");
 
             this._tUnitRepository = tUnitRepository;
             this._mCustomerRepository = mCustomerRepository;
             this._tTransUnitRepository = tTransUnitRepository;
             this._mCostCenterRepository = mCostCenterRepository;
+            this._mUnitTypeRepository = mUnitTypeRepository;
         }
 
         public ActionResult Index()
@@ -71,7 +74,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                         cell = new string[] {
                             unit.UnitStatus,
                             unit.Id, 
-                            unit.UnitTypeId, 
+                            unit.UnitTypeId.Id, 
                             unit.UnitLandWide.HasValue ?  unit.UnitLandWide.Value.ToString(Helper.CommonHelper.IntegerFormat) : null,
                             unit.UnitWide.HasValue ? unit.UnitWide.Value.ToString(Helper.CommonHelper.IntegerFormat) : null,
                             unit.UnitLocation,
@@ -98,6 +101,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
             TUnit unitToInsert = new TUnit();
             TransferFormValuesTo(unitToInsert, viewModel);
+            unitToInsert.UnitTypeId = _mUnitTypeRepository.Get(formCollection["UnitTypeId"]);
             unitToInsert.UnitStatus = EnumUnitStatus.New.ToString();
 
             unitToInsert.SetAssignedIdTo(viewModel.Id);
@@ -153,6 +157,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             UpdateNumericData(viewModel, formCollection);
             TUnit unitToUpdate = _tUnitRepository.Get(viewModel.Id);
             TransferFormValuesTo(unitToUpdate, viewModel);
+            unitToUpdate.UnitTypeId = _mUnitTypeRepository.Get(formCollection["UnitTypeId"]);
             unitToUpdate.ModifiedDate = DateTime.Now;
             unitToUpdate.ModifiedBy = User.Identity.Name;
             unitToUpdate.DataStatus = EnumDataStatus.Updated.ToString();
@@ -197,7 +202,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         private void TransferFormValuesTo(TUnit unitToInsert, TUnit unitFrom)
         {
-            unitToInsert.UnitTypeId = unitFrom.UnitTypeId;
             unitToInsert.UnitLocation = unitFrom.UnitLocation;
             unitToInsert.UnitWide = unitFrom.UnitWide;
             unitToInsert.UnitLandWide = unitFrom.UnitLandWide;
@@ -268,6 +272,20 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 //return Content(ex.Message);
             }
             return RedirectToAction("UnitSales", new RouteValueDictionary(new { unitId }));
+        }
+
+         public ActionResult GetUnitTypeList()
+        {
+            var unitTypes = _mUnitTypeRepository.GetAll();
+            StringBuilder sb = new StringBuilder();
+            MUnitType unitType;
+            sb.AppendFormat("{0}:{1}", string.Empty, "-Pilih Tipe Unit-");
+            for (int i = 0; i < unitTypes.Count; i++)
+            {
+                unitType = unitTypes[i];
+                sb.AppendFormat(";{0}:{1}", unitType.Id, unitType.UnitTypeName);
+            }
+            return Content(sb.ToString());
         }
     }
 }

@@ -87,7 +87,7 @@
                 colModel: [
                     { name: 'act', index: 'act', width: 75, sortable: false },
                     { name: 'Id', index: 'Id', width: 100, align: 'left', key: true, editrules: { required: true, edithidden: false }, hidedlg: true, hidden: false, editable: true },
-                    { name: 'UnitType', index: 'UnitType', width: 100, align: 'left', editable: true, edittype: 'text', editrules: { required: true }, formoptions: { elmsuffix: ' *'} },
+                    { name: 'UnitTypeId', index: 'UnitTypeId', width: 100, align: 'left', editable: true, edittype: 'select', editrules: { required: true }, formoptions: { elmsuffix: ' *'} },
                    { name: 'UnitLandWide', index: 'UnitLandWide', width: 80, sortable: false, align: 'right', editable: true, edittype: 'text', editrules: { required: false },
                        editoptions: {
                            dataInit: function (elem) {
@@ -127,6 +127,7 @@
                 caption: 'Daftar Unit',
                 autowidth: true,
                 loadComplete: function () {
+                 $('#list').setColProp('UnitTypeId', { editoptions: { value: unitTypeIds} });
                  var ids = jQuery("#list").getDataIDs();
                     for (var i = 0; i < ids.length; i++) {
                         var cl = ids[i]; 
@@ -166,6 +167,7 @@ else {
             $("#popup").dialog("open");
             return false;   
         }   
+            var unitTypeIds = $.ajax({ url: '<%= Url.Action("GetUnitTypeList","Unit") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the ItemCats.'); } }).responseText;
     </script>
 </asp:Content>
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server"> 

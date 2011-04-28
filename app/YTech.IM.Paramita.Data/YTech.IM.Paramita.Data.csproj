@@ -95,6 +95,7 @@
     <Compile Include="NHibernateMaps\Master\MJobTypeMap.cs" />
     <Compile Include="NHibernateMaps\Master\MProductMap.cs" />
     <Compile Include="NHibernateMaps\Master\MSupplierMap.cs" />
+    <Compile Include="NHibernateMaps\Master\MUnitTypeMap.cs" />
     <Compile Include="NHibernateMaps\Master\MWarehouseMap.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -119,6 +120,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\MJobTypeRepository.cs" />
     <Compile Include="Repository\MProductRepository.cs" />
+    <Compile Include="Repository\MUnitTypeRepository.cs" />
     <Compile Include="Repository\TRealRepository.cs" />
     <Compile Include="Repository\MAccountCatRepository.cs" />
     <Compile Include="Repository\MCustomerRepository.cs" />
