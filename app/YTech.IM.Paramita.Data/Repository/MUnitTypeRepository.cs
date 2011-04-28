@@ -18,7 +18,7 @@ namespace YTech.IM.Paramita.Data.Repository
 
             if (!string.IsNullOrEmpty(unitTypeId))
             {
-                sql.AppendLine(@" where ut.UnitTypeId.Id = :unitTypeId");
+                sql.AppendLine(@" where ut.CostCenterId.Id = :unitTypeId");
             }
 
             IQuery q = Session.CreateQuery(sql.ToString());

@@ -8,12 +8,27 @@
     </div>
     <div id="listPsetcols" class="scroll" style="text-align: center;">
     </div>
+    <div id="dialog" title="Status">
+        <p></p>
+    </div>
+    <div id='popup'>
+        <iframe width='100%' height='380px' id="popup_frame" frameborder="0"></iframe>
+    </div>
     <script type="text/javascript">
 
         $(document).ready(function () {
 
             $("#dialog").dialog({
                 autoOpen: false
+            });
+            $("#popup").dialog({
+                autoOpen: false,
+                height: 420,
+                width: '80%',
+                modal: true,
+                close: function(event, ui) {                 
+                    $("#list").trigger("reloadGrid");
+                 }
             });
 
 
@@ -82,8 +97,9 @@
                 url: '<%= Url.Action("List", "CostCenter") %>',
                 datatype: 'json',
                 mtype: 'GET',
-                colNames: ['Kode Cost Center', 'Nama', 'Total Budget', 'Status', 'Tgl Mulai', 'Tgl Selesai', 'Keterangan'],
+                colNames: ['', 'Kode Cost Center', 'Nama', 'Total Budget', 'Status', 'Tgl Mulai', 'Tgl Selesai', 'Keterangan'],
                 colModel: [
+                    { name: 'act', index: 'act', width: 75, sortable: false },
                     { name: 'Id', index: 'Id', width: 100, align: 'left', key: true, editrules: { required: true, edithidden: false }, hidedlg: true, hidden: false, editable: true },
                     { name: 'CostCenterName', index: 'CostCenterName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { required: true }, formoptions: { elmsuffix: ' *'} },
                        { name: 'CostCenterTotalBudget', index: 'CostCenterTotalBudget', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false },
@@ -121,11 +137,19 @@
                 height: 300,
                 caption: 'Daftar Cost Center',
                 autowidth: true,
+                loadComplete: function() {
+                    var ids = jQuery("#list").getDataIDs();
+                    for (var i = 0; i < ids.length; i++) {
+                        var cl = ids[0];
+                        var be = "<input type='button' value='T' tooltips='Tambah Type Unit' onClick=\"OpenPopup('" + cl + "');\" />";
+                        $(this).setRowData(ids[i], { act: be });
+                    }
+                },
                 subGrid: true,
-                subGridUrl: '',
+                subGridUrl: '<%= Url.Action("ListForSubGrid", "UnitType") %>',
                 subGridModel: [{ name: ['Nama', 'Total', 'Keterangan'],
-                                 width: [55, 80, 80, 80],
-                                 align: ['left', 'right', 'left', 'left'],
+                                 width: [80, 80, 80],
+                                 align: ['right', 'left', 'left'],
                                  params: ['Id']
                 }],
                 ondblClickRow: function (rowid, iRow, iCol, e) {
@@ -139,9 +163,12 @@
                 insertDialog,
                 deleteDialog
             );
-        });       
+         });
+
+         function OpenPopup(id) {
+             $("#popup_frame").attr("src", "<%= Url.Action("AddUnitType", "UnitType") %>?costCenterId="+id);
+             $("#popup").dialog("open");
+             return false;
+         }       
     </script>
-    <div id="dialog" title="Status">
-        <p></p>
-    </div>
 </asp:Content>

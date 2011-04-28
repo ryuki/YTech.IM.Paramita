@@ -52,6 +52,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                     {
                         i = itemCat.Id.ToString(),
                         cell = new string[] {
+                            string.Empty,
                             itemCat.Id, 
                             itemCat.CostCenterName, 
                           itemCat.CostCenterTotalBudget.HasValue ?  itemCat.CostCenterTotalBudget.Value.ToString(Helper.CommonHelper.NumberFormat) : null, 
