@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Helper\FillHelper.cs" />
     <Compile Include="Master\CustomerController.cs" />
+    <Compile Include="Master\UnitTypeController.cs" />
     <Compile Include="Transaction\AccountingController.cs" />
     <Compile Include="ControllerEnums.cs" />
     <Compile Include="Helper\CommonHelper.cs" />

@@ -316,6 +316,7 @@
     <Content Include="Views\Master\Account\Search.aspx" />
     <Content Include="Views\Master\Brand\Index.aspx" />
     <Content Include="Views\Master\Customer\Index.aspx" />
+    <Content Include="Views\Master\UnitType\AddUnitType.aspx" />
     <Content Include="Views\Shared\Js.ascx" />
     <Content Include="Views\Shared\LogOnUserControl.ascx" />
     <Content Include="Views\Shared\Menu.ascx" />
@@ -415,6 +416,7 @@
   <ItemGroup>
     <Content Include="Views\Transaction\Report\RptTransDetail.rdlc" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <Target Name="BeforeBuild">
