@@ -99,7 +99,7 @@
             var editDialog = {
                 url: '<%= Url.Action("Update", "UnitType") %>'
                 , beforeSubmit: function (postdata, formid) {
-                    postdata.ActionId = actionId;
+                    postdata.CostCenterId = costCenterId;
                     return [true, ''];
                 }
                 , closeAfterAdd: true
@@ -132,7 +132,6 @@
                 , beforeSubmit: function (postdata, formid) {
                     postdata.CostCenterId = costCenterId;
                         return [true, ''];
-//                    alert('fff');
                 }
                 , afterShowForm: function (eparams) {
                     $('#Id').attr('disabled', '');
@@ -153,6 +152,7 @@
                 , afterComplete: function (response, postdata, formid) {
                     $('#dialog p:first').text(response.responseText);
                     $("#dialog").dialog("open");
+                    $("#list").trigger("reloadGrid");
                 }
             };
 
@@ -173,8 +173,9 @@
                 },
                 datatype: 'json',
                 mtype: 'GET',
-                colNames: ['Nama', 'Total', 'Keterangan'],
+                colNames: ['Kode Type Unit', 'Nama', 'Total', 'Keterangan'],
                 colModel: [
+                    { name: 'UnitTypeId', index: 'UnitTypeId', width: 100, sortable: false, align: 'left', key: true, editrules: { required: false, edithidden: true }, editable: false, hidden: true },
                     { name: 'UnitTypeName', index: 'UnitTypeName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { edithidden: true} },
                     { name: 'UnitTypeTotal', index: 'UnitTypeTotal', width: 200, align: 'right', editable: true, edittype: 'text', editrules: { edithidden: true }, hidden: false,
                         editoptions: {
@@ -209,7 +210,6 @@
                 insertDialog,
                 deleteDialog
             );
-            //alert(insertDialog);
         });
     </script>
 </asp:Content>

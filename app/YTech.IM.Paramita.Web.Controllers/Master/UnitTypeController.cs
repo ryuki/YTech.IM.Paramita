@@ -7,6 +7,7 @@ using SharpArch.Core;
 using SharpArch.Web.NHibernate;
 using YTech.IM.Paramita.Core.Master;
 using YTech.IM.Paramita.Core.RepositoryInterfaces;
+using YTech.IM.Paramita.Enums;
 
 namespace YTech.IM.Paramita.Web.Controllers.Master
 {
@@ -78,6 +79,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                         i = unitType.Id.ToString(),
                         cell = new string[]
                         {
+                            unitType.Id,
                             unitType.UnitTypeName,
                             unitType.UnitTypeTotal.ToString(),
                             unitType.UnitTypeDesc               
@@ -110,6 +112,57 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                 _mUnitTypeRepository.DbContext.RollbackTransaction();
 
                 //throw e.GetBaseException();
+                return Content(e.GetBaseException().Message);
+            }
+
+            return Content("success");
+        }
+
+        [Transaction]
+        public ActionResult Update(MUnitType viewModel, FormCollection formCollection)
+        {
+            MUnitType mUnitTypeToUpdate = _mUnitTypeRepository.Get(viewModel.Id);
+            TransferFormValuesTo(mUnitTypeToUpdate, viewModel);
+            mUnitTypeToUpdate.CostCenterId = _mCostCenterRepository.Get(formCollection["CostCenterId"]);
+            mUnitTypeToUpdate.ModifiedDate = DateTime.Now;
+            mUnitTypeToUpdate.ModifiedBy = User.Identity.Name;
+            mUnitTypeToUpdate.DataStatus = EnumDataStatus.Updated.ToString();
+            _mUnitTypeRepository.Update(mUnitTypeToUpdate);
+
+            try
+            {
+                _mUnitTypeRepository.DbContext.CommitChanges();
+            }
+            catch (Exception e)
+            {
+
+                _mUnitTypeRepository.DbContext.RollbackTransaction();
+
+                return Content(e.GetBaseException().Message);
+            }
+
+            return Content("success");
+        }
+
+        [Transaction]
+        public ActionResult Delete(MUnitType viewModel, FormCollection formCollection)
+        {
+            MUnitType mUnitTypeToDelete = _mUnitTypeRepository.Get(viewModel.Id);
+
+            if (mUnitTypeToDelete != null)
+            {
+                _mUnitTypeRepository.Delete(mUnitTypeToDelete);
+            }
+
+            try
+            {
+                _mUnitTypeRepository.DbContext.CommitChanges();
+            }
+            catch (Exception e)
+            {
+
+                _mUnitTypeRepository.DbContext.RollbackTransaction();
+
                 return Content(e.GetBaseException().Message);
             }
 
