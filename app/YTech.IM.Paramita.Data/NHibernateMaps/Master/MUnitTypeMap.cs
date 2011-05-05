@@ -6,7 +6,7 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Master
 {
     public class MUnitTypeMap : IAutoMappingOverride<MUnitType>
     {
-        #region Implementation of IAutoMappingOverride<MEmployee>
+        #region Implementation of IAutoMappingOverride<MUnitType>
 
         public void Override(AutoMapping<MUnitType> mapping)
         {

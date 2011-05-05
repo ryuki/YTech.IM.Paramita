@@ -179,6 +179,13 @@
     <Compile Include="ReportViewer.aspx.designer.cs">
       <DependentUpon>ReportViewer.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Master\JobType\Index.aspx.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Master\JobType\Index.aspx.designer.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\complex.css" />
@@ -316,6 +323,7 @@
     <Content Include="Views\Master\Account\Search.aspx" />
     <Content Include="Views\Master\Brand\Index.aspx" />
     <Content Include="Views\Master\Customer\Index.aspx" />
+    <Content Include="Views\Master\JobType\Index.aspx" />
     <Content Include="Views\Master\UnitType\AddUnitType.aspx" />
     <Content Include="Views\Shared\Js.ascx" />
     <Content Include="Views\Shared\LogOnUserControl.ascx" />

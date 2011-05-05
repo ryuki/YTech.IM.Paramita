@@ -15,6 +15,8 @@
         <div>
             <%= Html.ActionLinkForAreas<WarehouseController>(c => c.Index(),"Master Gudang") %></div>
         <div>
+            <%= Html.ActionLinkForAreas<JobTypeController>(c => c.Index(), "Master Jenis Pekerjaan")%></div>
+        <div>
             <%= Html.ActionLinkForAreas<MItemCatController>(c => c.Index(),"Master Kategori Produk") %></div>
         <div>
             <%= Html.ActionLinkForAreas<BrandController>(c => c.Index(),"Master Merek") %></div>
