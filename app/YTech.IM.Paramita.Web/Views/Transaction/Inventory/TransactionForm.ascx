@@ -140,6 +140,22 @@
                   <%}%>
             </table>
         </td>
+        <td>
+            <table>
+                <% if (ViewData.Model.ViewJobType)
+                    {%>
+                <tr>
+                    <td>
+                        <label for="Trans_JobType">Jenis Pekerjaan :</label>
+                    </td>
+                    <td>
+                        <%= Html.DropDownList("Trans.JobType", Model.JobTypeList) %>
+                        <%= Html.ValidationMessage("Trans.JobType") %>
+                    </td>
+                </tr>
+                  <%}%>
+            </table>
+        </td>
     </tr>
 </table>
 <table id="list" class="scroll" cellpadding="0" cellspacing="0">
@@ -176,6 +192,10 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                    {	%> ,"Trans.WarehouseId": { required: true  }<% } %>
         <% if (ViewData.Model.ViewWarehouseTo)
                    {	%> ,"Trans.WarehouseIdTo": { required: true  }<% } %>
+        <% if (ViewData.Model.ViewUnitType)
+                   {	%> ,"Trans.UnitTypeId": { required: true  }<% } %>
+        <% if (ViewData.Model.ViewJobType)
+                   {	%> ,"Trans.JobTypeId": { required: true  }<% } %>
     },
     messages: {
         <% if (ViewData.Model.ViewFactur) {	%>  "Trans.TransFactur": "<img id='TransFacturerror' src='"+imgerror+"' hovertext='No Faktur harus diisi' />"<% } %>
@@ -183,6 +203,8 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
         <% if (ViewData.Model.ViewSupplier) {	%>  ,"Trans.TransBy": "<img id='TransByerror' src='"+imgerror+"' hovertext='Pilih Supplier' />"<% } %>
         <% if (ViewData.Model.ViewWarehouse) {	%>  ,"Trans.WarehouseId": "<img id='WarehouseIderror' src='"+imgerror+"' hovertext='Pilih Gudang' />"<% } %>
         <% if (ViewData.Model.ViewWarehouseTo) {	%>  ,"Trans.WarehouseIdTo": "<img id='WarehouseIdToerror' src='"+imgerror+"' hovertext='Pilih Gudang Tujuan' />"<% } %>
+        <% if (ViewData.Model.ViewUnitType) {	%>  ,"Trans.UnitTypeId": "<img id='UnitTypeIdToerror' src='"+imgerror+"' hovertext='Pilih Tipe Unit' />"<% } %>
+        <% if (ViewData.Model.ViewJobType) {	%>  ,"Trans.JobTypeId": "<img id='JobTypeIdToerror' src='"+imgerror+"' hovertext='Pilih Jenis Pekerjaan' />"<% } %>
         },        invalidHandler: function(form, validator) {          var errors = validator.numberOfInvalids();
 						  if (errors) {
                           var message = "Validasi data kurang";

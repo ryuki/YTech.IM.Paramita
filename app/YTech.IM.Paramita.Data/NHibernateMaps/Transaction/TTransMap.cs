@@ -22,6 +22,7 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Transaction
 
             mapping.References(x => x.WarehouseId, "WAREHOUSE_ID").Fetch.Join();
             mapping.References(x => x.WarehouseIdTo, "WAREHOUSE_ID_TO").Fetch.Join();
+            mapping.References(x => x.UnitTypeId, "UNIT_TYPE_ID").Fetch.Join();
             mapping.Map(x => x.TransDate, "TRANS_DATE");
             mapping.Map(x => x.TransBy, "TRANS_BY");
             mapping.Map(x => x.TransFactur, "TRANS_FACTUR");

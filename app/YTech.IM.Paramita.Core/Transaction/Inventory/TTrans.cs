@@ -27,6 +27,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Inventory
         [NotNull, NotEmpty]
         public virtual MWarehouse WarehouseId { get; set; }
         public virtual MWarehouse WarehouseIdTo { get; set; }
+        public virtual MUnitType UnitTypeId { get; set; }
         public virtual DateTime? TransDate { get; set; }
         public virtual string TransBy { get; set; }
         public virtual string TransFactur { get; set; }

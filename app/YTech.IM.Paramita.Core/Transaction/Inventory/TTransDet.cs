@@ -22,6 +22,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Inventory
         public virtual TTrans TransId { get; protected set; }
         public virtual MItem ItemId { get; set; }
         public virtual MItemUom ItemUomId { get; set; }
+        public virtual MJobType JobTypeId { get; set; }
         public virtual int? TransDetNo { get; set; }
         public virtual decimal? TransDetQty { get; set; }
         public virtual decimal? TransDetPrice { get; set; }
