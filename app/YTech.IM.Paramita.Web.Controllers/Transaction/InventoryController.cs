@@ -578,7 +578,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             {
                 Trans.WarehouseIdTo = _mWarehouseRepository.Get(formCollection["Trans.WarehouseIdTo"]);
             }
-            Trans.UnitTypeId = _mUnitTypeRepository.Get(formCollection["Trans.UnitTypeId"]); // need id
+            Trans.UnitTypeId = _mUnitTypeRepository.Get(formCollection["Trans.UnitTypeId"]);
             Trans.CreatedDate = DateTime.Now;
             Trans.CreatedBy = User.Identity.Name;
             Trans.DataStatus = Enums.EnumDataStatus.New.ToString();

@@ -133,8 +133,8 @@
                             Tipe Unit :</label>
                     </td>
                     <td>
-                        <%= Html.DropDownList("Trans.UnitType", Model.UnitTypeList) %>
-                        <%= Html.ValidationMessage("Trans.UnitType") %>
+                        <%= Html.DropDownList("Trans.UnitTypeId", Model.UnitTypeList) %>
+                        <%= Html.ValidationMessage("Trans.UnitTypeId") %>
                     </td>
                 </tr>
                   <%}%>
@@ -149,8 +149,8 @@
                         <label for="Trans_JobType">Jenis Pekerjaan :</label>
                     </td>
                     <td>
-                        <%= Html.DropDownList("Trans.JobType", Model.JobTypeList) %>
-                        <%= Html.ValidationMessage("Trans.JobType") %>
+                        <%= Html.DropDownList("Trans.JobTypeId", Model.JobTypeList) %>
+                        <%= Html.ValidationMessage("Trans.JobTypeId") %>
                     </td>
                 </tr>
                   <%}%>
