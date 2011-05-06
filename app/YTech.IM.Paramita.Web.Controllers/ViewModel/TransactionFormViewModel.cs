@@ -17,7 +17,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
 {
     public class TransactionFormViewModel
     {
-        public static TransactionFormViewModel CreateTransactionFormViewModel(ITTransRepository transRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository, IMUnitTypeRepository mUnitTypeRepository)
+        public static TransactionFormViewModel CreateTransactionFormViewModel(ITTransRepository transRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository, IMUnitTypeRepository mUnitTypeRepository, IMJobTypeRepository mJobTypeRepository)
         {
             TransactionFormViewModel viewModel = new TransactionFormViewModel();
 
@@ -39,7 +39,13 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
             mUnitType.UnitTypeName = "-Pilih Unit-";
             listUnitType.Insert(0, mUnitType);
             viewModel.UnitTypeList = new SelectList(listUnitType, "Id", "UnitTypeName");
-            
+
+            IList<MJobType> listJobType = mJobTypeRepository.GetAll();
+            MJobType mJobType = new MJobType();
+            mJobType.JobTypeName = "-Pilih Jenis Pekerjaan-";
+            listJobType.Insert(0, mJobType);
+            viewModel.JobTypeList = new SelectList(listJobType, "Id", "JobTypeName");
+
             //fill payment method
             var values = from EnumPaymentMethod e in Enum.GetValues(typeof(EnumPaymentMethod))
                          select new { ID = e, Name = e.ToString() };
@@ -62,6 +68,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public SelectList SupplierList { get; internal set; }
         public SelectList PaymentMethodList { get; internal set; }
         public SelectList UnitTypeList { get; internal set; }
+        public SelectList JobTypeList { get; internal set; }
         public bool ViewWarehouse { get; internal set; }
         public bool ViewWarehouseTo { get; internal set; }
         public bool ViewSupplier { get; internal set; }
@@ -70,6 +77,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public bool ViewPrice { get; internal set; }
         public bool ViewPaymentMethod { get; internal set; }
         public bool ViewUnitType { get; internal set; }
+        public bool ViewJobType { get; internal set; }
         public string Title { get; internal set; }
 
     }
