@@ -128,6 +128,7 @@
     <Compile Include="ViewModel\Reports\TransTotalViewModel.cs" />
     <Compile Include="ViewModel\TransactionFormViewModel.cs" />
     <Compile Include="ViewModel\UnitSalesFormViewModel.cs" />
+    <Compile Include="ViewModel\UnitViewModel.cs" />
     <Compile Include="ViewModel\UserAdministration\DetailsViewModel.cs" />
     <Compile Include="ViewModel\UserAdministration\IndexViewModel.cs" />
     <Compile Include="ViewModel\UserAdministration\RoleViewModel.cs" />
@@ -150,7 +151,16 @@
       <Name>YTech.IM.Paramita.Enums</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Properties\DataSources\YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.CashJournalViewModel.datasource" />
+    <None Include="Properties\DataSources\YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.ItemViewModel.datasource" />
+    <None Include="Properties\DataSources\YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.JournalDetViewModel.datasource" />
+    <None Include="Properties\DataSources\YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.RecAccountViewModel.datasource" />
+    <None Include="Properties\DataSources\YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.StockCardViewModel.datasource" />
+    <None Include="Properties\DataSources\YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.StockItemViewModel.datasource" />
+    <None Include="Properties\DataSources\YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.TransDetViewModel.datasource" />
+    <None Include="Properties\DataSources\YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.TransTotalViewModel.datasource" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using NHibernate;
 using SharpArch.Data.NHibernate;
@@ -9,23 +10,23 @@ namespace YTech.IM.Paramita.Data.Repository
 {
     public class MUnitTypeRepository : NHibernateRepositoryWithTypedId<MUnitType,string >, IMUnitTypeRepository
     {
-        public IList<MUnitType> GetByUnitTypeId(string unitTypeId)
+        public IList<MUnitType> GetByCostCenterId(string costCenterId)
         {
             StringBuilder sql = new StringBuilder();
 
             sql.AppendLine(@"   select ut
                                 from MUnitType as ut");
 
-            if (!string.IsNullOrEmpty(unitTypeId))
+            if (!string.IsNullOrEmpty(costCenterId))
             {
-                sql.AppendLine(@" where ut.CostCenterId.Id = :unitTypeId");
+                sql.AppendLine(@" where ut.CostCenterId.Id = :costCenterId");
             }
 
             IQuery q = Session.CreateQuery(sql.ToString());
 
-            if (!string.IsNullOrEmpty(unitTypeId))
+            if (!string.IsNullOrEmpty(costCenterId))
             {
-                q.SetString("unitTypeId", unitTypeId);
+                q.SetString("costCenterId", costCenterId);
             }
 
             return q.List<MUnitType>();

@@ -49,15 +49,16 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Index()
         {
-            return View();
+            UnitViewModel viewModel = UnitViewModel.Create(_mCostCenterRepository);
+            return View(viewModel);
         }
 
 
         [Transaction]
-        public virtual ActionResult List(string sidx, string sord, int page, int rows)
+        public virtual ActionResult List(string sidx, string sord, int page, int rows, string costCenterId)
         {
             int totalRecords = 0;
-            var units = _tUnitRepository.GetPagedUnitList(sidx, sord, page, rows, ref totalRecords);
+            var units = _tUnitRepository.GetPagedUnitList(sidx, sord, page, rows, ref totalRecords, costCenterId);
             int pageSize = rows;
             int totalPages = (int)Math.Ceiling((float)totalRecords / (float)pageSize);
 
@@ -74,7 +75,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                         cell = new string[] {
                             unit.UnitStatus,
                             unit.Id, 
+                            unit.UnitNo, 
                             unit.UnitTypeId.Id, 
+                            unit.UnitTypeId.UnitTypeName, 
                             unit.UnitLandWide.HasValue ?  unit.UnitLandWide.Value.ToString(Helper.CommonHelper.IntegerFormat) : null,
                             unit.UnitWide.HasValue ? unit.UnitWide.Value.ToString(Helper.CommonHelper.IntegerFormat) : null,
                             unit.UnitLocation,
@@ -93,10 +96,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [Transaction]
         public ActionResult Insert(TUnit viewModel, FormCollection formCollection)
         {
-            if (!(ViewData.ModelState.IsValid && viewModel.IsValid()))
-            {
-
-            }
             UpdateNumericData(viewModel, formCollection);
 
             TUnit unitToInsert = new TUnit();
@@ -207,12 +206,14 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             unitToInsert.UnitLandWide = unitFrom.UnitLandWide;
             unitToInsert.UnitPrice = unitFrom.UnitPrice;
             unitToInsert.UnitDesc = unitFrom.UnitDesc;
+            unitToInsert.CostCenterId = unitFrom.CostCenterId;
+            unitToInsert.UnitNo = unitFrom.UnitNo;
         }
 
         [Transaction]
         public ActionResult UnitSales(string unitId)
         {
-            UnitSalesFormViewModel viewModel = UnitSalesFormViewModel.CreateUnitSalesFormViewModel(_mCustomerRepository, _mCostCenterRepository);
+            UnitSalesFormViewModel viewModel = UnitSalesFormViewModel.CreateUnitSalesFormViewModel(_mCustomerRepository, _mCostCenterRepository, _tTransUnitRepository, unitId);
 
             TempData["UnitId"] = "id=" + unitId;
             return View(viewModel);
@@ -227,29 +228,34 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
             TUnit unit = _tUnitRepository.Get(unitId);
 
-            TTransUnit transUnit = viewModel;
+            TTransUnit transUnit = _tTransUnitRepository.GetByUnitId(unitId);
+            bool isSave = true;
             if (transUnit == null)
             {
                 transUnit = new TTransUnit();
+                transUnit.SetAssignedIdTo(Guid.Empty.ToString());
+                transUnit.CreatedDate = DateTime.Now;
+                transUnit.CreatedBy = User.Identity.Name;
+                transUnit.DataStatus = EnumDataStatus.New.ToString();
             }
-            transUnit.SetAssignedIdTo(formCollection["TransUnit.Id"]);
+            else
+            {
+                isSave = false;
+                transUnit.ModifiedDate = DateTime.Now;
+                transUnit.ModifiedBy = User.Identity.Name;
+                transUnit.DataStatus = EnumDataStatus.Updated.ToString();
+            }
             transUnit.UnitId = unit;
-            if (!string.IsNullOrEmpty(formCollection["TransUnit.CustomerId"]))
+            if (!string.IsNullOrEmpty(formCollection["CustomerId"]))
             {
-                transUnit.CustomerId = _mCustomerRepository.Get(formCollection["TransUnit.CustomerId"]);
+                transUnit.CustomerId = _mCustomerRepository.Get(formCollection["CustomerId"]);
             }
-            transUnit.TransUnitDate = Convert.ToDateTime(formCollection["TransUnit.TransUnitDate"]);
-            transUnit.TransUnitFactur = formCollection["TransUnit.TransUnitFactur"];
-            transUnit.TransUnitPrice = Convert.ToDecimal(formCollection["TransUnit.TransUnitPrice"]);
-            transUnit.TransUnitDesc = formCollection["TransUnit.TransUnitDesc"];
-            transUnit.TransUnitPaymentMethod = formCollection["TransUnit.TransUnitPaymentMethod"];
-            if (!string.IsNullOrEmpty(formCollection["TransUnit.CostCenterId"]))
-            {
-                transUnit.CostCenterId = _mCostCenterRepository.Get(formCollection["TransUnit.CostCenterId"]);
-            }
-            transUnit.CreatedDate = DateTime.Now;
-            transUnit.CreatedBy = User.Identity.Name;
-            transUnit.DataStatus = EnumDataStatus.New.ToString();
+            transUnit.TransUnitDate = viewModel.TransUnitDate;
+            transUnit.TransUnitFactur = viewModel.TransUnitFactur;
+            transUnit.TransUnitPrice = Convert.ToDecimal(formCollection["TransUnitPrice"].Replace(",", ""));
+            transUnit.TransUnitDesc = viewModel.TransUnitDesc;
+            transUnit.TransUnitPaymentMethod = viewModel.TransUnitPaymentMethod;
+            transUnit.CostCenterId = unit.CostCenterId;
 
             //change unit status
             unit.UnitStatus = EnumUnitStatus.Sale.ToString();
@@ -260,7 +266,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
             try
             {
-                _tTransUnitRepository.Save(transUnit);
+                if (isSave)
+                    _tTransUnitRepository.Save(transUnit);
+                else
+                    _tTransUnitRepository.Update(transUnit);
                 _tTransUnitRepository.DbContext.CommitTransaction();
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Success;
             }
@@ -274,9 +283,32 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return RedirectToAction("UnitSales", new RouteValueDictionary(new { unitId }));
         }
 
-         public ActionResult GetUnitTypeList()
+        [Transaction]
+        public ActionResult DeleteUnitSales(string unitId)
         {
-            var unitTypes = _mUnitTypeRepository.GetAll();
+            _tTransUnitRepository.DbContext.BeginTransaction();
+            TUnit unit = _tUnitRepository.Get(unitId);
+            //change unit status
+            unit.UnitStatus = EnumUnitStatus.New.ToString();
+            unit.ModifiedDate = DateTime.Now;
+            unit.ModifiedBy = User.Identity.Name;
+            unit.DataStatus = EnumDataStatus.Updated.ToString();
+            try
+            {
+                _tUnitRepository.Update(unit);
+                _tTransUnitRepository.DeleteByUnitId(unitId);
+                _tTransUnitRepository.DbContext.CommitTransaction();
+            }
+            catch (Exception ex)
+            {
+                _tTransUnitRepository.DbContext.RollbackTransaction();
+            }
+            return Content("Pembatalan penjualan unit berhasil dilakukan.");
+        }
+
+        public ActionResult GetUnitTypeList(string costCenterId)
+        {
+            var unitTypes = _mUnitTypeRepository.GetByCostCenterId(costCenterId);
             StringBuilder sb = new StringBuilder();
             MUnitType unitType;
             sb.AppendFormat("{0}:{1}", string.Empty, "-Pilih Tipe Unit-");

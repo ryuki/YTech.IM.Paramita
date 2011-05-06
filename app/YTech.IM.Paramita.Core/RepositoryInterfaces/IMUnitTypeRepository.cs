@@ -6,6 +6,6 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
     public interface IMUnitTypeRepository : INHibernateRepositoryWithTypedId<MUnitType, string>
     {
-        IList<MUnitType> GetByUnitTypeId(string unitTypeId);
+        IList<MUnitType> GetByCostCenterId(string costCenterId);
     }
 }

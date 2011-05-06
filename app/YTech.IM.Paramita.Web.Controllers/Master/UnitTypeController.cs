@@ -34,7 +34,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         [Transaction]
         public ActionResult ListForSubGrid(string id)
         {
-            var unitTypes = _mUnitTypeRepository.GetByUnitTypeId(id);
+            var unitTypes = _mUnitTypeRepository.GetByCostCenterId(id);
 
             var jsonData = new
             {
@@ -64,7 +64,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         public virtual ActionResult List(string sidx, string sord, int page, int rows, string unitTypeId)
         {
             int totalRecords = 10;
-            var unitTypes = _mUnitTypeRepository.GetByUnitTypeId(unitTypeId);
+            var unitTypes = _mUnitTypeRepository.GetByCostCenterId(unitTypeId);
             int pageSize = rows;
             int totalPages = (int)Math.Ceiling((float)totalRecords / (float)pageSize);
 

@@ -96,6 +96,10 @@
           <DataField>TransId</DataField>
           <rd:TypeName>YTech.IM.Paramita.Core.Transaction.Inventory.TTrans</rd:TypeName>
         </Field>
+        <Field Name="TransName">
+          <DataField>TransName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="TransPaymentMethod">
           <DataField>TransPaymentMethod</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -173,7 +177,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Laporan Detail</Value>
+                <Value>="Laporan Detail " &amp; First(Fields!TransName.Value, "TransTotalViewModel")</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>14pt</FontSize>

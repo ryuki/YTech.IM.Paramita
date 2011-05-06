@@ -20,6 +20,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Unit
         public virtual decimal? UnitPrice { get; set; }
         public virtual string UnitStatus { get; set; }
         public virtual string UnitDesc { get; set; }
+        public virtual MCostCenter CostCenterId { get; set; }
         
         public virtual string DataStatus { get; set; }
         public virtual string CreatedBy { get; set; }

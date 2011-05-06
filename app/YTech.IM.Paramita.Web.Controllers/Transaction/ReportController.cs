@@ -130,24 +130,24 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     //switch (viewModel.TransStatus)
                     //{
                     //    case EnumTransactionStatus.PurchaseOrder:
-                            title = "Lap. Detail";
-                            viewModel.ShowDateFrom = true;
-                            viewModel.ShowDateTo = true;
-                            viewModel.ShowWarehouse = true;
+                    title = "Lap. Detail";
+                    viewModel.ShowDateFrom = true;
+                    viewModel.ShowDateTo = true;
+                    viewModel.ShowWarehouse = true;
                     //        break;
                     //}
 
-                            break;
+                    break;
                 case EnumReports.RptItem:
-                            title = "Daftar Master Produk";
+                    title = "Daftar Master Produk";
 
-                            break;
+                    break;
                 case EnumReports.RptBukuBesar:
-                            title = "Lap. Buku Besar";
-                            viewModel.ShowDateFrom = true;
-                            viewModel.ShowDateTo = true;
-                            viewModel.ShowCostCenter = true;
-                            break;
+                    title = "Lap. Buku Besar";
+                    viewModel.ShowDateFrom = true;
+                    viewModel.ShowDateTo = true;
+                    viewModel.ShowCostCenter = true;
+                    break;
             }
             ViewData["CurrentItem"] = title;
 
@@ -162,7 +162,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         {
             return ReportTrans(reports, EnumTransactionStatus.None);
         }
-        
+
         [ValidateAntiForgeryToken]      // Helps avoid CSRF attacks
         [Transaction]                   // Wraps a transaction around the action
         [AcceptVerbs(HttpVerbs.Post)]
@@ -266,7 +266,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                            det.Id,
                            det.ItemName,
                            det.ItemDesc,
-                          ItemCatId= det.ItemCatId.Id,
+                           ItemCatId = det.ItemCatId.Id,
                            det.ItemCatId.ItemCatName,
                            det.ItemUoms[0].ItemUomPurchasePrice
                        }
@@ -280,42 +280,45 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private ReportDataSource GetTransTotal(DateTime? dateFrom, DateTime? dateTo, string warehouseId, EnumTransactionStatus transStatus)
         {
             Check.Require(transStatus != EnumTransactionStatus.None, "transStatus may not be None");
-            IList<TTransDet> dets; 
-            MWarehouse warehouse = null; 
+            IList<TTransDet> dets;
+            MWarehouse warehouse = null;
             if (!string.IsNullOrEmpty(warehouseId))
                 warehouse = _mWarehouseRepository.Get(warehouseId);
             dets = _tTransDetRepository.GetByDateWarehouse(dateFrom, dateTo, warehouse, transStatus.ToString());
 
             var list = from det in dets
                        select new
-                       {
-                           det.TransDetNo,
-                           det.TransDetQty,
-                           det.TransDetDesc,
-                           det.TransDetTotal,
-                           det.TransDetPrice,
-                           det.TransDetDisc,
-                           ItemId = det.ItemId.Id,
-                           det.ItemId.ItemName,
-                           SupplierName = det.TransId.TransBy,
-                           det.TransId.TransFactur,
-                           det.TransId.TransDate,
-                           WarehouseId = det.TransId.WarehouseId.Id,
-                           det.TransId.WarehouseId.WarehouseName,
-                           WarehouseToName = det.TransId.WarehouseIdTo != null ? det.TransId.WarehouseIdTo.WarehouseName : null,
-                           det.TransId.TransStatus,
-                           det.TransId.TransDesc,
-                           det.TransId.TransSubTotal,
-                           det.TransId.TransPaymentMethod,
-                           TransId = det.TransId.Id,
-                           ViewWarehouse = SetView(det.TransId.TransStatus, EnumViewTrans.ViewWarehouse),
-                           ViewWarehouseTo = SetView(det.TransId.TransStatus, EnumViewTrans.ViewWarehouseTo),
-                           ViewSupplier = SetView(det.TransId.TransStatus, EnumViewTrans.ViewSupplier),
-                           ViewDate = SetView(det.TransId.TransStatus, EnumViewTrans.ViewDate),
-                           ViewFactur = SetView(det.TransId.TransStatus, EnumViewTrans.ViewFactur),
-                           ViewPrice = SetView(det.TransId.TransStatus, EnumViewTrans.ViewPrice),
-                           ViewPaymentMethod = SetView(det.TransId.TransStatus, EnumViewTrans.ViewPaymentMethod)
-                       }
+                                  {
+                                      det.TransDetNo,
+                                      det.TransDetQty,
+                                      det.TransDetDesc,
+                                      det.TransDetTotal,
+                                      det.TransDetPrice,
+                                      det.TransDetDisc,
+                                      ItemId = det.ItemId.Id,
+                                      det.ItemId.ItemName,
+                                      SupplierName = det.TransId.TransBy,
+                                      det.TransId.TransFactur,
+                                      det.TransId.TransDate,
+                                      WarehouseId = det.TransId.WarehouseId.Id,
+                                      det.TransId.WarehouseId.WarehouseName,
+                                      WarehouseToName =
+                           det.TransId.WarehouseIdTo != null ? det.TransId.WarehouseIdTo.WarehouseName : null,
+                                      det.TransId.TransStatus,
+                                      det.TransId.TransDesc,
+                                      det.TransId.TransSubTotal,
+                                      det.TransId.TransPaymentMethod,
+                                      TransId = det.TransId.Id,
+                                      ViewWarehouse = SetView(det.TransId.TransStatus, EnumViewTrans.ViewWarehouse),
+                                      ViewWarehouseTo = SetView(det.TransId.TransStatus, EnumViewTrans.ViewWarehouseTo),
+                                      ViewSupplier = SetView(det.TransId.TransStatus, EnumViewTrans.ViewSupplier),
+                                      ViewDate = SetView(det.TransId.TransStatus, EnumViewTrans.ViewDate),
+                                      ViewFactur = SetView(det.TransId.TransStatus, EnumViewTrans.ViewFactur),
+                                      ViewPrice = SetView(det.TransId.TransStatus, EnumViewTrans.ViewPrice),
+                                      ViewPaymentMethod =
+                           SetView(det.TransId.TransStatus, EnumViewTrans.ViewPaymentMethod),
+                                      TransName = Helper.CommonHelper.GetStringValue(transStatus)
+                                  }
             ;
 
             ReportDataSource reportDataSource = new ReportDataSource("TransTotalViewModel", list);
@@ -351,8 +354,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       det.ItemId.ItemName,
                                       WarehouseId = det.TransId.WarehouseId.Id,
                                       det.TransId.WarehouseId.WarehouseName,
-                                      TotalUsed = _tTransDetRepository.GetTotalUsed(det.ItemId, det.TransId.WarehouseId, dateFrom,dateTo, EnumTransactionStatus.Using.ToString()),
-                                      RealPercentValue = GetRealValue(det.TransId.WarehouseId.CostCenterId, dateFrom, dateTo) 
+                                      TotalUsed = _tTransDetRepository.GetTotalUsed(det.ItemId, det.TransId.WarehouseId, dateFrom, dateTo, EnumTransactionStatus.Using.ToString()),
+                                      RealPercentValue = GetRealValue(det.TransId.WarehouseId.CostCenterId, dateFrom, dateTo)
                                   }
             ;
 
@@ -361,9 +364,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         }
 
         //get real value
-        private object GetRealValue(MCostCenter mCostCenter,DateTime dateFrom,DateTime dateTo)
+        private object GetRealValue(MCostCenter mCostCenter, DateTime dateFrom, DateTime dateTo)
         {
-            TReal real = _tRealRepository.GetByCostCenterAndDate(mCostCenter, dateFrom,dateTo);
+            TReal real = _tRealRepository.GetByCostCenterAndDate(mCostCenter, dateFrom, dateTo);
             if (real != null)
             {
                 return real.RealPercentValue;

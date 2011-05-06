@@ -9,5 +9,8 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
     public interface ITTransUnitRepository : INHibernateRepositoryWithTypedId<TTransUnit, string>
     {
+        TTransUnit GetByUnitId(string unitId);
+
+        void DeleteByUnitId(string unitId);
     }
 }

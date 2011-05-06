@@ -42,7 +42,7 @@
                 fillSpace: true
             });
 
-            var path = location.pathname.substring(1);
+            var path = location.pathname + location.search + location.hash;
             if (path)
                 $('#accordion a[href$="' + path + '"]').parent().attr('class', 'selected');
             /*******************************

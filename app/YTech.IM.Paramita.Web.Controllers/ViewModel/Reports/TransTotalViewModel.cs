@@ -22,6 +22,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel.Reports
         public string TransDesc { get; set; }
         public decimal? TransSubTotal { get; set; }
         public string TransPaymentMethod { get; set; }
+        public string TransName { get; set; }
 
         public bool ViewWarehouse { get;  set; }
         public bool ViewWarehouseTo { get;  set; }

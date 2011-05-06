@@ -9,6 +9,6 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
     public interface ITUnitRepository : INHibernateRepositoryWithTypedId<TUnit, string>
     {
-        IEnumerable<TUnit> GetPagedUnitList(string orderCol, string orderBy, int pageIndex, int maxRows, ref int totalRows);
+        IEnumerable<TUnit> GetPagedUnitList(string orderCol, string orderBy, int pageIndex, int maxRows, ref int totalRows, string costCenterId); 
     }
 }

@@ -78,7 +78,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             {
                 case EnumTransactionStatus.PurchaseOrder:
                     viewModel.ViewWarehouse = true;
-                    viewModel.Title = "Order Pembelian";
                     viewModel.ViewWarehouseTo = false;
                     viewModel.ViewSupplier = true;
                     viewModel.ViewDate = true;
@@ -88,7 +87,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumTransactionStatus.Purchase:
                     viewModel.ViewWarehouse = true;
-                    viewModel.Title = "Pembelian";
                     viewModel.ViewWarehouseTo = false;
                     viewModel.ViewSupplier = true;
                     viewModel.ViewDate = true;
@@ -98,7 +96,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumTransactionStatus.ReturPurchase:
                     viewModel.ViewWarehouse = true;
-                    viewModel.Title = "Retur Pembelian";
                     viewModel.ViewWarehouseTo = false;
                     viewModel.ViewSupplier = true;
                     viewModel.ViewDate = true;
@@ -112,7 +109,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumTransactionStatus.Using:
                     viewModel.ViewWarehouse = true;
-                    viewModel.Title = "Pemakaian Material";
                     viewModel.ViewWarehouseTo = false;
                     viewModel.ViewSupplier = false;
                     viewModel.ViewDate = true;
@@ -122,7 +118,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumTransactionStatus.Mutation:
                     viewModel.ViewWarehouse = true;
-                    viewModel.Title = "Mutasi Stok";
                     viewModel.ViewWarehouseTo = true;
                     viewModel.ViewSupplier = false;
                     viewModel.ViewDate = true;
@@ -132,7 +127,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumTransactionStatus.Adjusment:
                     viewModel.ViewWarehouse = true;
-                    viewModel.Title = "Penyesuaian Stok";
                     viewModel.ViewWarehouseTo = false;
                     viewModel.ViewSupplier = false;
                     viewModel.ViewDate = true;
@@ -142,7 +136,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumTransactionStatus.Received:
                     viewModel.ViewWarehouse = true;
-                    viewModel.Title = "Penerimaan Stok";
                     viewModel.ViewWarehouseTo = false;
                     viewModel.ViewSupplier = true;
                     viewModel.ViewDate = true;
@@ -151,7 +144,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumTransactionStatus.Budgeting:
                     viewModel.ViewWarehouse = true;
-                    viewModel.Title = "Rencana Anggaran Belanja";
                     viewModel.ViewWarehouseTo = false;
                     viewModel.ViewSupplier = false;
                     viewModel.ViewDate = false;
@@ -161,6 +153,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewUnitType = true;
                     break;
             }
+            viewModel.Title = Helper.CommonHelper.GetStringValue(enumTransactionStatus);
 
             ViewData["CurrentItem"] = viewModel.Title;
             //ViewData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.NotSaved;

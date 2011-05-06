@@ -22,13 +22,14 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Unit
                  .GeneratedBy.Assigned();
 
             mapping.Map(x => x.UnitNo, "UNIT_NO");
-            mapping.References(x => x.UnitTypeId, "UNIT_TYPE_ID");
+            mapping.References(x => x.UnitTypeId, "UNIT_TYPE_ID").LazyLoad();
             mapping.Map(x => x.UnitLandWide, "UNIT_LAND_WIDE");
             mapping.Map(x => x.UnitWide, "UNIT_WIDE");
             mapping.Map(x => x.UnitLocation, "UNIT_LOCATION");
             mapping.Map(x => x.UnitPrice, "UNIT_PRICE");
             mapping.Map(x => x.UnitStatus, "UNIT_STATUS");
-            mapping.Map(x => x.UnitDesc, "UNIT_DESC"); 
+            mapping.Map(x => x.UnitDesc, "UNIT_DESC");
+            mapping.References(x => x.CostCenterId, "COST_CENTER_ID").LazyLoad();
 
             mapping.Map(x => x.DataStatus, "DATA_STATUS");
             mapping.Map(x => x.CreatedBy, "CREATED_BY");
