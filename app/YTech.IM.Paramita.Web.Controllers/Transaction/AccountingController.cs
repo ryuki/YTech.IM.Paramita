@@ -183,6 +183,13 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         {
             _tJournalRepository.DbContext.BeginTransaction();
 
+            //check first
+            TJournal journal1 = _tJournalRepository.Get(formCollection["Journal.Id"]);
+            if (journal1 != null)
+            {
+                _tJournalRepository.Delete(journal1);
+            }
+
             if (journal == null)
             {
                 journal = new TJournal();
@@ -449,6 +456,76 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Failed;
             }
             return RedirectToAction("Closing");
+        }
+
+        [Transaction]
+        public ActionResult ListCash()
+        {
+            return View();
+        }
+
+        [Transaction]
+        public ActionResult ListSearchCash(string sidx, string sord, int page, int rows, string searchBy, string searchText, string journalType)
+        {
+            int totalRecords = 0;
+            var journalList = _tJournalRepository.GetPagedJournalList(sidx, sord, page, rows, ref totalRecords, searchBy, searchText, journalType);
+            int pageSize = rows;
+            int totalPages = (int)Math.Ceiling((float)totalRecords / (float)pageSize);
+
+            var jsonData = new
+            {
+                total = totalPages,
+                page = page,
+                records = totalRecords,
+                rows = (
+                    from journal in journalList
+                    select new
+                    {
+                        i = journal.Id.ToString(),
+                        cell = new string[] {
+                            journal.Id, 
+                            journal.JournalVoucherNo, 
+                            journal.JournalDate.HasValue ? journal.JournalDate.Value.ToString(Helper.CommonHelper.DateFormat): null,
+                            journal.JournalEvidenceNo,
+                            journal.JournalPic,
+                            journal.JournalDesc
+                        }
+                    }).ToArray()
+            };
+
+
+            return Json(jsonData, JsonRequestBehavior.AllowGet);
+        }
+
+        [Transaction]
+        public ActionResult GetJsonJournal(string journalId)
+        {
+            TJournal journal = _tJournalRepository.Get(journalId);
+
+            MAccount cashAccount = null;
+            string detailStatus = journal.JournalType == EnumJournalType.CashIn.ToString()
+                                      ? EnumJournalStatus.D.ToString()
+                                      : EnumJournalStatus.K.ToString();
+            cashAccount = (from s in journal.JournalDets
+                           where s.JournalDetStatus == detailStatus
+                           select s.AccountId).First();
+
+            IList<TJournalDet> others = (from s in journal.JournalDets
+                                         where s.JournalDetStatus != detailStatus
+                                         select s).ToList();
+            ListJournalDet = others.ToList();
+            var t = new
+            {
+                JournalId = journal.Id,
+                journal.JournalDate,
+                journal.JournalVoucherNo,
+                CostCenterId = journal.CostCenterId.Id,
+                CashAccountId = cashAccount.Id,
+                CashAccountName = cashAccount.AccountName,
+                journal.JournalPic,
+                journal.JournalDesc
+            };
+            return Json(t, JsonRequestBehavior.AllowGet);
         }
     }
 }

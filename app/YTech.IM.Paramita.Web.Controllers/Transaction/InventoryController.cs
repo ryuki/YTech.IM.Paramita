@@ -118,6 +118,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewFactur = true;
                     viewModel.ViewPrice = false;
                     viewModel.ViewPaymentMethod = false;
+                    viewModel.ViewUnitType = true;
+                    viewModel.ViewJobType = true;
                     break;
                 case EnumTransactionStatus.Mutation:
                     viewModel.ViewWarehouse = true;
@@ -512,7 +514,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             if (!string.IsNullOrEmpty(formCollection["TransDetDisc"]))
             {
                 string wide = formCollection["TransDetDisc"].Replace(",", "");
-                decimal? disc= Convert.ToDecimal(wide);
+                decimal? disc = Convert.ToDecimal(wide);
                 viewModel.TransDetDisc = disc;
             }
             if (!string.IsNullOrEmpty(formCollection["TransDetTotal"]))
@@ -538,7 +540,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return Content("success");
         }
 
-        
+
 
         private void TransferFormValuesTo(TTransDet transDet, TTransDet viewModel)
         {
@@ -571,7 +573,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             {
                 Trans.WarehouseIdTo = _mWarehouseRepository.Get(formCollection["Trans.WarehouseIdTo"]);
             }
-            Trans.UnitTypeId = _mUnitTypeRepository.Get(formCollection["Trans.UnitTypeId"]);
+            if (!string.IsNullOrEmpty(formCollection["Trans.UnitTypeId"]))
+                Trans.UnitTypeId = _mUnitTypeRepository.Get(formCollection["Trans.UnitTypeId"]);
             Trans.CreatedDate = DateTime.Now;
             Trans.CreatedBy = User.Identity.Name;
             Trans.DataStatus = Enums.EnumDataStatus.New.ToString();
@@ -617,17 +620,25 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             TTransDet detToInsert;
             IList<TTransDet> listDet = new List<TTransDet>();
             decimal total = 0;
+
+            MJobType jobType = null;
+            if (!string.IsNullOrEmpty(formCollection["Trans.JobTypeId"]))
+                jobType = _mJobTypeRepository.Get(formCollection["Trans.JobTypeId"]);
+
             foreach (TTransDet det in ListDetTrans)
             {
                 detToInsert = new TTransDet(Trans);
                 detToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
                 detToInsert.ItemId = det.ItemId;
                 detToInsert.ItemUomId = det.ItemUomId;
-                detToInsert.JobTypeId = _mJobTypeRepository.Get(formCollection["Trans.JobTypeId"]);
                 detToInsert.TransDetQty = det.TransDetQty;
                 detToInsert.TransDetPrice = det.TransDetPrice;
                 detToInsert.TransDetDisc = det.TransDetDisc;
                 detToInsert.TransDetTotal = det.TransDetTotal;
+                if (jobType != null)
+                    detToInsert.JobTypeId = jobType;
+                else
+                    detToInsert.JobTypeId = det.JobTypeId;
                 detToInsert.CreatedBy = User.Identity.Name;
                 detToInsert.CreatedDate = DateTime.Now;
                 detToInsert.DataStatus = Enums.EnumDataStatus.New.ToString();

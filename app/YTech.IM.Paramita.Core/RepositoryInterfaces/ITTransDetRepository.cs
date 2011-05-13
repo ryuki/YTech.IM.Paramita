@@ -11,7 +11,7 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
     {
         IList<TTransDet> GetByItemWarehouse(MItem item, MWarehouse warehouse);
 
-        decimal? GetTotalUsed(MItem item, MWarehouse warehouse, DateTime dateFrom, DateTime dateTo, string transStatus);
+        decimal? GetTotalUsed(MItem item, MWarehouse warehouse, DateTime? dateFrom, DateTime? dateTo, string transStatus);
 
         IList<TTransDet> GetByDateWarehouse(System.DateTime? dateFrom, System.DateTime? dateTo, MWarehouse warehouse, string transStatus);
     }

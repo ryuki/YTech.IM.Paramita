@@ -323,12 +323,14 @@
     <Content Include="Views\Master\Account\Search.aspx" />
     <Content Include="Views\Master\Brand\Index.aspx" />
     <Content Include="Views\Master\Customer\Index.aspx" />
+    <Content Include="Views\Master\Item\Search.aspx" />
     <Content Include="Views\Master\JobType\Index.aspx" />
     <Content Include="Views\Master\UnitType\AddUnitType.aspx" />
     <Content Include="Views\Shared\Js.ascx" />
     <Content Include="Views\Shared\LogOnUserControl.ascx" />
     <Content Include="Views\Shared\Menu.ascx" />
     <Content Include="Views\Shared\Status.ascx" />
+    <Content Include="Views\Transaction\Accounting\ListCash.aspx" />
     <Content Include="Views\Transaction\Inventory\Received.aspx" />
     <Content Include="Views\Transaction\Real\Index.aspx" />
     <Content Include="Views\Transaction\Report\ReportTrans.aspx" />

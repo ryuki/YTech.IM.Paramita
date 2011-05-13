@@ -79,6 +79,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public bool ViewUnitType { get; internal set; }
         public bool ViewJobType { get; internal set; }
         public string Title { get; internal set; }
+        public bool IsAddStock { get; internal set; }
 
     }
 }

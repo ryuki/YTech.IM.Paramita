@@ -6,6 +6,6 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
     public interface IMItemRepository : INHibernateRepositoryWithTypedId<MItem, string>
     {
-        IEnumerable<MItem> GetPagedItemList(string orderCol, string orderBy, int pageIndex, int maxRows, ref int totalRows);
+        IEnumerable<MItem> GetPagedItemList(string orderCol, string orderBy, int pageIndex, int maxRows, ref int totalRows, string itemId, string itemName, MItemCat itemCat);
     }
 }

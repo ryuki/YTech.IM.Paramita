@@ -40,6 +40,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             this._mWarehouseRepository = mWarehouseRepository;
         }
 
+        public ActionResult Search()
+        {
+            return View();
+        }
 
         public ActionResult Index()
         {
@@ -50,7 +54,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         public virtual ActionResult List(string sidx, string sord, int page, int rows)
         {
             int totalRecords = 0;
-            var itemCats = _mItemRepository.GetPagedItemList(sidx, sord, page, rows, ref totalRecords);
+            var itemCats = _mItemRepository.GetPagedItemList(sidx, sord, page, rows, ref totalRecords, null, null, null);
             int pageSize = rows;
             int totalPages = (int)Math.Ceiling((float)totalRecords / (float)pageSize);
 
@@ -75,6 +79,48 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                            itemCat.ItemUoms.Count > 0 ? itemCat.ItemUoms[0].ItemUomName : null,
                        itemCat.ItemUoms.Count > 0 ?    itemCat.ItemUoms[0].ItemUomPurchasePrice.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                             itemCat.ItemDesc
+                        }
+                    }).ToArray()
+            };
+
+
+            return Json(jsonData, JsonRequestBehavior.AllowGet);
+        }
+
+        [Transaction]
+        public virtual ActionResult ListSearch(string sidx, string sord, int page, int rows, string itemId, string itemName, string itemCatId)
+        {
+            int totalRecords = 0;
+            MItemCat itemCat = null;
+            if (!string.IsNullOrEmpty(itemCatId))
+            {
+                itemCat = _mItemCatRepository.Get(itemCatId);
+            }
+            var items = _mItemRepository.GetPagedItemList(sidx, sord, page, rows, ref totalRecords, itemId, itemName, itemCat);
+            int pageSize = rows;
+            int totalPages = (int)Math.Ceiling((float)totalRecords / (float)pageSize);
+
+            var jsonData = new
+            {
+                total = totalPages,
+                page = page,
+                records = totalRecords,
+                rows = (
+                    from item in items
+                    select new
+                    {
+                        i = item.Id.ToString(),
+                        cell = new string[] {
+                            item.Id, 
+                            item.ItemName, 
+                           item.ItemCatId != null ? item.ItemCatId.Id : null,
+                           item.ItemCatId != null ? item.ItemCatId.ItemCatName : null,
+                           item.BrandId != null ? item.BrandId.Id : null,
+                           item.BrandId != null ? item.BrandId.BrandName : null,
+                         item.ItemUoms.Count > 0 ?   item.ItemUoms[0].Id : null,
+                           item.ItemUoms.Count > 0 ? item.ItemUoms[0].ItemUomName : null,
+                       item.ItemUoms.Count > 0 ?    item.ItemUoms[0].ItemUomPurchasePrice.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
+                            item.ItemDesc
                         }
                     }).ToArray()
             };
@@ -283,7 +329,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             {
                 MItem mItem = _mItemRepository.Get(itemId);
                 MWarehouse warehouse = _mWarehouseRepository.Get(warehouseId);
-                decimal? totalUsed = _tTransDetRepository.GetTotalUsed(mItem, warehouse, DateTime.MinValue, DateTime.MaxValue, transactionStatus.ToString());
+                decimal? totalUsed = _tTransDetRepository.GetTotalUsed(mItem, warehouse, null, null, transactionStatus.ToString());
                 if (totalUsed.HasValue)
                 {
                     return Content(totalUsed.Value.ToString(Helper.CommonHelper.NumberFormat));

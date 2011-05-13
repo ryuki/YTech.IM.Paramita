@@ -168,6 +168,9 @@
     <p>
     </p>
 </div>
+<div id='popup'>
+    <iframe width='100%' height='380px' id="popup_frame" frameborder="0"></iframe>
+</div>
 <% } %>
 <script language="javascript" type="text/javascript">
 
@@ -247,6 +250,15 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
         $("div#error").dialog({
             autoOpen: false
         });
+         $("#popup").dialog({
+                autoOpen: false,
+                height: 420,
+                width: '80%',
+                modal: true,
+                close: function(event, ui) {                 
+                    $("#list").trigger("reloadGrid");
+                 }
+            });
 
       var editDialog = {
             url: '<%= Url.Action("Update", "Inventory") %>'
@@ -266,6 +278,9 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 }
                 , afterShowForm: function (eparams) {
                     $('#Id').attr('disabled', 'disabled');
+                     $('#imgItemId').click(function(){
+                        OpenPopupItemSearch();
+                        });
                 }
                 , width: "400"
                 , afterComplete: function (response, postdata, formid) {
@@ -292,27 +307,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                     $('#ItemId').change(function () {
                         var price = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/Get") %>/' + $('#ItemId :selected').val(), async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
                         $('#TransDetPrice').attr('value', price);
-                        CalculateTotal();
-
-                        <% if (ViewData.Model.Trans.TransStatus == EnumTransactionStatus.PurchaseOrder.ToString())
-{%>
-                    var itemId = $('#ItemId :selected').val();
-                    var itemName = $('#ItemId :selected').text();
-                    var warehouseId  = $('#Trans_WarehouseId option:selected').val();
-                    var warehouseName  = $('#Trans_WarehouseId option:selected').text();
-//                    alert(itemId);
-//                    alert(warehouseId);
-                    var totalQtyBudget = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/GetTotalBudget") %>?itemId=' + itemId + '&warehouseId='+ warehouseId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the totalQtyBudget.'); } }).responseText;
-                    var totalQtyUsed = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/GetTotalUsed") %>?itemId=' + itemId + '&warehouseId='+ warehouseId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the totalQtyUsed.'); } }).responseText;
-                    var displayText = "Detail "+ itemName + " di gudang " + warehouseName ;
-                     displayText += "<br />Total Anggaran : " + totalQtyBudget;
-                    displayText += "<br />Total Pemakaian : " + totalQtyUsed;
-
-                    $('#dialog p:first').html(displayText);
-                    $("#dialog").dialog("open");
-//                    setTimeout("$('#dialog').dialog('close');",5000);
-               <%
-}%>
+                        CalculateTotal(); 
                     });
                     $('#TransDetPrice').change(function () {
                         CalculateTotal();
@@ -327,7 +322,10 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                }%>  
                    <%
                }%>  
-                    
+                  
+                     $('#imgItemId').click(function(){
+                        OpenPopupItemSearch();
+                        });  
                 }
                 , afterComplete: function (response, postdata, formid) {
                     $('#dialog p:first').text(response.responseText);
@@ -352,6 +350,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
         $.jgrid.edit.editCaption = "Edit Detail";
         $.jgrid.del.caption = "Hapus Detail";
         $.jgrid.del.msg = "Anda yakin menghapus Detail yang dipilih?";
+        var imgLov = '<%= Url.Content("~/Content/Images/window16.gif") %>';
         $("#list").jqGrid({
             url: '<%= Url.Action("List", "Inventory", new { usePrice = ViewData.Model.ViewPrice} ) %>',
             datatype: 'json',
@@ -364,8 +363,13 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                     'Keterangan'],
             colModel: [
                     { name: 'Id', index: 'Id', width: 100, align: 'left', key: true, editrules: { required: true, edithidden: false }, hidedlg: true, hidden: true, editable: false },
-                    { name: 'ItemId', index: 'ItemId', width: 200, align: 'left', editable: true, edittype: 'select', editrules: { edithidden: true }, hidden: true },
-                    { name: 'ItemName', index: 'ItemName', width: 200, align: 'left', editable: false, edittype: 'select', editrules: { edithidden: true} },
+                      { name: 'ItemId', index: 'ItemId', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { edithidden: true }, hidden: true,
+                       formoptions: {
+                        "elmsuffix": "&nbsp;<img src='" + imgLov + "' style='cursor:hand;' id='imgItemId' />"
+                    } }, 
+                    { name: 'ItemName', index: 'ItemName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { edithidden: true} },
+//                    { name: 'ItemId', index: 'ItemId', width: 200, align: 'left', editable: true, edittype: 'select', editrules: { edithidden: true }, hidden: true },
+//                    { name: 'ItemName', index: 'ItemName', width: 200, align: 'left', editable: false, edittype: 'select', editrules: { edithidden: true} },
                      { name: 'TransDetQty', index: 'TransDetQty', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false  },
                        editoptions: {
                            dataInit: function (elem) {
@@ -413,7 +417,6 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             caption: 'Daftar Detail',
             autowidth: true,
             loadComplete: function () {
-                $('#list').setColProp('ItemId', { editoptions: { value: items} });
                 $('#listPager_center').hide();
             },
             ondblClickRow: function (rowid, iRow, iCol, e) {
@@ -429,8 +432,6 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             );
 
     });
-        var items = $.ajax({ url:  '<%= ResolveUrl("~/Master/Item/GetList") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
-
                       
 //function to generate tooltips
 		function generateTooltips() {
@@ -452,4 +453,46 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 					}
 			});
 		}
+
+         function OpenPopupItemSearch()
+        {
+          $("#popup_frame").attr("src", "<%= ResolveUrl("~/Master/Item/Search") %>");
+            $("#popup").dialog("open");
+            return false;   
+        }
+
+         function SetItemDetail(itemId, itemName, price)
+        {
+//        alert(itemId);
+//        alert(itemName);
+//        alert(price);
+  $("#popup").dialog("close");
+          $('#ItemId').attr('value', itemId);
+          $('#ItemName').attr('value', itemName);
+           <% if (ViewData.Model.ViewPrice)
+               {%>   
+               $('#TransDetPrice').attr('value', price.toString());
+            CalculateTotal();
+                   <%
+               }%>  
+               
+                <% if (ViewData.Model.Trans.TransStatus == EnumTransactionStatus.PurchaseOrder.ToString())
+{%> 
+                    var warehouseId  = $('#Trans_WarehouseId option:selected').val();
+                    var warehouseName  = $('#Trans_WarehouseId option:selected').text();
+        var imgLov = '<%= Url.Content("~/Content/Images/window16.gif") %>';
+//                    alert(itemId);
+//                    alert(warehouseId);
+                    var totalQtyBudget = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/GetTotalBudget") %>?itemId=' + itemId + '&warehouseId='+ warehouseId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the totalQtyBudget.'); } }).responseText;
+                    var totalQtyUsed = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/GetTotalUsed") %>?itemId=' + itemId + '&warehouseId='+ warehouseId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the totalQtyUsed.'); } }).responseText;
+                    var displayText = "Detail "+ itemName + " di gudang " + warehouseName ;
+                     displayText += "<br />Total Anggaran : " + totalQtyBudget;
+                    displayText += "<br />Total Pemakaian : " + totalQtyUsed;
+
+                    $('#dialog p:first').html(displayText);
+                    $("#dialog").dialog("open");
+//                    setTimeout("$('#dialog').dialog('close');",5000);
+               <%
+}%>      
+        }
 </script>

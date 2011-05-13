@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using NHibernate;
 using NHibernate.Criterion;
 using SharpArch.Data.NHibernate;
@@ -34,6 +35,49 @@ namespace YTech.IM.Paramita.Data.Repository
             {
                 return null;
             }
+        }
+
+        public IEnumerable<TJournal> GetPagedJournalList(string orderCol, string orderBy, int pageIndex, int maxRows, ref int totalRows, string searchBy, string searchText, string journalType)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendLine(@"  from TJournal as j
+                                where 1=1 ");
+            if (!string.IsNullOrEmpty(journalType))
+            {
+                sql.AppendLine(@"   and j.JournalType = :journalType ");
+            }
+            if (!string.IsNullOrEmpty(searchBy) && !string.IsNullOrEmpty(searchText))
+            {
+                sql.AppendFormat(@"   and j.{0} = :searchText", searchText).AppendLine();
+            }
+
+            string queryCount = string.Format(" select count(j.Id) {0}", sql);
+            IQuery q = Session.CreateQuery(queryCount);
+            if (!string.IsNullOrEmpty(journalType))
+            {
+                q.SetString("journalType", journalType);
+            }
+            if (!string.IsNullOrEmpty(searchBy) && !string.IsNullOrEmpty(searchText))
+            {
+                q.SetString("searchText", searchText);
+            }
+            totalRows = Convert.ToInt32(q.UniqueResult());
+
+            sql.AppendLine(@"   order by j.JournalDate desc  ");
+            string query = string.Format(" select j {0}", sql);
+            q = Session.CreateQuery(query);
+            if (!string.IsNullOrEmpty(journalType))
+            {
+                q.SetString("journalType", journalType);
+            }
+            if (!string.IsNullOrEmpty(searchBy) && !string.IsNullOrEmpty(searchText))
+            {
+                q.SetString("searchText", searchText);
+            }
+            q.SetMaxResults(maxRows);
+            q.SetFirstResult((pageIndex - 1) * maxRows);
+            IEnumerable<TJournal> list = q.List<TJournal>();
+            return list; 
         }
     }
 }

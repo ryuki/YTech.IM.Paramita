@@ -9,7 +9,7 @@
                                        {
                                            //UpdateTargetId = "status",
                                            InsertionMode = InsertionMode.Replace,
-                                          // OnBegin = "ajaxValidate",
+                                           // OnBegin = "ajaxValidate",
                                            OnSuccess = "onSavedSuccess"
                                        }
 
@@ -34,7 +34,11 @@
             <button id="btnSave" name="btnSave" type="submit">
                 Simpan</button>
             <button id="btnPrint" name="btnPrint" type="submit">
-                Cetak</button></span>
+                Cetak</button>
+            <button id="btnList" name="btnList" type="button">
+                Daftar
+                <%= ViewData.Model.Title %></button>
+        </span>
     </div>
     <table>
         <tr>
@@ -84,12 +88,13 @@
                                 Akun Kas :</label>
                         </td>
                         <td>
-                            <%= Html.TextBox("CashAccountId", Model.CashAccountId)%>&nbsp;<img src='<%= Url.Content("~/Content/Images/window16.gif") %>' style='cursor:hand;' id='imgCashAccountId' />
+                            <%= Html.TextBox("CashAccountId", Model.CashAccountId)%>&nbsp;<img src='<%= Url.Content("~/Content/Images/window16.gif") %>'
+                                style='cursor: hand;' id='imgCashAccountId' />
                             <%= Html.ValidationMessage("CashAccountId")%>
                         </td>
                     </tr>
                     <tr>
-                        <td> 
+                        <td>
                         </td>
                         <td>
                             <%= Html.TextBox("CashAccountName", Model.CashAccountName)%>
@@ -288,6 +293,12 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             autoOpen: false
         });
 
+        $("#btnList").click(function () {
+        var urlList = '<%= ResolveUrl("~/Transaction/Accounting/ListCash") %>';
+          $("#popup_frame").attr("src", urlList+"?src=cc&journalType="+$("#Journal_JournalType").val());
+            $("#popup").dialog("open");
+                               });
+
         var editDialog = {
             url: '<%= Url.Action("Update", "Accounting") %>'
                 , closeAfterAdd: true
@@ -459,7 +470,28 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
      $('#CashAccountId').attr('value', accountId);
           $('#CashAccountName').attr('value', accountName);
 
-  }
-       
+  }       
+        } 
+
+         function SetJournalDetail(src,journalId)
+        {
+  $("#popup").dialog("close");
+        var journal = $.parseJSON($.ajax({ url: '<%= Url.Action("GetJsonJournal","Accounting") %>?journalId=' + journalId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the journal.'); } }).responseText);
+        if (journal) {
+         var transDate = new Date(parseInt(journal.JournalDate.substr(6)));
+            //alert('debug 3');
+                $("#Journal_JournalDate").val(transDate.format('dd-mmm-yyyy'));
+
+    $("#Journal_Id").val(journal.JournalId); 
+    $("#Journal_JournalVoucherNo").val(journal.JournalVoucherNo);
+    $("#Journal_CostCenterId").val(journal.CostCenterId);
+    $("#CashAccountId").val(journal.CashAccountId);
+    $("#CashAccountName").val(journal.CashAccountName);
+    $("#Journal_JournalPic").val(journal.JournalPic);
+    $("#Journal_JournalDesc").val(journal.JournalDesc); 
+
+    setTimeout("$('#list').trigger('reloadGrid')",1000); 
+}
+
         } 
 </script>
