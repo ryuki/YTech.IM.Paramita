@@ -89,16 +89,32 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult CashIn(TJournal journal, FormCollection formCollection)
         {
+            return SaveJournalInterface(journal, formCollection);
+        }
+
+        private ActionResult SaveJournalInterface(TJournal journal, FormCollection formCollection)
+        {
             if (formCollection["btnSave"] != null)
                 return SaveJournal(journal, formCollection);
-            else if (formCollection["btnPrint"] != null)
+            else if (formCollection["btnPrint"] != null || formCollection["btnPrintKwitansi"] != null)
             {
                 //save data to session
                 SetDataForPrint(journal.Id);
+                string reportUrl = string.Empty;
+                if (formCollection["btnPrint"] != null)
+                {
+                    reportUrl = Url.Content("~/ReportViewer.aspx?rpt=RptPrintCash");
+                }
+                else if (formCollection["btnPrintKwitansi"] != null)
+                {
+                    reportUrl = Url.Content("~/ReportViewer.aspx?rpt=RptPrintKwitansi");
+                }
+
                 var e = new
                 {
                     Success = false,
-                    Message = "redirect"
+                    Message = "redirect",
+                    Data = reportUrl
                 };
                 return Json(e, JsonRequestBehavior.AllowGet);
             }
@@ -122,20 +138,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult CashOut(TJournal journal, FormCollection formCollection)
         {
-            if (formCollection["btnSave"] != null)
-                return SaveJournal(journal, formCollection);
-            else if (formCollection["btnPrint"] != null)
-            {
-                //save data to session
-                SetDataForPrint(journal.Id);
-                var e = new
-                {
-                    Success = false,
-                    Message = "redirect"
-                };
-                return Json(e, JsonRequestBehavior.AllowGet);
-            }
-            return View();
+            return SaveJournalInterface(journal, formCollection);
         }
 
         private void SetDataForPrint(string journalId)
@@ -185,9 +188,14 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
             //check first
             TJournal journal1 = _tJournalRepository.Get(formCollection["Journal.Id"]);
+            string voucherNo = journal.JournalVoucherNo;
             if (journal1 != null)
             {
                 _tJournalRepository.Delete(journal1);
+            }
+            else
+            {
+                voucherNo = Helper.CommonHelper.GetVoucherNo(false);
             }
 
             if (journal == null)
@@ -196,6 +204,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             }
             journal.SetAssignedIdTo(formCollection["Journal.Id"]);
             journal.CostCenterId = _mCostCenterRepository.Get(formCollection["Journal.CostCenterId"]);
+            journal.JournalVoucherNo = voucherNo;
             journal.CreatedDate = DateTime.Now;
             journal.CreatedBy = User.Identity.Name;
             journal.DataStatus = Enums.EnumDataStatus.New.ToString();
@@ -277,7 +286,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             var e = new
             {
                 Success,
-                Message
+                Message,
+                voucherNo
             };
             return
                 Json(e, JsonRequestBehavior.AllowGet);
@@ -291,7 +301,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             journal.SetAssignedIdTo(Guid.NewGuid().ToString());
             journal.JournalDate = DateTime.Today;
             journal.JournalType = journalType.ToString();
-            journal.JournalVoucherNo = Helper.CommonHelper.GetVoucherNo();
+            // journal.JournalVoucherNo = "<Otomatis, dikosongkan saja.>"; //Helper.CommonHelper.GetVoucherNo();
             return journal;
         }
 
@@ -456,6 +466,38 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Failed;
             }
             return RedirectToAction("Closing");
+        }
+
+        [Transaction]
+        public ActionResult Opening()
+        {
+            OpeningViewModel viewModel = OpeningViewModel.Create(_tRecPeriodRepository);
+            ViewData["CurrentItem"] = "Buka Buku";
+            return View(viewModel);
+        }
+
+        [ValidateAntiForgeryToken]      // Helps avoid CSRF attacks
+        [Transaction]                   // Wraps a transaction around the action
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Opening(OpeningViewModel viewModel, FormCollection formCollection)
+        {
+            _tRecPeriodRepository.DbContext.BeginTransaction();
+            try
+            {
+                if (!string.IsNullOrEmpty(viewModel.RecPeriodId))
+                {
+                    _tRecPeriodRepository.DeleteByRecPeriodId(viewModel.RecPeriodId);
+                    _tRecPeriodRepository.DbContext.CommitChanges();
+                }
+
+                TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Success;
+            }
+            catch (Exception)
+            {
+                _tRecPeriodRepository.DbContext.RollbackTransaction();
+                TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Failed;
+            }
+            return RedirectToAction("Opening");
         }
 
         [Transaction]

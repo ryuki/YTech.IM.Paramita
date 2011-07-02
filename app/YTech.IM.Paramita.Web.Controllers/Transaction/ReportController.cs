@@ -426,7 +426,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                            card.WarehouseId.WarehouseName,
                            card.StockCardSaldo,
                            card.StockCardDesc,
-                           card.TransDetId.TransId.TransFactur
+                          TransFactur =  card.TransDetId != null?  card.TransDetId.TransId.TransFactur:null
                        }
             ;
 

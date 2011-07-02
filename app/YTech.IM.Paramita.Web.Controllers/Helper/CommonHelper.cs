@@ -55,12 +55,20 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
 
         public static string GetFacturNo(EnumTransactionStatus transactionStatus)
         {
-            TReference refer = GetReference((EnumReferenceType)Enum.Parse(typeof(EnumReferenceType), transactionStatus.ToString()));
-            ITReferenceRepository referenceRepository = new TReferenceRepository();
+            return GetFacturNo(transactionStatus, true);
+        }
+
+        public static string GetFacturNo(EnumTransactionStatus transactionStatus, bool automatedIncrease)
+        {
+            TReference refer = GetReference((EnumReferenceType)Enum.Parse(typeof(EnumReferenceType), transactionStatus.ToString())); 
             decimal no = Convert.ToDecimal(refer.ReferenceValue) + 1;
             refer.ReferenceValue = no.ToString();
-            referenceRepository.Update(refer);
-            referenceRepository.DbContext.CommitChanges();
+            if (automatedIncrease)
+            {
+                ITReferenceRepository referenceRepository = new TReferenceRepository();
+                referenceRepository.Update(refer);
+                referenceRepository.DbContext.CommitChanges();
+            } 
 
             string tipeTrans = string.Empty;
             char[] charTransArray = transactionStatus.ToString().ToCharArray();
@@ -84,12 +92,21 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
 
         public static string GetVoucherNo()
         {
-            TReference refer = GetReference(EnumReferenceType.VoucherNo);
-            ITReferenceRepository referenceRepository = new TReferenceRepository();
+            return GetVoucherNo(false);
+        }
+
+        public static string GetVoucherNo(bool automatedIncrease)
+        {
+            TReference refer = GetReference(EnumReferenceType.VoucherNo); 
             decimal no = Convert.ToDecimal(refer.ReferenceValue) + 1;
             refer.ReferenceValue = no.ToString();
-            referenceRepository.Update(refer);
-            referenceRepository.DbContext.CommitChanges();
+            if (automatedIncrease)
+            {
+                ITReferenceRepository referenceRepository = new TReferenceRepository();
+                referenceRepository.DbContext.BeginTransaction();
+                referenceRepository.Update(refer);
+                referenceRepository.DbContext.CommitTransaction();
+            }
 
             string formatFactur = "GRAHA/[XXX]/[MONTH]/[YEAR]";
             StringBuilder result = new StringBuilder();

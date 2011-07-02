@@ -48,7 +48,7 @@ namespace YTech.IM.Paramita.Data.Repository
             }
             if (!string.IsNullOrEmpty(searchBy) && !string.IsNullOrEmpty(searchText))
             {
-                sql.AppendFormat(@"   and j.{0} = :searchText", searchText).AppendLine();
+                sql.AppendFormat(@"   and j.{0} like :searchText", searchBy).AppendLine();
             }
 
             string queryCount = string.Format(" select count(j.Id) {0}", sql);
@@ -63,7 +63,7 @@ namespace YTech.IM.Paramita.Data.Repository
             }
             totalRows = Convert.ToInt32(q.UniqueResult());
 
-            sql.AppendLine(@"   order by j.JournalDate desc  ");
+            sql.AppendLine(@"   order by j.JournalDate desc, j.JournalVoucherNo desc  ");
             string query = string.Format(" select j {0}", sql);
             q = Session.CreateQuery(query);
             if (!string.IsNullOrEmpty(journalType))

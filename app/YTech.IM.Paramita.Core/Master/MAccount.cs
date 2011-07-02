@@ -14,7 +14,7 @@ namespace YTech.IM.Paramita.Core.Master
         public virtual MAccountCat AccountCatId { get; set; }
         public virtual MAccount AccountParentId { get; set; }
         public virtual string AccountDesc { get; set; }
-        public virtual string AccountStatus { get; set; }
+        public virtual string AccountStatus { get; set; } 
 
         public virtual string DataStatus { get; set; }
         public virtual string CreatedBy { get; set; }

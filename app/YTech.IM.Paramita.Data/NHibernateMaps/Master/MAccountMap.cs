@@ -23,7 +23,7 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Master
             mapping.References(x => x.AccountParentId, "ACCOUNT_PARENT_ID").LazyLoad();
             mapping.Map(x => x.AccountStatus, "ACCOUNT_STATUS");
             mapping.Map(x => x.AccountName, "ACCOUNT_NAME");
-            mapping.Map(x => x.AccountDesc, "ACCOUNT_DESC");
+            mapping.Map(x => x.AccountDesc, "ACCOUNT_DESC"); 
 
             mapping.Map(x => x.DataStatus, "DATA_STATUS");
             mapping.Map(x => x.CreatedBy, "CREATED_BY");

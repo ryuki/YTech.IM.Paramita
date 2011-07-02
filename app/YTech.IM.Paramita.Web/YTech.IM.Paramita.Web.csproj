@@ -330,7 +330,9 @@
     <Content Include="Views\Shared\LogOnUserControl.ascx" />
     <Content Include="Views\Shared\Menu.ascx" />
     <Content Include="Views\Shared\Status.ascx" />
+    <Content Include="Views\Transaction\Accounting\Opening.aspx" />
     <Content Include="Views\Transaction\Accounting\ListCash.aspx" />
+    <Content Include="Views\Transaction\Inventory\ListTransaction.aspx" />
     <Content Include="Views\Transaction\Inventory\Received.aspx" />
     <Content Include="Views\Transaction\Real\Index.aspx" />
     <Content Include="Views\Transaction\Report\ReportTrans.aspx" />
@@ -426,7 +428,9 @@
   <ItemGroup>
     <Content Include="Views\Transaction\Report\RptTransDetail.rdlc" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Transaction\Report\RptPrintKwitansi.rdlc" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <Target Name="BeforeBuild">

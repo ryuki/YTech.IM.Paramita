@@ -116,6 +116,7 @@
     <Compile Include="ViewModel\CashFormViewModel.cs" />
     <Compile Include="ViewModel\ClosingViewModel.cs" />
     <Compile Include="ViewModel\GeneralLedgerViewModel.cs" />
+    <Compile Include="ViewModel\OpeningViewModel.cs" />
     <Compile Include="ViewModel\RealFormViewModel.cs" />
     <Compile Include="ViewModel\ReportParamViewModel.cs" />
     <Compile Include="ViewModel\Reports\CashJournalViewModel.cs" />

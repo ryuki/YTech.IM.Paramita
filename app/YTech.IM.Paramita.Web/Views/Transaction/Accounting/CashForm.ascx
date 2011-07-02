@@ -34,7 +34,9 @@
             <button id="btnSave" name="btnSave" type="submit">
                 Simpan</button>
             <button id="btnPrint" name="btnPrint" type="submit">
-                Cetak</button>
+                Cetak Bukti</button>
+            <button id="btnPrintKwitansi" name="btnPrintKwitansi" type="submit">
+                Cetak Kwitansi</button>
             <button id="btnList" name="btnList" type="button">
                 Daftar
                 <%= ViewData.Model.Title %></button>
@@ -64,7 +66,7 @@
                                 No Voucher :</label>
                         </td>
                         <td>
-                            <%= Html.TextBox("Journal.JournalVoucherNo", Model.Journal.JournalVoucherNo)%>
+                            <%= Html.TextBox("Journal.JournalVoucherNo", Model.Journal.JournalVoucherNo,new { @readonly = "readonly" }) %>
                             <%= Html.ValidationMessage("Journal.JournalVoucherNo")%>
                         </td>
                     </tr>
@@ -127,7 +129,7 @@
     </table>
 </div>
 <%
-    }
+   }
 %>
 <table id="list" class="scroll" cellpadding="0" cellspacing="0">
 </table>
@@ -144,37 +146,38 @@
 </div>
 <script language="javascript" type="text/javascript">
 
-function onSavedSuccess(e) {
-//alert(e);
- //$("#Save").attr('disabled', 'disabled');
-    var json = e.get_response().get_object();
-//alert(json);
-    var success = json.Success;
-       // alert(json.Success);
-    if (success == false) {
-        var msg = json.Message;
-//        alert(json.Message);
-        if (msg) {
-
-            if (msg == "redirect") {
-                var urlreport = '<%= ResolveUrl("~/ReportViewer.aspx?rpt=RptPrintCash") %>';
-                   // alert(urlreport);
-                window.open(urlreport);
-            }
-            else {
-                $('#dialog p:first').text(msg);
-                $("#dialog").dialog("open"); 
-            }
+    function onSavedSuccess(e) {
+        //alert(e);
+        //$("#Save").attr('disabled', 'disabled');
+        var json = e.get_response().get_object();
+        //alert(json);
+        var success = json.Success;
+        // alert(json.Success);
+        if (success == false) {
+            var msg = json.Message;
+            //        alert(json.Message);
+            if (msg) {
+                if (msg == "redirect") {
+                    var urlreport = json.Data; // '<%= ResolveUrl("~/ReportViewer.aspx?rpt=RptPrintCash") %>';
+                    // alert(urlreport);
+                    window.open(urlreport);
+                }
+                else {
+                    $('#dialog p:first').text(msg);
+                    $("#dialog").dialog("open"); 
+                }
             return false ;  
+            }
+        }
+        else{
+            $("#btnSave").attr('disabled', 'disabled');
+            $("#btnPrint").attr('disabled', '');
+            $("#btnPrintKwitansi").attr('disabled', '');
+            $('#dialog p:first').text(msg);
+            $("#Journal_JournalVoucherNo").val(json.voucherNo);
+            $("#dialog").dialog("open"); 
         }
     }
-    else{
-        $("#btnSave").attr('disabled', 'disabled');
-        $("#btnPrint").attr('disabled', '');
-        $('#dialog p:first').text(msg);
-        $("#dialog").dialog("open"); 
-    }
-}
 
 
 function ajaxValidate() {
@@ -203,7 +206,9 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             ,
         "Journal.CostCenterId": "<img id='CostCenterIderror' src='"+imgerror+"' hovertext='Pilih cost center' />",
         "AccountId": "<img id='AccountIderror' src='"+imgerror+"' hovertext='Pilih akun kas' />"
-        },        invalidHandler: function(form, validator) {          var errors = validator.numberOfInvalids();
+        },
+        invalidHandler: function(form, validator) {
+          var errors = validator.numberOfInvalids();
 						  if (errors) {
                           var message = "Validasi data kurang";
 //										var message = errors == 1
@@ -220,7 +225,8 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 		errorPlacement: function(error, element) { 
 			error.insertAfter(element);
 			//generateTooltips();
-		}
+		}
+
     }).form();
 }
 
@@ -235,10 +241,12 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
     if (TempData[EnumCommonViewData.SaveState.ToString()].Equals(EnumSaveState.Failed))
     {%>
    $("#btnPrint").attr('disabled', 'disabled');
+   $("#btnPrintKwitansi").attr('disabled', 'disabled');
     <%
     }
 } else { %>
   $("#btnPrint").attr('disabled', 'disabled');
+   $("#btnPrintKwitansi").attr('disabled', 'disabled');
 <% } %>
 
         $("#Journal_JournalDate").datepicker({ dateFormat: "dd-M-yy" });
@@ -422,7 +430,8 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 
 //function to generate tooltips
 		function generateTooltips() {
-		  //make sure tool tip is enabled for any new error label//          alert('s');
+		  //make sure tool tip is enabled for any new error label
+//          alert('s');
 			$("img[id*='error']").tooltip({
 				showURL: false,
 				opacity: 0.99,
@@ -431,7 +440,8 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 					bodyHandler: function() {
 						return $("#"+this.id).attr("hovertext");
 					}
-			});
+			});
+
 			//make sure tool tip is enabled for any new valid label
 			$("img[src*='tick.gif']").tooltip({
 				showURL: false,
@@ -439,7 +449,8 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 						return "OK";
 					}
 			});
-		}
+		}
+
         
         function OpenPopupCashAccountSearch()
   {
@@ -473,25 +484,30 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
   }       
         } 
 
-         function SetJournalDetail(src,journalId)
+        function SetJournalDetail(src,journalId)
         {
-  $("#popup").dialog("close");
-        var journal = $.parseJSON($.ajax({ url: '<%= Url.Action("GetJsonJournal","Accounting") %>?journalId=' + journalId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the journal.'); } }).responseText);
-        if (journal) {
-         var transDate = new Date(parseInt(journal.JournalDate.substr(6)));
-            //alert('debug 3');
-                $("#Journal_JournalDate").val(transDate.format('dd-mmm-yyyy'));
+            $("#popup").dialog("close");
+            var journal = $.parseJSON($.ajax({ url: '<%= Url.Action("GetJsonJournal","Accounting") %>?journalId=' + journalId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the journal.'); } }).responseText);
+            if (journal) {
+            if (journal.JournalDate)
+                {
+                    var transDate = new Date(parseInt(journal.JournalDate.substr(6)));
+                    //alert('debug 3');
+                    $("#Journal_JournalDate").val(transDate.format('dd-mmm-yyyy'));
+                }
 
-    $("#Journal_Id").val(journal.JournalId); 
-    $("#Journal_JournalVoucherNo").val(journal.JournalVoucherNo);
-    $("#Journal_CostCenterId").val(journal.CostCenterId);
-    $("#CashAccountId").val(journal.CashAccountId);
-    $("#CashAccountName").val(journal.CashAccountName);
-    $("#Journal_JournalPic").val(journal.JournalPic);
-    $("#Journal_JournalDesc").val(journal.JournalDesc); 
+            $("#Journal_Id").val(journal.JournalId); 
+            $("#Journal_JournalVoucherNo").val(journal.JournalVoucherNo);
+            $("#Journal_CostCenterId").val(journal.CostCenterId);
+            $("#CashAccountId").val(journal.CashAccountId);
+            $("#CashAccountName").val(journal.CashAccountName);
+            $("#Journal_JournalPic").val(journal.JournalPic);
+            $("#Journal_JournalDesc").val(journal.JournalDesc); 
 
-    setTimeout("$('#list').trigger('reloadGrid')",1000); 
-}
+            setTimeout("$('#list').trigger('reloadGrid')",1000); 
+            $("#btnPrint").attr('disabled', '');
+            $("#btnPrintKwitansi").attr('disabled', '');
+        }
 
         } 
 </script>

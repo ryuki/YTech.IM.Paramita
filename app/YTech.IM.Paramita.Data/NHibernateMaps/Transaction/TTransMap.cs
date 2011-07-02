@@ -20,9 +20,9 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Transaction
             mapping.Id(x => x.Id, "TRANS_ID")
                  .GeneratedBy.Assigned();
 
-            mapping.References(x => x.WarehouseId, "WAREHOUSE_ID").Fetch.Join();
-            mapping.References(x => x.WarehouseIdTo, "WAREHOUSE_ID_TO").Fetch.Join();
-            mapping.References(x => x.UnitTypeId, "UNIT_TYPE_ID").Fetch.Join();
+            mapping.References(x => x.WarehouseId, "WAREHOUSE_ID");
+            mapping.References(x => x.WarehouseIdTo, "WAREHOUSE_ID_TO");
+            mapping.References(x => x.UnitTypeId, "UNIT_TYPE_ID");
             mapping.Map(x => x.TransDate, "TRANS_DATE");
             mapping.Map(x => x.TransBy, "TRANS_BY");
             mapping.Map(x => x.TransFactur, "TRANS_FACTUR");
@@ -34,6 +34,7 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Transaction
             mapping.Map(x => x.TransTax, "TRANS_TAX");
             mapping.Map(x => x.TransStatus, "TRANS_STATUS");
             mapping.Map(x => x.TransDesc, "TRANS_DESC");
+            mapping.References(x => x.JobTypeId, "JOB_TYPE_ID");
 
             mapping.Map(x => x.DataStatus, "DATA_STATUS");
             mapping.Map(x => x.CreatedBy, "CREATED_BY");

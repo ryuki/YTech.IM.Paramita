@@ -1,10 +1,9 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl<TransactionFormViewModel>" %>
-
 <%--<% using (Html.BeginForm())
    { %>--%>
-   <% using (Ajax.BeginForm(new AjaxOptions
+<% using (Ajax.BeginForm(new AjaxOptions
                                        {
-                                           UpdateTargetId = "status",
+                                           //UpdateTargetId = "status",
                                            InsertionMode = InsertionMode.Replace,
                                            OnBegin = "ajaxValidate",
                                            OnSuccess = "onSavedSuccess"
@@ -12,7 +11,7 @@
 
           ))
    {%>
-   <div id="status">
+<div id="status">
 </div>
 <div class="ui-state-highlight ui-corner-all" style="padding: 5pt; margin-bottom: 5pt;
     display: none;" id="error">
@@ -27,8 +26,15 @@
 <div>
     <span id="toolbar" class="ui-widget-header ui-corner-all"><a id="newTrans" href="<%= Url.Action(ViewData.Model.Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString()) ? "Index" : Model.Trans.TransStatus.ToString(), "Inventory") %>">
         Baru</a>
-        <button id="Save" type="submit">
+        <button id="btnSave" type="submit" name="btnSave">
             Simpan</button>
+        <%--<button id="btnPrint" name="btnPrint" type="submit">
+            Cetak Faktur</button>--%>
+        <button id="btnDelete" name="btnDelete" type="submit">
+            Hapus <%= ViewData.Model.Title %></button>
+        <button id="btnList" name="btnList" type="button">
+            Daftar
+            <%= ViewData.Model.Title %></button>
     </span>
 </div>
 <table>
@@ -126,10 +132,10 @@
         <td>
             <table>
                 <% if (ViewData.Model.ViewUnitType)
-                    {%>
+                   {%>
                 <tr>
                     <td>
-                        <label for="Trans_UnitType">
+                        <label for="Trans_UnitTypeId">
                             Tipe Unit :</label>
                     </td>
                     <td>
@@ -137,23 +143,24 @@
                         <%= Html.ValidationMessage("Trans.UnitTypeId") %>
                     </td>
                 </tr>
-                  <%}%>
+                <%}%>
             </table>
         </td>
         <td>
             <table>
                 <% if (ViewData.Model.ViewJobType)
-                    {%>
+                   {%>
                 <tr>
                     <td>
-                        <label for="Trans_JobType">Jenis Pekerjaan :</label>
+                        <label for="Trans_JobTypeId">
+                            Jenis Pekerjaan :</label>
                     </td>
                     <td>
                         <%= Html.DropDownList("Trans.JobTypeId", Model.JobTypeList) %>
                         <%= Html.ValidationMessage("Trans.JobTypeId") %>
                     </td>
                 </tr>
-                  <%}%>
+                <%}%>
             </table>
         </td>
     </tr>
@@ -175,8 +182,36 @@
 <script language="javascript" type="text/javascript">
 
 
-function onSavedSuccess() {
- $("#Save").attr('disabled', 'disabled');
+function onSavedSuccess(e) {
+ //$("#Save").attr('disabled', 'disabled');
+  var json = e.get_response().get_object();
+//alert(json);
+    var success = json.Success;
+       //alert(json.Success);
+        var msg = json.Message;
+    if (success == false) {
+        //alert(json.Message);
+        if (msg) {
+
+            if (msg == "redirect") {
+                var urlreport = '<%= ResolveUrl("~/ReportViewer.aspx?rpt=RptPrintFactur") %>';
+                   // alert(urlreport);
+                window.open(urlreport);
+            }
+            else {
+                $('#dialog p:first').text(msg);
+                $("#dialog").dialog("open"); 
+            }
+            return false ;  
+        }
+    }
+    else{
+        $("#btnSave").attr('disabled', 'disabled');
+        $("#btnDelete").attr('disabled', 'disabled');
+        $("#btnPrint").attr('disabled', '');
+        $('#dialog p:first').text(msg);
+        $("#dialog").dialog("open"); 
+    }
 }
 
 
@@ -208,7 +243,9 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
         <% if (ViewData.Model.ViewWarehouseTo) {	%>  ,"Trans.WarehouseIdTo": "<img id='WarehouseIdToerror' src='"+imgerror+"' hovertext='Pilih Gudang Tujuan' />"<% } %>
         <% if (ViewData.Model.ViewUnitType) {	%>  ,"Trans.UnitTypeId": "<img id='UnitTypeIdToerror' src='"+imgerror+"' hovertext='Pilih Tipe Unit' />"<% } %>
         <% if (ViewData.Model.ViewJobType) {	%>  ,"Trans.JobTypeId": "<img id='JobTypeIdToerror' src='"+imgerror+"' hovertext='Pilih Jenis Pekerjaan' />"<% } %>
-        },        invalidHandler: function(form, validator) {          var errors = validator.numberOfInvalids();
+        },
+        invalidHandler: function(form, validator) {
+          var errors = validator.numberOfInvalids();
 						  if (errors) {
                           var message = "Validasi data kurang";
 				$("div#error span#error_msg").html(message);
@@ -236,7 +273,20 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 
     $(function () {
         $("#newTrans").button();
-        $("#Save").button();
+        //$("#Save").button();
+  $("#btnDelete").attr('disabled', 'disabled');
+
+         <% if (TempData[EnumCommonViewData.SaveState.ToString()] != null)
+{
+    if (TempData[EnumCommonViewData.SaveState.ToString()].Equals(EnumSaveState.Failed))
+    {%>
+   $("#btnPrint").attr('disabled', 'disabled');
+    <%
+    }
+} else { %>
+  $("#btnPrint").attr('disabled', 'disabled');
+<% } %>
+
         $("#Trans_TransDate").datepicker({ dateFormat: "dd-M-yy" });
     });
 
@@ -259,6 +309,12 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                     $("#list").trigger("reloadGrid");
                  }
             });
+
+        $("#btnList").click(function () {
+        var urlList = '<%= ResolveUrl("~/Transaction/Inventory/ListTransaction") %>';
+          $("#popup_frame").attr("src", urlList+"?src=cc&transStatus="+$("#Trans_TransStatus").val());
+            $("#popup").dialog("open");
+                               });
 
       var editDialog = {
             url: '<%= Url.Action("Update", "Inventory") %>'
@@ -435,7 +491,8 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                       
 //function to generate tooltips
 		function generateTooltips() {
-		  //make sure tool tip is enabled for any new error label//          alert('s');
+		  //make sure tool tip is enabled for any new error label
+//          alert('s');
 			$("img[id*='error']").tooltip({
 				showURL: false,
 				opacity: 0.99,
@@ -444,7 +501,8 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 					bodyHandler: function() {
 						return $("#"+this.id).attr("hovertext");
 					}
-			});
+			});
+
 			//make sure tool tip is enabled for any new valid label
 			$("img[src*='tick.gif']").tooltip({
 				showURL: false,
@@ -495,4 +553,32 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                <%
 }%>      
         }
+
+         function SetTransDetail(src,transId)
+        {
+            $("#popup").dialog("close");
+            var trans = $.parseJSON($.ajax({ url: '<%= Url.Action("GetJsonTrans","Inventory") %>?transId=' + transId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the trans.'); } }).responseText);
+            if (trans) {
+                if (trans.TransDate)
+                {
+                    var transDate = new Date(parseInt(trans.TransDate.substr(6)));
+                    //alert('debug 3');
+                    $("#Trans_TransDate").val(transDate.format('dd-mmm-yyyy'));
+                }
+
+            $("#Trans_Id").val(trans.TransId); 
+            $("#Trans_TransFactur").val(trans.TransFactur); 
+            $("#Trans_WarehouseId").val(trans.WarehouseId); 
+            $("#Trans_TransPaymentMethod").val(trans.TransPaymentMethod); 
+            $("#Trans_TransBy").val(trans.TransBy); 
+            $("#Trans_WarehouseIdTo").val(trans.WarehouseIdTo); 
+            $("#Trans_UnitTypeId").val(trans.UnitTypeId); 
+            $("#Trans_JobTypeId").val(trans.JobTypeId); 
+
+            setTimeout("$('#list').trigger('reloadGrid')",1000); 
+             $("#btnPrint").attr('disabled', '');
+             $("#btnDelete").attr('disabled', '');
+        }
+
+        } 
 </script>

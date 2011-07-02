@@ -178,6 +178,9 @@
         <div>
             <%= Html.ActionLinkForAreas<AccountingController>(c => c.Closing(), "Tutup Buku")%>
         </div>
+        <div>
+            <%= Html.ActionLinkForAreas<AccountingController>(c => c.Opening(), "Buka Buku")%>
+        </div>
     </div>
     <%
         }

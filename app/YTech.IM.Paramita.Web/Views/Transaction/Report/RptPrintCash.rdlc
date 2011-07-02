@@ -122,7 +122,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>6.34415in</Width>
+              <Width>8.19832in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -140,10 +140,10 @@
                                 <Width>0.30783in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.26066in</Width>
+                                <Width>1.88566in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>3.31726in</Width>
+                                <Width>3.77271in</Width>
                               </TablixColumn>
                               <TablixColumn>
                                 <Width>1.3267in</Width>
@@ -629,7 +629,7 @@
                           <DataSetName>CashJournalViewModel</DataSetName>
                           <Top>1.25865in</Top>
                           <Height>0.85377in</Height>
-                          <Width>6.21245in</Width>
+                          <Width>7.2929in</Width>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -658,7 +658,7 @@
                           </Paragraphs>
                           <rd:DefaultName>JournalDate</rd:DefaultName>
                           <Top>0.25393in</Top>
-                          <Left>4.49266in</Left>
+                          <Left>5.50308in</Left>
                           <Height>0.25in</Height>
                           <Width>1.71978in</Width>
                           <ZIndex>1</ZIndex>
@@ -691,7 +691,7 @@
                           </Paragraphs>
                           <rd:DefaultName>JournalVoucherNo</rd:DefaultName>
                           <Top>0.00393in</Top>
-                          <Left>4.49267in</Left>
+                          <Left>5.50309in</Left>
                           <Height>0.25in</Height>
                           <Width>1.71978in</Width>
                           <ZIndex>2</ZIndex>
@@ -723,7 +723,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox8</rd:DefaultName>
-                          <Left>4.10281in</Left>
+                          <Left>5.11323in</Left>
                           <Height>0.25in</Height>
                           <Width>0.38986in</Width>
                           <ZIndex>3</ZIndex>
@@ -756,7 +756,7 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox9</rd:DefaultName>
                           <Top>0.25in</Top>
-                          <Left>4.10281in</Left>
+                          <Left>5.11323in</Left>
                           <Height>0.25in</Height>
                           <Width>0.38986in</Width>
                           <ZIndex>4</ZIndex>
@@ -796,7 +796,7 @@
                           <Top>0.00393in</Top>
                           <Left>1.56849in</Left>
                           <Height>0.5in</Height>
-                          <Width>2.53432in</Width>
+                          <Width>3.54474in</Width>
                           <ZIndex>5</ZIndex>
                           <Style>
                             <Border>
@@ -862,7 +862,7 @@
                           <Top>0.88129in</Top>
                           <Left>1.56849in</Left>
                           <Height>0.25in</Height>
-                          <Width>3.31063in</Width>
+                          <Width>3.5381in</Width>
                           <ZIndex>7</ZIndex>
                           <Style>
                             <Border>
@@ -878,16 +878,16 @@
                           <TablixBody>
                             <TablixColumns>
                               <TablixColumn>
-                                <Width>1.41406in</Width>
+                                <Width>1.57812in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.49091in</Width>
+                                <Width>1.65497in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.27987in</Width>
+                                <Width>1.44393in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.25472in</Width>
+                                <Width>1.41878in</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
@@ -1170,9 +1170,9 @@
                             </TablixMembers>
                           </TablixRowHierarchy>
                           <Top>2.25996in</Top>
-                          <Left>0.30783in</Left>
+                          <Left>1.19709in</Left>
                           <Height>0.90566in</Height>
-                          <Width>5.43956in</Width>
+                          <Width>6.09581in</Width>
                           <ZIndex>8</ZIndex>
                           <Style>
                             <Border>
@@ -1234,7 +1234,7 @@
                           <Top>0.63129in</Top>
                           <Left>1.57513in</Left>
                           <Height>0.25in</Height>
-                          <Width>3.31063in</Width>
+                          <Width>3.5381in</Width>
                           <ZIndex>10</ZIndex>
                           <Style>
                             <Border>
@@ -1269,6 +1269,7 @@
                         </Border>
                       </Style>
                     </Rectangle>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -1293,9 +1294,9 @@
         </TablixRowHierarchy>
         <DataSetName>CashJournalViewModel</DataSetName>
         <Top>0.12717in</Top>
-        <Left>0.125in</Left>
+        <Left>0.375in</Left>
         <Height>3.16562in</Height>
-        <Width>6.34415in</Width>
+        <Width>8.19832in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1306,8 +1307,10 @@
     <Height>3.39656in</Height>
     <Style />
   </Body>
-  <Width>6.61774in</Width>
+  <Width>9.52123in</Width>
   <Page>
+    <PageHeight>5.5in</PageHeight>
+    <PageWidth>9.5in</PageWidth>
     <LeftMargin>0.1in</LeftMargin>
     <RightMargin>0.1in</RightMargin>
     <TopMargin>0.1in</TopMargin>

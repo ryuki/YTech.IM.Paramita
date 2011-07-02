@@ -39,6 +39,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Inventory
         public virtual decimal? TransTax { get; set; }
         public virtual string TransStatus { get; set; }
         public virtual string TransDesc { get; set; }
+        public virtual MJobType JobTypeId { get; set; }
 
         public virtual IList<TTransDet> TransDets { get; protected set; }
 

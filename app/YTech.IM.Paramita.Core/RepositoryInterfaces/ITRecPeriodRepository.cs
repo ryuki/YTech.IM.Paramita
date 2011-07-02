@@ -10,5 +10,7 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
     public interface ITRecPeriodRepository : INHibernateRepositoryWithTypedId<TRecPeriod, string>
     {
         DateTime? GetLastDateClosing();
+
+        void DeleteByRecPeriodId(string recPeriodId);
     }
 }

@@ -257,7 +257,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ReturPurchase(TTrans Trans, FormCollection formCollection)
         {
-            return SaveTransaction(Trans, formCollection);
+            return SaveTransactionInterface(Trans, formCollection);
         }
 
         public ActionResult Using()
@@ -276,7 +276,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Using(TTrans Trans, FormCollection formCollection)
         {
-            return SaveTransaction(Trans, formCollection);
+            return SaveTransactionInterface(Trans, formCollection);
         }
 
         public ActionResult Received()
@@ -295,7 +295,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Received(TTrans Trans, FormCollection formCollection)
         {
-            return SaveTransaction(Trans, formCollection);
+            return SaveTransactionInterface(Trans, formCollection);
         }
 
         public ActionResult Mutation()
@@ -314,7 +314,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Mutation(TTrans Trans, FormCollection formCollection)
         {
-            return SaveTransaction(Trans, formCollection);
+            return SaveTransactionInterface(Trans, formCollection);
         }
 
         [Transaction]
@@ -334,7 +334,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Adjusment(TTrans Trans, FormCollection formCollection)
         {
-            return SaveTransaction(Trans, formCollection);
+            return SaveTransactionInterface(Trans, formCollection);
         }
 
         private List<TTransDet> ListDetTrans
@@ -557,24 +557,31 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Index(TTrans Trans, FormCollection formCollection)
         {
-            return SaveTransaction(Trans, formCollection);
+            return SaveTransactionInterface(Trans, formCollection);
         }
 
-        private ActionResult SaveTransaction(TTrans Trans, FormCollection formCollection)
+        private ActionResult SaveTransactionInterface(TTrans Trans, FormCollection formCollection)
         {
-            _tTransRepository.DbContext.BeginTransaction();
-            if (Trans == null)
-            {
-                Trans = new TTrans();
-            }
+            if (formCollection["btnSave"] != null)
+                return SaveTransaction(Trans, formCollection, false);
+            else if (formCollection["btnDelete"] != null)
+                return SaveTransaction(Trans, formCollection, true);
+
+            return View();
+        }
+
+        private void SaveTransaction(TTrans Trans, FormCollection formCollection, bool addStock, bool calculateStock)
+        {
             Trans.SetAssignedIdTo(formCollection["Trans.Id"]);
-            Trans.WarehouseId = _mWarehouseRepository.Get(formCollection["Trans.WarehouseId"]);
+            //Trans.WarehouseId = _mWarehouseRepository.Get(formCollection["Trans.WarehouseId"]);
             if (!string.IsNullOrEmpty(formCollection["Trans.WarehouseIdTo"]))
             {
                 Trans.WarehouseIdTo = _mWarehouseRepository.Get(formCollection["Trans.WarehouseIdTo"]);
             }
             if (!string.IsNullOrEmpty(formCollection["Trans.UnitTypeId"]))
                 Trans.UnitTypeId = _mUnitTypeRepository.Get(formCollection["Trans.UnitTypeId"]);
+            if (!string.IsNullOrEmpty(formCollection["Trans.JobTypeId"]))
+                Trans.JobTypeId = _mJobTypeRepository.Get(formCollection["Trans.JobTypeId"]);
             Trans.CreatedDate = DateTime.Now;
             Trans.CreatedBy = User.Identity.Name;
             Trans.DataStatus = Enums.EnumDataStatus.New.ToString();
@@ -582,6 +589,68 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             Trans.TransDets.Clear();
 
             //save stock card
+
+            TTransDet detToInsert;
+            IList<TTransDet> listDet = new List<TTransDet>();
+            decimal total = 0;
+
+            //MJobType jobType = null;
+            //if (!string.IsNullOrEmpty(formCollection["Trans.JobTypeId"]))
+            //    jobType = _mJobTypeRepository.Get(formCollection["Trans.JobTypeId"]);
+
+            foreach (TTransDet det in ListDetTrans)
+            {
+                detToInsert = new TTransDet(Trans);
+                detToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
+                detToInsert.ItemId = det.ItemId;
+                detToInsert.ItemUomId = det.ItemUomId;
+                detToInsert.TransDetQty = det.TransDetQty;
+                detToInsert.TransDetPrice = det.TransDetPrice;
+                detToInsert.TransDetDisc = det.TransDetDisc;
+                detToInsert.TransDetTotal = det.TransDetTotal;
+                //if (jobType != null)
+                //    detToInsert.JobTypeId = jobType;
+                //else
+                //    detToInsert.JobTypeId = det.JobTypeId;
+                detToInsert.CreatedBy = User.Identity.Name;
+                detToInsert.CreatedDate = DateTime.Now;
+                detToInsert.DataStatus = Enums.EnumDataStatus.New.ToString();
+                Trans.TransDets.Add(detToInsert);
+                total += det.TransDetTotal.HasValue ? det.TransDetTotal.Value : 0;
+                listDet.Add(detToInsert);
+            }
+            Trans.TransSubTotal = total;
+            _tTransRepository.Save(Trans);
+            //_tTransRepository.DbContext.CommitTransaction();
+
+            //_tStockCardRepository.DbContext.BeginTransaction();
+            if (calculateStock)
+            {
+                foreach (TTransDet det in listDet)
+                {
+                    //save stock
+                    if (Trans.TransStatus.Equals(EnumTransactionStatus.Mutation.ToString()))
+                    {
+                        SaveStock(Trans, det, false, Trans.WarehouseId, false);
+                        SaveStock(Trans, det, true, Trans.WarehouseIdTo, false);
+                        UpdateStockDetail(Trans, det, false, Trans.WarehouseId, false);
+                        UpdateStockDetail(Trans, det, true, Trans.WarehouseIdTo, false);
+                    }
+                    else
+                    {
+                        SaveStock(Trans, det, addStock, Trans.WarehouseId, false);
+                        UpdateStockDetail(Trans, det, addStock, Trans.WarehouseId, false);
+                    }
+                }
+            }
+
+        }
+
+        private ActionResult SaveTransaction(TTrans Trans, FormCollection formCollection, bool isDelete)
+        {
+            _tTransRepository.DbContext.BeginTransaction();
+
+            //get stock add or calculated
             bool addStock = true;
             bool calculateStock = false;
             EnumTransactionStatus status = (EnumTransactionStatus)Enum.Parse(typeof(EnumTransactionStatus), Trans.TransStatus);
@@ -617,78 +686,79 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
             }
 
-            TTransDet detToInsert;
-            IList<TTransDet> listDet = new List<TTransDet>();
-            decimal total = 0;
-
-            MJobType jobType = null;
-            if (!string.IsNullOrEmpty(formCollection["Trans.JobTypeId"]))
-                jobType = _mJobTypeRepository.Get(formCollection["Trans.JobTypeId"]);
-
-            foreach (TTransDet det in ListDetTrans)
+            //check first
+            TTrans tr = _tTransRepository.Get(formCollection["Trans.Id"]);
+            if (tr != null)
             {
-                detToInsert = new TTransDet(Trans);
-                detToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
-                detToInsert.ItemId = det.ItemId;
-                detToInsert.ItemUomId = det.ItemUomId;
-                detToInsert.TransDetQty = det.TransDetQty;
-                detToInsert.TransDetPrice = det.TransDetPrice;
-                detToInsert.TransDetDisc = det.TransDetDisc;
-                detToInsert.TransDetTotal = det.TransDetTotal;
-                if (jobType != null)
-                    detToInsert.JobTypeId = jobType;
-                else
-                    detToInsert.JobTypeId = det.JobTypeId;
-                detToInsert.CreatedBy = User.Identity.Name;
-                detToInsert.CreatedDate = DateTime.Now;
-                detToInsert.DataStatus = Enums.EnumDataStatus.New.ToString();
-                Trans.TransDets.Add(detToInsert);
-                total += det.TransDetTotal.HasValue ? det.TransDetTotal.Value : 0;
-                listDet.Add(detToInsert);
+                //call back stock for deleted
+                DeleteTransaction(tr, !addStock, calculateStock);
             }
-            Trans.TransSubTotal = total;
-            _tTransRepository.Save(Trans);
-            //_tTransRepository.DbContext.CommitTransaction();
-
-            //_tStockCardRepository.DbContext.BeginTransaction();
-            if (calculateStock)
+            if (!isDelete)
             {
-                foreach (TTransDet det in listDet)
-                {
-                    //save stock
-                    if (Trans.TransStatus.Equals(EnumTransactionStatus.Mutation.ToString()))
-                    {
-                        SaveStock(Trans, det, false, Trans.WarehouseId);
-                        SaveStock(Trans, det, true, Trans.WarehouseIdTo);
-                        UpdateStockDetail(Trans, det, false, Trans.WarehouseId);
-                        UpdateStockDetail(Trans, det, true, Trans.WarehouseIdTo);
-                    }
-                    else
-                    {
-                        SaveStock(Trans, det, addStock, Trans.WarehouseId);
-                        UpdateStockDetail(Trans, det, addStock, Trans.WarehouseId);
-                    }
-                }
+                SaveTransaction(Trans, formCollection, addStock, calculateStock);
             }
 
+            string Message = string.Empty;
+            bool Success = true;
             try
             {
                 _tTransRepository.DbContext.CommitTransaction();
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Success;
+                if (!isDelete)
+                    Message = "Data berhasil disimpan.";
+                else
+                    Message = "Data berhasil dihapus.";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Success = false;
+                if (!isDelete)
+                    Message = "Data gagal disimpan.";
+                else
+                    Message = "Data gagal dihapus.";
+                Message += "Error : " + ex.GetBaseException().Message;
                 _tTransRepository.DbContext.RollbackTransaction();
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Failed;
             }
+            var e = new
+            {
+                Success,
+                Message
+            };
+            return Json(e, JsonRequestBehavior.AllowGet);
             //if (!Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString()))
             //{
             //    return RedirectToAction(Trans.TransStatus.ToString());
             //}
-            return View("Status");
+            //return View("Status");
         }
 
-        private void SaveStock(TTrans Trans, TTransDet det, bool addStock, MWarehouse mWarehouse)
+        private void DeleteTransaction(TTrans tr, bool addStock, bool calculateStock)
+        {
+            if (calculateStock)
+            {
+                foreach (TTransDet det in tr.TransDets)
+                {
+                    //save stock
+                    if (tr.TransStatus.Equals(EnumTransactionStatus.Mutation.ToString()))
+                    {
+                        SaveStock(tr, det, false, tr.WarehouseId, true);
+                        SaveStock(tr, det, true, tr.WarehouseIdTo, true);
+                        UpdateStockDetail(tr, det, false, tr.WarehouseId, true);
+                        UpdateStockDetail(tr, det, true, tr.WarehouseIdTo, true);
+                    }
+                    else
+                    {
+                        SaveStock(tr, det, addStock, tr.WarehouseId, true);
+                        UpdateStockDetail(tr, det, addStock, tr.WarehouseId, true);
+                    }
+                }
+            }
+
+            _tTransRepository.Delete(tr);
+        }
+
+        private void SaveStock(TTrans Trans, TTransDet det, bool addStock, MWarehouse mWarehouse, bool isDelete)
         {
             TStockCard stockCard;
             TStockItem stockItem;
@@ -743,20 +813,22 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 stockCard.StockCardQty = det.TransDetQty;
                 stockCard.StockCardSaldo = stockItem.ItemStock;
                 stockCard.StockCardStatus = addStock;
-                stockCard.TransDetId = det;
+                //if (!isDelete)
+                //    stockCard.TransDetId = det;
                 stockCard.WarehouseId = mWarehouse;
                 _tStockCardRepository.Save(stockCard);
             }
         }
 
-        private void UpdateStockDetail(TTrans Trans, TTransDet det, bool addStock, MWarehouse mWarehouse)
+        private void UpdateStockDetail(TTrans Trans, TTransDet det, bool addStock, MWarehouse mWarehouse, bool isDelete)
         {
             if (addStock)
             {
                 TStock stock = new TStock();
                 stock.SetAssignedIdTo(Guid.NewGuid().ToString());
                 stock.ItemId = det.ItemId;
-                stock.TransDetId = det;
+                //if (!isDelete)
+                //    stock.TransDetId = det;
                 stock.StockDate = Trans.TransDate;
                 stock.StockDesc = det.TransDetDesc;
                 stock.StockPrice = det.TransDetPrice;
@@ -793,7 +865,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     {
                         stockRef.StockRefQty = sisa;
                     }
-                    stockRef.TransDetId = det;
+                    //if (!isDelete)
+                    //    stockRef.TransDetId = det;
                     stockRef.StockRefPrice = det.TransDetPrice;
                     stockRef.StockRefDate = Trans.TransDate;
                     stockRef.StockRefStatus = Trans.TransStatus;
@@ -831,7 +904,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Budgeting(TTrans Trans, FormCollection formCollection)
         {
-            return SaveTransaction(Trans, formCollection);
+            return SaveTransactionInterface(Trans, formCollection);
         }
 
         [Transaction]
@@ -852,5 +925,64 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             }
             return Content(sb.ToString());
         }
+
+        [Transaction]
+        public ActionResult ListTransaction()
+        {
+            return View();
+        }
+
+        [Transaction]
+        public ActionResult ListSearchTrans(string sidx, string sord, int page, int rows, string searchBy, string searchText, string transStatus)
+        {
+            int totalRecords = 0;
+            var transList = _tTransRepository.GetPagedTransList(sidx, sord, page, rows, ref totalRecords, searchBy, searchText, transStatus);
+            int pageSize = rows;
+            int totalPages = (int)Math.Ceiling((float)totalRecords / (float)pageSize);
+
+            var jsonData = new
+            {
+                total = totalPages,
+                page = page,
+                records = totalRecords,
+                rows = (
+                    from trans in transList
+                    select new
+                    {
+                        i = trans.Id.ToString(),
+                        cell = new string[] {
+                            trans.Id, 
+                            trans.TransFactur, 
+                            trans.TransDate.HasValue ? trans.TransDate.Value.ToString(Helper.CommonHelper.DateFormat): null,
+                            trans.TransDesc
+                        }
+                    }).ToArray()
+            };
+
+
+            return Json(jsonData, JsonRequestBehavior.AllowGet);
+        }
+
+        [Transaction]
+        public ActionResult GetJsonTrans(string transId)
+        {
+            TTrans trans = _tTransRepository.Get(transId);
+            ListDetTrans = trans.TransDets.ToList();
+            var t = new
+            {
+                TransId = trans.Id,
+                trans.TransDate,
+                trans.TransFactur,
+                WarehouseId = trans.WarehouseId != null ? trans.WarehouseId.Id : null,
+                trans.TransPaymentMethod,
+                trans.TransBy,
+                WarehouseIdTo = trans.WarehouseIdTo != null ? trans.WarehouseIdTo.Id : null,
+                UnitTypeId = trans.UnitTypeId != null ? trans.UnitTypeId.Id : null,
+                JobTypeId = trans.JobTypeId != null ? trans.JobTypeId.Id : null
+
+            };
+            return Json(t, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
