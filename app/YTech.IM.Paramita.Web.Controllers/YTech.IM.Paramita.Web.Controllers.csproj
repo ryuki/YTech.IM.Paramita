@@ -120,6 +120,7 @@
     <Compile Include="ViewModel\RealFormViewModel.cs" />
     <Compile Include="ViewModel\ReportParamViewModel.cs" />
     <Compile Include="ViewModel\Reports\CashJournalViewModel.cs" />
+    <Compile Include="ViewModel\Reports\JournalDetFlowViewModel.cs" />
     <Compile Include="ViewModel\Reports\ItemViewModel.cs" />
     <Compile Include="ViewModel\Reports\JournalDetViewModel.cs" />
     <Compile Include="ViewModel\Reports\RecAccountViewModel.cs" />
