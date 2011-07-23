@@ -10,7 +10,7 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="JournalDetViewModel">
+    <DataSet Name="JournalDetFlowViewModel">
       <Fields>
         <Field Name="AccountId">
           <DataField>AccountId</DataField>
@@ -84,9 +84,17 @@
           <DataField>ModifiedDate</DataField>
           <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
+        <Field Name="RowNumber">
+          <DataField>RowNumber</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
         <Field Name="RowVersion">
           <DataField>RowVersion</DataField>
           <rd:TypeName>System.Byte[]</rd:TypeName>
+        </Field>
+        <Field Name="Saldo">
+          <DataField>Saldo</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
       </Fields>
       <Query>
@@ -95,8 +103,8 @@
       </Query>
       <rd:DataSetInfo>
         <rd:DataSetName>YTech.IM.Paramita.Web.Controllers.ViewModel.Reports</rd:DataSetName>
-        <rd:TableName>JournalDetViewModel</rd:TableName>
-        <rd:ObjectDataSourceType>YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.JournalDetViewModel, YTech.IM.Paramita.Web.Controllers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>JournalDetFlowViewModel</rd:TableName>
+        <rd:ObjectDataSourceType>YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.JournalDetFlowViewModel, YTech.IM.Paramita.Web.Controllers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
@@ -215,6 +223,9 @@
                                                 </TablixColumn>
                                                 <TablixColumn>
                                                   <Width>1.00855in</Width>
+                                                </TablixColumn>
+                                                <TablixColumn>
+                                                  <Width>1.70833in</Width>
                                                 </TablixColumn>
                                                 <TablixColumn>
                                                   <Width>1.38591in</Width>
@@ -438,6 +449,44 @@
                                                             </Paragraph>
                                                           </Paragraphs>
                                                           <rd:DefaultName>Textbox7</rd:DefaultName>
+                                                          <Style>
+                                                            <Border>
+                                                              <Color>#7292cc</Color>
+                                                              <Style>Solid</Style>
+                                                            </Border>
+                                                            <BackgroundColor>#4c68a2</BackgroundColor>
+                                                            <PaddingLeft>2pt</PaddingLeft>
+                                                            <PaddingRight>2pt</PaddingRight>
+                                                            <PaddingTop>2pt</PaddingTop>
+                                                            <PaddingBottom>2pt</PaddingBottom>
+                                                          </Style>
+                                                        </Textbox>
+                                                      </CellContents>
+                                                    </TablixCell>
+                                                    <TablixCell>
+                                                      <CellContents>
+                                                        <Textbox Name="Textbox1">
+                                                          <CanGrow>true</CanGrow>
+                                                          <KeepTogether>true</KeepTogether>
+                                                          <Paragraphs>
+                                                            <Paragraph>
+                                                              <TextRuns>
+                                                                <TextRun>
+                                                                  <Value>Saldo</Value>
+                                                                  <Style>
+                                                                    <FontFamily>Verdana</FontFamily>
+                                                                    <FontSize>9pt</FontSize>
+                                                                    <FontWeight>Bold</FontWeight>
+                                                                    <Color>White</Color>
+                                                                  </Style>
+                                                                </TextRun>
+                                                              </TextRuns>
+                                                              <Style>
+                                                                <TextAlign>Center</TextAlign>
+                                                              </Style>
+                                                            </Paragraph>
+                                                          </Paragraphs>
+                                                          <rd:DefaultName>Textbox1</rd:DefaultName>
                                                           <Style>
                                                             <Border>
                                                               <Color>#7292cc</Color>
@@ -708,6 +757,43 @@
                                                     </TablixCell>
                                                     <TablixCell>
                                                       <CellContents>
+                                                        <Textbox Name="Saldo">
+                                                          <CanGrow>true</CanGrow>
+                                                          <KeepTogether>true</KeepTogether>
+                                                          <Paragraphs>
+                                                            <Paragraph>
+                                                              <TextRuns>
+                                                                <TextRun>
+                                                                  <Value>=Fields!Saldo.Value</Value>
+                                                                  <Style>
+                                                                    <FontFamily>Verdana</FontFamily>
+                                                                    <FontSize>9pt</FontSize>
+                                                                    <Format>N2</Format>
+                                                                    <Color>#4d4d4d</Color>
+                                                                  </Style>
+                                                                </TextRun>
+                                                              </TextRuns>
+                                                              <Style>
+                                                                <TextAlign>Right</TextAlign>
+                                                              </Style>
+                                                            </Paragraph>
+                                                          </Paragraphs>
+                                                          <rd:DefaultName>Saldo</rd:DefaultName>
+                                                          <Style>
+                                                            <Border>
+                                                              <Color>#e5e5e5</Color>
+                                                              <Style>Solid</Style>
+                                                            </Border>
+                                                            <PaddingLeft>2pt</PaddingLeft>
+                                                            <PaddingRight>2pt</PaddingRight>
+                                                            <PaddingTop>2pt</PaddingTop>
+                                                            <PaddingBottom>2pt</PaddingBottom>
+                                                          </Style>
+                                                        </Textbox>
+                                                      </CellContents>
+                                                    </TablixCell>
+                                                    <TablixCell>
+                                                      <CellContents>
                                                         <Textbox Name="JournalDetDesc">
                                                           <CanGrow>true</CanGrow>
                                                           <KeepTogether>true</KeepTogether>
@@ -753,6 +839,7 @@
                                                 <TablixMember />
                                                 <TablixMember />
                                                 <TablixMember />
+                                                <TablixMember />
                                               </TablixMembers>
                                             </TablixColumnHierarchy>
                                             <TablixRowHierarchy>
@@ -767,9 +854,8 @@
                                             </TablixRowHierarchy>
                                             <DataSetName>JournalDetViewModel</DataSetName>
                                             <Top>0.33359in</Top>
-                                            <Left>0in</Left>
                                             <Height>0.5in</Height>
-                                            <Width>7.03155in</Width>
+                                            <Width>8.73988in</Width>
                                             <Style>
                                               <Border>
                                                 <Style>None</Style>
@@ -879,7 +965,6 @@
                                           </Border>
                                         </Style>
                                       </Rectangle>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                 </TablixCells>
@@ -943,7 +1028,7 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>JournalDetViewModel</DataSetName>
+        <DataSetName>JournalDetFlowViewModel</DataSetName>
         <Top>0.3866in</Top>
         <Height>1.69444in</Height>
         <Width>9.50601in</Width>

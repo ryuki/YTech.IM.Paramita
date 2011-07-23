@@ -128,6 +128,7 @@
     <Compile Include="RepositoryInterfaces\ITTransRepository.cs" />
     <Compile Include="RepositoryInterfaces\ITTransUnitRepository.cs" />
     <Compile Include="RepositoryInterfaces\ITUnitRepository.cs" />
+    <Compile Include="RepositoryInterfaces\IVJournalDetFlowRepository.cs" />
     <Compile Include="Transaction\Accounting\TJournal.cs" />
     <Compile Include="Transaction\Accounting\TJournalDet.cs" />
     <Compile Include="Transaction\Accounting\TJournalRef.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Transaction\TReference.cs" />
     <Compile Include="Transaction\Unit\TTransUnit.cs" />
     <Compile Include="Transaction\Unit\TUnit.cs" />
+    <Compile Include="View\VJournalDetFlow.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YTech.IM.Paramita.Enums\YTech.IM.Paramita.Enums.csproj">

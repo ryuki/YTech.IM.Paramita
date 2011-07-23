@@ -11,6 +11,7 @@ using YTech.IM.Paramita.Core.RepositoryInterfaces;
 using YTech.IM.Paramita.Core.Transaction;
 using YTech.IM.Paramita.Core.Transaction.Accounting;
 using YTech.IM.Paramita.Core.Transaction.Inventory;
+using YTech.IM.Paramita.Core.View;
 using YTech.IM.Paramita.Data.Repository;
 using YTech.IM.Paramita.Enums;
 using YTech.IM.Paramita.Web.Controllers.ViewModel;
@@ -39,8 +40,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private readonly ITStockItemRepository _tStockItemRepository;
         private readonly ITTransDetRepository _tTransDetRepository;
         private readonly ITRealRepository _tRealRepository;
+        private readonly IVJournalDetFlowRepository _vJournalDetFlowRepository;
 
-        public ReportController(ITJournalRepository tJournalRepository, ITJournalDetRepository tJournalDetRepository, IMCostCenterRepository mCostCenterRepository, IMAccountRepository mAccountRepository, ITRecAccountRepository tRecAccountRepository, ITRecPeriodRepository tRecPeriodRepository, IMBrandRepository mBrandRepository, IMSupplierRepository mSupplierRepository, IMWarehouseRepository mWarehouseRepository, IMItemRepository mItemRepository, ITStockCardRepository tStockCardRepository, ITStockItemRepository tStockItemRepository, ITTransDetRepository tTransDetRepository, ITRealRepository tRealRepository)
+        public ReportController(ITJournalRepository tJournalRepository, ITJournalDetRepository tJournalDetRepository, IMCostCenterRepository mCostCenterRepository, IMAccountRepository mAccountRepository, ITRecAccountRepository tRecAccountRepository, ITRecPeriodRepository tRecPeriodRepository, IMBrandRepository mBrandRepository, IMSupplierRepository mSupplierRepository, IMWarehouseRepository mWarehouseRepository, IMItemRepository mItemRepository, ITStockCardRepository tStockCardRepository, ITStockItemRepository tStockItemRepository, ITTransDetRepository tTransDetRepository, ITRealRepository tRealRepository, IVJournalDetFlowRepository vJournalDetFlowRepository)
         {
             Check.Require(tJournalRepository != null, "tJournalRepository may not be null");
             Check.Require(tJournalDetRepository != null, "tJournalDetRepository may not be null");
@@ -56,6 +58,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             Check.Require(tStockItemRepository != null, "tStockItemRepository may not be null");
             Check.Require(tTransDetRepository != null, "tTransDetRepository may not be null");
             Check.Require(tRealRepository != null, "tRealRepository may not be null");
+            Check.Require(vJournalDetFlowRepository != null, "vJournalDetFlowRepository may not be null");
 
             this._tJournalRepository = tJournalRepository;
             this._tJournalDetRepository = tJournalDetRepository;
@@ -71,6 +74,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             this._tStockItemRepository = tStockItemRepository;
             this._tTransDetRepository = tTransDetRepository;
             this._tRealRepository = tRealRepository;
+            this._vJournalDetFlowRepository = vJournalDetFlowRepository;
         }
 
         [Transaction]
@@ -216,7 +220,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     localReport.DataSources.Add(GetItemViewModel());
                     break;
                 case EnumReports.RptBukuBesar:
-                    localReport.DataSources.Add(GetJournalDet(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId));
+                    localReport.DataSources.Add(GetJournalDetFlow(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId));
                     break;
             }
 
@@ -254,6 +258,32 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             Response.AddHeader("content-disposition", string.Format("attachment; filename={0}.{1}", reports.ToString(), fileNameExtension));
 
             return File(renderedBytes, mimeType);
+        }
+
+        private ReportDataSource GetJournalDetFlow(DateTime? dateFrom, DateTime? dateTo, string costCenterId)
+        {
+            IList<VJournalDetFlow> dets = _vJournalDetFlowRepository.GetForReport(dateFrom, dateTo, costCenterId);
+
+            var list = from det in dets
+                       select new
+                       {
+                           det.JournalDetAmmount,
+                           det.JournalDetStatus,
+                           det.JournalDetDesc,
+                           det.JournalDetEvidenceNo,
+                           JournalVoucherNo = det.JournalId != null ? det.JournalId.JournalVoucherNo : null,
+                           CostCenterId = det.JournalId != null ? det.JournalId.CostCenterId != null ? det.JournalId.CostCenterId.Id : null : null,
+                           CostCenterName = det.JournalId != null ? det.JournalId.CostCenterId != null ? det.JournalId.CostCenterId.CostCenterName : null : null,
+                           JournalDate = det.JournalId != null ? det.JournalId.JournalDate : null,
+                           AccountId = det.AccountId != null ? det.AccountId.Id : null,
+                           AccountName = det.AccountId != null ? det.AccountId.AccountName : null,
+                           det.Saldo,
+                           det.RowNumber
+                       }
+            ;
+
+            ReportDataSource reportDataSource = new ReportDataSource("JournalDetFlowViewModel", list);
+            return reportDataSource;
         }
 
         private ReportDataSource GetItemViewModel()
@@ -426,7 +456,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                            card.WarehouseId.WarehouseName,
                            card.StockCardSaldo,
                            card.StockCardDesc,
-                          TransFactur =  card.TransDetId != null?  card.TransDetId.TransId.TransFactur:null
+                           TransFactur = card.TransDetId != null ? card.TransDetId.TransId.TransFactur : null
                        }
             ;
 
@@ -489,11 +519,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       det.JournalDetDesc,
                                       det.JournalDetEvidenceNo,
                                       det.JournalId.JournalVoucherNo,
-                                      CostCenterId = det.JournalId.CostCenterId.Id,
-                                      det.JournalId.CostCenterId.CostCenterName,
+                                      CostCenterId = det.JournalId.CostCenterId != null ? det.JournalId.CostCenterId.Id : null,
+                                     CostCenterName =  det.JournalId.CostCenterId != null ?  det.JournalId.CostCenterId.CostCenterName : null,
                                       det.JournalId.JournalDate,
-                                      AccountId = det.AccountId.Id,
-                                      det.AccountId.AccountName
+                                      AccountId = det.AccountId != null ? det.AccountId.Id : null,
+                                      AccountName = det.AccountId != null ?  det.AccountId.AccountName : null
                                   }
             ;
 
