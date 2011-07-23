@@ -140,7 +140,7 @@
                 loadComplete: function() {
                     var ids = jQuery("#list").getDataIDs();
                     for (var i = 0; i < ids.length; i++) {
-                        var cl = ids[0];
+                        var cl = ids[i];
                         var be = "<input type='button' value='T' tooltips='Tambah Type Unit' onClick=\"OpenPopup('" + cl + "');\" />";
                         $(this).setRowData(ids[i], { act: be });
                     }
@@ -166,7 +166,7 @@
          });
 
          function OpenPopup(id) {
-             $("#popup_frame").attr("src", "<%= Url.Action("AddUnitType", "UnitType") %>?costCenterId="+id);
+             $("#popup_frame").attr("src", "<%= Url.Action("AddUnitType", "UnitType") %>?costCenterId="+id+"&rand="+(new Date()).getTime());
              $("#popup").dialog("open");
              return false;
          }       

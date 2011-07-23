@@ -77,7 +77,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                            itemCat.BrandId != null ? itemCat.BrandId.BrandName : null,
                          itemCat.ItemUoms.Count > 0 ?   itemCat.ItemUoms[0].Id : null,
                            itemCat.ItemUoms.Count > 0 ? itemCat.ItemUoms[0].ItemUomName : null,
-                       itemCat.ItemUoms.Count > 0 ?    itemCat.ItemUoms[0].ItemUomPurchasePrice.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
+                       itemCat.ItemUoms.Count > 0 ?  itemCat.ItemUoms[0].ItemUomPurchasePrice.HasValue ?  itemCat.ItemUoms[0].ItemUomPurchasePrice.Value.ToString(Helper.CommonHelper.NumberFormat) : "0" : "0",
                             itemCat.ItemDesc
                         }
                     }).ToArray()
@@ -119,7 +119,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                            item.BrandId != null ? item.BrandId.BrandName : null,
                          item.ItemUoms.Count > 0 ?   item.ItemUoms[0].Id : null,
                            item.ItemUoms.Count > 0 ? item.ItemUoms[0].ItemUomName : null,
-                       item.ItemUoms.Count > 0 ?    item.ItemUoms[0].ItemUomPurchasePrice.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
+                       item.ItemUoms.Count > 0 ?  item.ItemUoms[0].ItemUomPurchasePrice.HasValue ?  item.ItemUoms[0].ItemUomPurchasePrice.Value.ToString(Helper.CommonHelper.NumberFormat) : "0" : "0",
                             item.ItemDesc
                         }
                     }).ToArray()

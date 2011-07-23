@@ -34,6 +34,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Accounting
         public virtual decimal JournalAmmount { get; set; }
         public virtual string JournalStatus { get; set; }
         public virtual string JournalDesc { get; set; }
+        public virtual string JournalPic2 { get; set; }
        
         public virtual IList<TJournalDet> JournalDets { get; protected set; }
 

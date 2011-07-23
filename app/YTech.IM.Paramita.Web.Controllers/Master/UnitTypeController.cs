@@ -45,7 +45,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                         cell = new string[]
                         {
                             unitType.UnitTypeName,
-                            unitType.UnitTypeTotal.ToString(),
+                            unitType.UnitTypeTotal.HasValue ? unitType.UnitTypeTotal.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                             unitType.UnitTypeDesc               
                         }
                     }
@@ -61,10 +61,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         }
 
         [Transaction]
-        public virtual ActionResult List(string sidx, string sord, int page, int rows, string unitTypeId)
+        public virtual ActionResult List(string sidx, string sord, int page, int rows, string CostCenterId)
         {
             int totalRecords = 10;
-            var unitTypes = _mUnitTypeRepository.GetByCostCenterId(unitTypeId);
+            var unitTypes = _mUnitTypeRepository.GetByCostCenterId(CostCenterId);
             int pageSize = rows;
             int totalPages = (int)Math.Ceiling((float)totalRecords / (float)pageSize);
 

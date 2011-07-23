@@ -10,6 +10,8 @@
     </div>
     <script type="text/javascript">
 
+            var itemCats = $.ajax({ url: '<%= Url.Action("GetList","MItemCat") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the ItemCats.'); } }).responseText;
+            var brands = $.ajax({ url: '<%= Url.Action("GetList","Brand") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the Brands.'); } }).responseText;
         $(document).ready(function () {
             $("#dialog").dialog({
                 autoOpen: false
@@ -81,7 +83,7 @@
                 colModel: [
                     { name: 'Id', index: 'Id', width: 100, align: 'left', key: true, editrules: { required: true, edithidden: false }, hidedlg: true, hidden: false, editable: true },
                     { name: 'ItemName', index: 'ItemName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { required: true }, formoptions: { elmsuffix: ' *'} },
-                    { name: 'ItemCatId', index: 'ItemCatId', width: 200, align: 'left', editable: true, edittype: 'select', editrules: { edithidden: true },hidden:true },
+                    { name: 'ItemCatId', index: 'ItemCatId', width: 200, align: 'left', editable: true, edittype: 'select', editrules: { edithidden: true },hidden:true  },
                     { name: 'ItemCatName', index: 'ItemCatName', width: 200, align: 'left', editable: false, edittype: 'select', editrules: { edithidden: true } },
                     { name: 'BrandId', index: 'BrandId', width: 200, align: 'left', editable: true, edittype: 'select', editrules: { edithidden: true }, hidden: true },
                     { name: 'BrandName', index: 'BrandName', width: 200, align: 'left', editable: false, edittype: 'select', editrules: { edithidden: true} },
@@ -108,8 +110,9 @@
                 caption: 'Daftar Produk',
                 autowidth: true,
                 loadComplete: function () {
-                    $('#list').setColProp('ItemCatId', { editoptions: { value: itemCats} });
-                    $('#list').setColProp('BrandId', { editoptions: { value: brands} });
+                    //$('#list').setColProp('ItemCatId', { editoptions: { value: itemCats} });
+					//alert(itemCats);
+                    //$('#list').setColProp('BrandId', { editoptions: { value: brands} });
                 },
                 ondblClickRow: function (rowid, iRow, iCol, e) {
                     $('#list').editGridRow(rowid, editDialog);
@@ -124,8 +127,6 @@
             );
         });
 
-            var itemCats = $.ajax({ url: '<%= Url.Action("GetList","MItemCat") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the ItemCats.'); } }).responseText;
-            var brands = $.ajax({ url: '<%= Url.Action("GetList","Brand") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the Brands.'); } }).responseText;
 
 //            alert(brands.toString());
     </script>

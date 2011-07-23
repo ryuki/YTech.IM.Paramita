@@ -341,10 +341,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         {
             get
             {
-                if (Session["listDetTrans"] == null)
-                {
-                    Session["listDetTrans"] = new List<TTransDet>();
-                }
+                //if (Session["listDetTrans"] == null)
+                //{
+                //    Session["listDetTrans"] = new List<TTransDet>();
+                //}
                 return Session["listDetTrans"] as List<TTransDet>;
             }
             set
@@ -387,8 +387,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                                          det.Id,
                                                          det.ItemId != null ? det.ItemId.Id : null,
                                                          det.ItemId != null ? det.ItemId.ItemName : null,
-                                                        det.TransDetPrice.HasValue ?  det.TransDetPrice.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                                                          det.TransDetQty.HasValue ?  det.TransDetQty.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
+                                                        det.TransDetPrice.HasValue ?  det.TransDetPrice.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                                                         det.TransDetDisc.HasValue ?   det.TransDetDisc.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                                                         det.TransDetTotal.HasValue ?   det.TransDetTotal.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                                                          det.TransDetDesc
@@ -465,19 +465,19 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             transDetToInsert.DataStatus = EnumDataStatus.New.ToString();
 
             ListDetTrans.Add(transDetToInsert);
-            return Content("success");
+            return Content("Detail transaksi berhasil disimpan");
         }
 
         public ActionResult Delete(TTransDet viewModel, FormCollection formCollection)
         {
             ListDetTrans.Remove(viewModel);
-            return Content("success");
+            return Content("Detail transaksi berhasil dihapus");
         }
 
         public ActionResult DeleteTransRef(TTransRef viewModel, FormCollection formCollection)
         {
             ListTransRef.Remove(viewModel);
-            return Content("success");
+            return Content("Detail transaksi berhasil dihapus");
         }
 
         public ActionResult Insert(TTransDet viewModel, FormCollection formCollection)
@@ -494,7 +494,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             transDetToInsert.DataStatus = EnumDataStatus.New.ToString();
 
             ListDetTrans.Add(transDetToInsert);
-            return Content("success");
+            return Content("Detail transaksi berhasil disimpan");
         }
 
         private static void UpdateNumericData(TTransDet viewModel, FormCollection formCollection)
@@ -648,60 +648,60 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         private ActionResult SaveTransaction(TTrans Trans, FormCollection formCollection, bool isDelete)
         {
-            _tTransRepository.DbContext.BeginTransaction();
-
-            //get stock add or calculated
-            bool addStock = true;
-            bool calculateStock = false;
-            EnumTransactionStatus status = (EnumTransactionStatus)Enum.Parse(typeof(EnumTransactionStatus), Trans.TransStatus);
-            switch (status)
-            {
-                case EnumTransactionStatus.Received:
-                    addStock = true;
-                    calculateStock = true;
-                    break;
-                case EnumTransactionStatus.Adjusment:
-                    addStock = true;
-                    calculateStock = true;
-                    break;
-                case EnumTransactionStatus.ReturPurchase:
-                    addStock = false;
-                    calculateStock = true;
-                    break;
-                case EnumTransactionStatus.ReturSales:
-                    addStock = true;
-                    calculateStock = true;
-                    break;
-                case EnumTransactionStatus.Sales:
-                    addStock = false;
-                    calculateStock = true;
-                    break;
-                case EnumTransactionStatus.Using:
-                    addStock = false;
-                    calculateStock = true;
-                    break;
-                case EnumTransactionStatus.Mutation:
-                    addStock = false;
-                    calculateStock = true;
-                    break;
-            }
-
-            //check first
-            TTrans tr = _tTransRepository.Get(formCollection["Trans.Id"]);
-            if (tr != null)
-            {
-                //call back stock for deleted
-                DeleteTransaction(tr, !addStock, calculateStock);
-            }
-            if (!isDelete)
-            {
-                SaveTransaction(Trans, formCollection, addStock, calculateStock);
-            }
-
             string Message = string.Empty;
             bool Success = true;
             try
             {
+                _tTransRepository.DbContext.BeginTransaction();
+
+                //get stock add or calculated
+                bool addStock = true;
+                bool calculateStock = false;
+                EnumTransactionStatus status = (EnumTransactionStatus)Enum.Parse(typeof(EnumTransactionStatus), Trans.TransStatus);
+                switch (status)
+                {
+                    case EnumTransactionStatus.Received:
+                        addStock = true;
+                        calculateStock = true;
+                        break;
+                    case EnumTransactionStatus.Adjusment:
+                        addStock = true;
+                        calculateStock = true;
+                        break;
+                    case EnumTransactionStatus.ReturPurchase:
+                        addStock = false;
+                        calculateStock = true;
+                        break;
+                    case EnumTransactionStatus.ReturSales:
+                        addStock = true;
+                        calculateStock = true;
+                        break;
+                    case EnumTransactionStatus.Sales:
+                        addStock = false;
+                        calculateStock = true;
+                        break;
+                    case EnumTransactionStatus.Using:
+                        addStock = false;
+                        calculateStock = true;
+                        break;
+                    case EnumTransactionStatus.Mutation:
+                        addStock = false;
+                        calculateStock = true;
+                        break;
+                }
+
+                //check first
+                TTrans tr = _tTransRepository.Get(formCollection["Trans.Id"]);
+                if (tr != null)
+                {
+                    //call back stock for deleted
+                    DeleteTransaction(tr, !addStock, calculateStock);
+                }
+                if (!isDelete)
+                {
+                    SaveTransaction(Trans, formCollection, addStock, calculateStock);
+                }
+
                 _tTransRepository.DbContext.CommitTransaction();
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Success;
                 if (!isDelete)

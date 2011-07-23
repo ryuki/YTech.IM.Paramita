@@ -80,6 +80,16 @@
                             <%= Html.ValidationMessage("Journal.CostCenterId")%>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <label for="Journal_JournalDesc">
+                                Keterangan :</label>
+                        </td>
+                        <td>
+                            <%= Html.TextBox("Journal.JournalDesc", Model.Journal.JournalDesc)%>
+                            <%= Html.ValidationMessage("Journal.JournalDesc")%>
+                        </td>
+                    </tr>
                 </table>
             </td>
             <td>
@@ -115,12 +125,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <label for="Journal_JournalDesc">
-                                Keterangan :</label>
+                            <label for="Journal_JournalPic2">
+                                Pemberi Kas :</label>
                         </td>
                         <td>
-                            <%= Html.TextBox("Journal.JournalDesc", Model.Journal.JournalDesc)%>
-                            <%= Html.ValidationMessage("Journal.JournalDesc")%>
+                            <%= Html.TextBox("Journal.JournalPic2", Model.Journal.JournalPic2)%>
+                            <%= Html.ValidationMessage("Journal.JournalPic2")%>
                         </td>
                     </tr>
                 </table>
@@ -142,7 +152,7 @@
     </p>
 </div>
 <div id='popup'>
-    <iframe width='100%' height='380px' id="popup_frame" frameborder="0"></iframe>
+    <iframe width='100%' height='400px' id="popup_frame" frameborder="0"></iframe>
 </div>
 <script language="javascript" type="text/javascript">
 
@@ -289,7 +299,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 width: '80%',
                 modal: true,
                 close: function(event, ui) {                 
-                    $("#list").trigger("reloadGrid");
+                    //$("#list").trigger("reloadGrid");
                  }
             });
             
@@ -453,15 +463,22 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 
         
         function OpenPopupCashAccountSearch()
-  {
-          $("#popup_frame").attr("src", "<%= ResolveUrl("~/Master/Account/Search") %>?src=CashAccountId");
-            $("#popup").dialog("open");
-            return false;   
+        { 
+            return OpenPopupAccount('CashAccountId'); 
         }
 
          function OpenPopupAccountSearch()
         {
-          $("#popup_frame").attr("src", "<%= ResolveUrl("~/Master/Account/Search") %>?src=AccountId");
+            return OpenPopupAccount('AccountId');   
+        }
+
+           function OpenPopupAccount(src)
+        {
+            var popup_frame = $("#popup_frame");
+            var new_url = '<%= ResolveUrl("~/Master/Account/Search") %>?src='+src;
+            if (popup_frame.attr("src") != new_url) {
+                popup_frame.attr("src", new_url);
+            }
             $("#popup").dialog("open");
             return false;   
         }
@@ -502,6 +519,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             $("#CashAccountId").val(journal.CashAccountId);
             $("#CashAccountName").val(journal.CashAccountName);
             $("#Journal_JournalPic").val(journal.JournalPic);
+            $("#Journal_JournalPic2").val(journal.JournalPic2);
             $("#Journal_JournalDesc").val(journal.JournalDesc); 
 
             setTimeout("$('#list').trigger('reloadGrid')",1000); 

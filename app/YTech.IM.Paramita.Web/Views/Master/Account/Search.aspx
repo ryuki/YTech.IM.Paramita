@@ -45,8 +45,8 @@
                    ],
 
                 pager: $('#listPager'),
-
-                //                rowNum: 20,
+                //set rownum to 0 to show all rows
+                rowNum: -1,
                 //                rowList: [20, 30, 50, 100],
                 //rownumbers: true, 
                 //                sortname: 'Id',

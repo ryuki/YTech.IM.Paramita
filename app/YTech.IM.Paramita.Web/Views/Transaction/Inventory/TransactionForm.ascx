@@ -31,9 +31,10 @@
         <%--<button id="btnPrint" name="btnPrint" type="submit">
             Cetak Faktur</button>--%>
         <button id="btnDelete" name="btnDelete" type="submit">
-            Hapus <%= ViewData.Model.Title %></button>
+            Hapus</button>
+           <%-- <%= ViewData.Model.Title %>--%>
         <button id="btnList" name="btnList" type="button">
-            Daftar
+            Edit
             <%= ViewData.Model.Title %></button>
     </span>
 </div>
@@ -306,7 +307,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 width: '80%',
                 modal: true,
                 close: function(event, ui) {                 
-                    $("#list").trigger("reloadGrid");
+                    //$("#list").trigger("reloadGrid");
                  }
             });
 
@@ -514,7 +515,12 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 
          function OpenPopupItemSearch()
         {
-          $("#popup_frame").attr("src", "<%= ResolveUrl("~/Master/Item/Search") %>");
+            var popup_frame = $("#popup_frame");
+            var new_url = '<%= ResolveUrl("~/Master/Item/Search") %>';
+            if (popup_frame.attr("src") != new_url) {
+                popup_frame.attr("src", new_url);
+            }
+        
             $("#popup").dialog("open");
             return false;   
         }
@@ -525,11 +531,11 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 //        alert(itemName);
 //        alert(price);
   $("#popup").dialog("close");
-          $('#ItemId').attr('value', itemId);
-          $('#ItemName').attr('value', itemName);
+          $('#ItemId').val(itemId);
+          $('#ItemName').val(itemName);
            <% if (ViewData.Model.ViewPrice)
                {%>   
-               $('#TransDetPrice').attr('value', price.toString());
+               $('#TransDetPrice').val(price.toString());
             CalculateTotal();
                    <%
                }%>  

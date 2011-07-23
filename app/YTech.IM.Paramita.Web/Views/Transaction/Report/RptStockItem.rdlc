@@ -472,7 +472,7 @@
                               <TablixMember>
                                 <Group Name="Details">
                                   <GroupExpressions>
-                                    <GroupExpression>=Fields!WarehouseId.Value</GroupExpression>
+                                    <GroupExpression>=Fields!ItemId.Value</GroupExpression>
                                   </GroupExpressions>
                                 </Group>
                               </TablixMember>

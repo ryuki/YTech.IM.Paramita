@@ -29,6 +29,7 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Transaction
             mapping.Map(x => x.JournalAmmount, "JOURNAL_AMMOUNT");
             mapping.Map(x => x.JournalStatus, "JOURNAL_STATUS");
             mapping.Map(x => x.JournalDesc, "JOURNAL_DESC");
+            mapping.Map(x => x.JournalPic2, "JOURNAL_PIC2");
 
             mapping.Map(x => x.DataStatus, "DATA_STATUS");
             mapping.Map(x => x.CreatedBy, "CREATED_BY");
