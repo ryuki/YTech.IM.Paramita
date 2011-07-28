@@ -562,9 +562,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 JournalId = journal.Id,
                 journal.JournalDate,
                 journal.JournalVoucherNo,
-                CostCenterId = journal.CostCenterId.Id,
-                CashAccountId = cashAccount.Id,
-                CashAccountName = cashAccount.AccountName,
+                CostCenterId = journal.CostCenterId != null ? journal.CostCenterId.Id : null,
+                CashAccountId = cashAccount != null ? cashAccount.Id : null,
+                CashAccountName = cashAccount != null ? cashAccount.AccountName : null,
                 journal.JournalPic,
                 journal.JournalPic2,
                 journal.JournalDesc

@@ -110,9 +110,9 @@
                 caption: 'Daftar Produk',
                 autowidth: true,
                 loadComplete: function () {
-                    //$('#list').setColProp('ItemCatId', { editoptions: { value: itemCats} });
+                    $('#list').setColProp('ItemCatId', { editoptions: { value: itemCats} });
 					//alert(itemCats);
-                    //$('#list').setColProp('BrandId', { editoptions: { value: brands} });
+                    $('#list').setColProp('BrandId', { editoptions: { value: brands} });
                 },
                 ondblClickRow: function (rowid, iRow, iCol, e) {
                     $('#list').editGridRow(rowid, editDialog);

@@ -9,7 +9,7 @@
                                        {
                                            //UpdateTargetId = "status",
                                            InsertionMode = InsertionMode.Replace,
-                                           // OnBegin = "ajaxValidate",
+                                           OnBegin = "ajaxValidate",
                                            OnSuccess = "onSavedSuccess"
                                        }
 
@@ -205,7 +205,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 //      }
  },
         "Journal.CostCenterId": { required: true  },
-        "AccountId": { required: true  }
+        "CashAccountId": { required: true  }
     },
     messages: {
         "Journal.JournalDate": "<img id='JournalDateerror' src='"+imgerror+"' hovertext='Tanggal tidak boleh kosong' />"
@@ -215,7 +215,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 //            }
             ,
         "Journal.CostCenterId": "<img id='CostCenterIderror' src='"+imgerror+"' hovertext='Pilih cost center' />",
-        "AccountId": "<img id='AccountIderror' src='"+imgerror+"' hovertext='Pilih akun kas' />"
+        "CashAccountId": "<img id='AccountIderror' src='"+imgerror+"' hovertext='Pilih akun kas' />"
         },
         invalidHandler: function(form, validator) {
           var errors = validator.numberOfInvalids();
