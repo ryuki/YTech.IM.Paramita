@@ -87,6 +87,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewFactur = true;
                     viewModel.ViewPrice = true;
                     viewModel.ViewPaymentMethod = false;
+                    viewModel.IsGenerateFactur = true;
                     break;
                 case EnumTransactionStatus.Purchase:
                     viewModel.ViewWarehouse = true;
@@ -96,6 +97,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewFactur = true;
                     viewModel.ViewPrice = true;
                     viewModel.ViewPaymentMethod = true;
+                    viewModel.IsGenerateFactur = false;
                     break;
                 case EnumTransactionStatus.ReturPurchase:
                     viewModel.ViewWarehouse = true;
@@ -105,6 +107,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewFactur = true;
                     viewModel.ViewPrice = true;
                     viewModel.ViewPaymentMethod = true;
+                    viewModel.IsGenerateFactur = true;
                     break;
                 case EnumTransactionStatus.Sales:
                     break;
@@ -120,6 +123,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewPaymentMethod = false;
                     viewModel.ViewUnitType = true;
                     viewModel.ViewJobType = true;
+                    viewModel.IsGenerateFactur = true;
                     break;
                 case EnumTransactionStatus.Mutation:
                     viewModel.ViewWarehouse = true;
@@ -129,6 +133,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewFactur = true;
                     viewModel.ViewPrice = false;
                     viewModel.ViewPaymentMethod = false;
+                    viewModel.IsGenerateFactur = true;
                     break;
                 case EnumTransactionStatus.Adjusment:
                     viewModel.ViewWarehouse = true;
@@ -138,6 +143,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewFactur = true;
                     viewModel.ViewPrice = false;
                     viewModel.ViewPaymentMethod = false;
+                    viewModel.IsGenerateFactur = true;
                     break;
                 case EnumTransactionStatus.Received:
                     viewModel.ViewWarehouse = true;
@@ -146,6 +152,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewDate = true;
                     viewModel.ViewFactur = true;
                     viewModel.ViewPaymentMethod = false;
+                    viewModel.IsGenerateFactur = true;
                     break;
                 case EnumTransactionStatus.Budgeting:
                     viewModel.ViewWarehouse = true;
@@ -157,6 +164,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ViewPaymentMethod = false;
                     viewModel.ViewUnitType = true;
                     viewModel.ViewJobType = true;
+                    viewModel.IsGenerateFactur = true;
                     break;
             }
             viewModel.Title = Helper.CommonHelper.GetStringValue(enumTransactionStatus);
@@ -697,15 +705,19 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 {
                     //call back stock for deleted
                     DeleteTransaction(tr, !addStock, calculateStock);
-                    FacturNo = tr.TransFactur;
+                    if (bool.Parse(formCollection["IsGenerateFactur"]))
+                        FacturNo = tr.TransFactur;
                 }
                 else
                 {
                     //set factur no after saved
-                    if (string.IsNullOrEmpty(Trans.TransFactur))
+                    if (bool.Parse(formCollection["IsGenerateFactur"]))
                     {
-                        FacturNo = Helper.CommonHelper.GetFacturNo(status, false);
-                        Trans.TransFactur = FacturNo;
+                        //if (string.IsNullOrEmpty(Trans.TransFactur))
+                        {
+                            FacturNo = Helper.CommonHelper.GetFacturNo(status, false);
+                            Trans.TransFactur = FacturNo;
+                        }
                     }
                 }
                 if (!isDelete)

@@ -80,6 +80,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public bool ViewJobType { get; internal set; }
         public string Title { get; internal set; }
         public bool IsAddStock { get; internal set; }
+        public bool IsGenerateFactur { get; internal set; }
 
     }
 }
