@@ -167,6 +167,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                            JournalVoucherNo = det.JournalId.JournalVoucherNo,
                            JournalId = det.JournalId.Id,
                            det.JournalId.JournalPic,
+                           det.JournalId.JournalPic2,
                            det.JournalDetAmmount,
                            det.JournalDetDesc,
                            det.JournalDetEvidenceNo,

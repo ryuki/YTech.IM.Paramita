@@ -142,7 +142,7 @@
                 , closeAfterEdit: true
                 , modal: true
                 , afterShowForm: function (eparams) {
-                    $('#UserName').attr('disabled', '');
+                    $('#UserName').removeAttr('disabled');
                     $('#tr_Password', eparams).show();
                     $('#tr_PasswordConfirm', eparams).show();
                 }

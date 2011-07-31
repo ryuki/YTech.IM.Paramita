@@ -209,8 +209,9 @@ function onSavedSuccess(e) {
     else{
         $("#btnSave").attr('disabled', 'disabled');
         $("#btnDelete").attr('disabled', 'disabled');
-        $("#btnPrint").attr('disabled', '');
+        $("#btnPrint").removeAttr('disabled');
         $('#dialog p:first').text(msg);
+        $("#Trans_TransFactur").val(json.FacturNo);
         $("#dialog").dialog("open"); 
     }
 }
@@ -351,7 +352,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 , closeAfterEdit: true
                 , modal: true
                 , afterShowForm: function (eparams) {
-                    $('#Id').attr('disabled', '');
+                    $('#Id').removeAttr('disabled');
                     $('#TransDetQty').attr('value', '1');
                      <% if (ViewData.Model.ViewPrice)
                {%> 
@@ -582,8 +583,8 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             $("#Trans_JobTypeId").val(trans.JobTypeId); 
 
             setTimeout("$('#list').trigger('reloadGrid')",1000); 
-             $("#btnPrint").attr('disabled', '');
-             $("#btnDelete").attr('disabled', '');
+             $("#btnPrint").removeAttr('disabled');
+             $("#btnDelete").removeAttr('disabled');
         }
 
         } 

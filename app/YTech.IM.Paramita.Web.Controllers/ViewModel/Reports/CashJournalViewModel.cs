@@ -16,6 +16,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel.Reports
         public string JournalVoucherNo { get; set; }
         public string JournalId { get; set; }
         public string JournalPic { get; set; }
+        public string JournalPic2 { get; set; }
         public string JournalType { get; set; }
         public string DetAccountId { get; set; }
         public string DetAccountName { get; set; }

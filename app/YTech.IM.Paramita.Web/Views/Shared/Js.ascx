@@ -19,14 +19,16 @@
     <script src="<%= Url.Content("~/Scripts/Templates/MicrosoftAjaxTemplates.js") %>"
         type="text/javascript"></script>--%>
       <script src="<%= Url.Content("~/Scripts/MicrosoftMvcValidation.debug.js") %>" type="text/javascript"></script>
-    <script src="<%= Url.Content("~/Scripts/jquery-1.4.4.min.js") %>" type="text/javascript"></script>
+    <%--<script src="<%= Url.Content("~/Scripts/jquery-1.4.4.min.js") %>" type="text/javascript"></script>--%>
+    <script src="<%= Url.Content("~/Scripts/jquery-1.6.2.min.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/samplebrowser.js") %>" type="text/javascript"></script>
     <link href="<%= Url.Content("~/Content/ui.jqgrid.css") %>" rel="stylesheet" type="text/css" />
     <link href="<%= Url.Content("~/Content/css/start/jquery-ui.css") %>" rel="Stylesheet"
         type="text/css" />
 
     <script src="<%= Url.Content("~/Scripts/jquery-ui.min.js") %>" type="text/javascript"></script>
-    <script src="<%= Url.Content("~/Scripts/jquery.validate.min.js") %>" type="text/javascript"></script>
+    <%--<script src="<%= Url.Content("~/Scripts/jquery.validate.min.js") %>" type="text/javascript"></script>--%>
+    <script src="<%= Url.Content("~/Scripts/jquery.validate-1.8.1.min.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/grid.locale-en.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/jquery.jqGrid.min.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/jquery.maskedinput-1.2.2.min.js") %>" type="text/javascript"></script>

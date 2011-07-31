@@ -181,8 +181,8 @@
         }
         else{
             $("#btnSave").attr('disabled', 'disabled');
-            $("#btnPrint").attr('disabled', '');
-            $("#btnPrintKwitansi").attr('disabled', '');
+            $("#btnPrint").removeAttr('disabled');
+            $("#btnPrintKwitansi").removeAttr('disabled');
             $('#dialog p:first').text(msg);
             $("#Journal_JournalVoucherNo").val(json.voucherNo);
             $("#dialog").dialog("open"); 
@@ -351,7 +351,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 , closeAfterEdit: true
                 , modal: true
                 , afterShowForm: function (eparams) {
-                    $('#Id').attr('disabled', '');
+                    $('#Id').removeAttr('disabled');
                     $('#JournalDetAmmount').attr('value', '0');
                      $('#imgAccountId').click(function () {
                                    OpenPopupAccountSearch();
@@ -523,8 +523,8 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             $("#Journal_JournalDesc").val(journal.JournalDesc); 
 
             setTimeout("$('#list').trigger('reloadGrid')",1000); 
-            $("#btnPrint").attr('disabled', '');
-            $("#btnPrintKwitansi").attr('disabled', '');
+            $("#btnPrint").removeAttr('disabled');
+            $("#btnPrintKwitansi").removeAttr('disabled');
         }
 
         } 

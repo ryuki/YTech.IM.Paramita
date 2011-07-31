@@ -204,7 +204,7 @@ function ajaxValidate() {
                 , closeAfterEdit: true
                 , modal: true
                 , afterShowForm: function (eparams) {
-                    $('#Id').attr('disabled', '');
+                    $('#Id').removeAttr('disabled');
                     $('#JournalDetAmmount').attr('value', '0');
 
                 }

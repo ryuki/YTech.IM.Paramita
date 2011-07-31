@@ -84,6 +84,10 @@
           <DataField>JournalPic</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="JournalPic2">
+          <DataField>JournalPic2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="JournalType">
           <DataField>JournalType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -122,7 +126,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>7.29207in</Width>
+              <Width>7.36905in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -216,7 +220,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>DetAccountId1</rd:DefaultName>
-                          <Top>2.68101in</Top>
+                          <Top>2.31892in</Top>
                           <Left>4.1549in</Left>
                           <Height>0.25in</Height>
                           <Width>3.01588in</Width>
@@ -625,6 +629,39 @@
                             </Border>
                           </Style>
                         </Tablix>
+                        <Textbox Name="JournalPic3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!JournalPic2.Value)</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>11pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>JournalPic</rd:DefaultName>
+                          <Top>3.15573in</Top>
+                          <Left>4.1549in</Left>
+                          <Height>0.25in</Height>
+                          <Width>3.01588in</Width>
+                          <ZIndex>13</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
                       </ReportItems>
                       <KeepTogether>true</KeepTogether>
                       <Style>
@@ -659,7 +696,7 @@
         <Top>0.12717in</Top>
         <Left>0.375in</Left>
         <Height>3.56145in</Height>
-        <Width>7.29207in</Width>
+        <Width>7.36905in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -728,7 +765,7 @@ End Select
 Return said
 End Function
 </Code>
-  <Width>7.66707in</Width>
+  <Width>7.88989in</Width>
   <Page>
     <PageWidth>9.5in</PageWidth>
     <Style />

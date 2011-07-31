@@ -70,7 +70,7 @@
                      return [true, ''];
                  }
                 , afterShowForm: function (eparams) {
-                    $('#Id').attr('disabled', '');
+                    $('#Id').removeAttr('disabled');
 
                 }
                 , afterComplete: function (response, postdata, formid) {

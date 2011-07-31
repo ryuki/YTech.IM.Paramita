@@ -301,6 +301,8 @@
     <Content Include="Scripts\grid.locale-en.js" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery-1.6.2-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.6.2.min.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.colorbox-min.js" />
     <Content Include="Scripts\jquery.jqGrid.min.js" />
@@ -309,6 +311,7 @@
     <Content Include="Scripts\jquery.maskedinput-1.2.2.min.js" />
     <Content Include="Scripts\jquery.mousewheel-3.0.4.js" />
     <Content Include="Scripts\jquery.tooltip.js" />
+    <Content Include="Scripts\jquery.validate-1.8.1.min.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
