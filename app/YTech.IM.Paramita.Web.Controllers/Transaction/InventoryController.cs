@@ -169,7 +169,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         {
             TTrans trans = new TTrans();
             trans.TransDate = DateTime.Today;
-            trans.TransFactur = Helper.CommonHelper.GetFacturNo(enumTransactionStatus);
+            trans.TransFactur = Helper.CommonHelper.GetFacturNo(enumTransactionStatus, false);
             trans.SetAssignedIdTo(Guid.NewGuid().ToString());
             trans.TransStatus = enumTransactionStatus.ToString();
             return trans;
@@ -650,6 +650,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         {
             string Message = string.Empty;
             bool Success = true;
+            string FacturNo = string.Empty;
             try
             {
                 _tTransRepository.DbContext.BeginTransaction();
@@ -696,6 +697,16 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 {
                     //call back stock for deleted
                     DeleteTransaction(tr, !addStock, calculateStock);
+                    FacturNo = tr.TransFactur;
+                }
+                else
+                {
+                    //set factur no after saved
+                    if (string.IsNullOrEmpty(Trans.TransFactur))
+                    {
+                        FacturNo = Helper.CommonHelper.GetFacturNo(status, false);
+                        Trans.TransFactur = FacturNo;
+                    }
                 }
                 if (!isDelete)
                 {
@@ -723,7 +734,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             var e = new
             {
                 Success,
-                Message
+                Message,
+                FacturNo
             };
             return Json(e, JsonRequestBehavior.AllowGet);
             //if (!Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString()))

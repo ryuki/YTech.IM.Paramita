@@ -23,6 +23,10 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel.Reports
         public decimal? TransSubTotal { get; set; }
         public string TransPaymentMethod { get; set; }
         public string TransName { get; set; }
+        public string JobTypeName { get; set; }
+        public string UnitTypeName { get; set; }
+        public string JobTypeId { get; set; }
+        public string UnitTypeId { get; set; }
 
         public bool ViewWarehouse { get;  set; }
         public bool ViewWarehouseTo { get;  set; }
@@ -30,6 +34,8 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel.Reports
         public bool ViewDate { get;  set; }
         public bool ViewFactur { get;  set; }
         public bool ViewPrice { get;  set; }
-        public bool ViewPaymentMethod { get;  set; }
+        public bool ViewPaymentMethod { get; set; }
+        public bool ViewJobType { get; set; }
+        public bool ViewUnitType { get; set; }
     }
 }

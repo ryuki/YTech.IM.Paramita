@@ -4,6 +4,7 @@ using SharpArch.Core.PersistenceSupport.NHibernate;
 using YTech.IM.Paramita.Core.Master;
 using YTech.IM.Paramita.Core.Transaction;
 using YTech.IM.Paramita.Core.Transaction.Inventory;
+using YTech.IM.Paramita.Enums;
 
 namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
@@ -13,6 +14,6 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 
         decimal? GetTotalUsed(MItem item, MWarehouse warehouse, DateTime? dateFrom, DateTime? dateTo, string transStatus);
 
-        IList<TTransDet> GetByDateWarehouse(System.DateTime? dateFrom, System.DateTime? dateTo, MWarehouse warehouse, string transStatus);
+        IList<TTransDet> GetByDateWarehouse(System.DateTime? dateFrom, System.DateTime? dateTo, string warehouseId, EnumTransactionStatus transStatus);
     }
 }

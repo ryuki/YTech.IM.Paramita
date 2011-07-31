@@ -40,6 +40,14 @@
           <DataField>ItemUomId</DataField>
           <rd:TypeName>YTech.IM.Paramita.Core.Master.MItemUom</rd:TypeName>
         </Field>
+        <Field Name="JobTypeId">
+          <DataField>JobTypeId</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="JobTypeName">
+          <DataField>JobTypeName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="ModifiedBy">
           <DataField>ModifiedBy</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -112,12 +120,24 @@
           <DataField>TransSubTotal</DataField>
           <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
+        <Field Name="UnitTypeId">
+          <DataField>UnitTypeId</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="UnitTypeName">
+          <DataField>UnitTypeName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="ViewDate">
           <DataField>ViewDate</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
         <Field Name="ViewFactur">
           <DataField>ViewFactur</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="ViewJobType">
+          <DataField>ViewJobType</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
         <Field Name="ViewPaymentMethod">
@@ -130,6 +150,10 @@
         </Field>
         <Field Name="ViewSupplier">
           <DataField>ViewSupplier</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="ViewUnitType">
+          <DataField>ViewUnitType</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
         <Field Name="ViewWarehouse">
@@ -211,7 +235,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>1.53773in</Height>
+              <Height>1.88679in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -895,7 +919,7 @@
                             </TablixMembers>
                           </TablixRowHierarchy>
                           <DataSetName>TransTotalViewModel</DataSetName>
-                          <Top>0.90435in</Top>
+                          <Top>1.27935in</Top>
                           <Height>0.5in</Height>
                           <Width>8in</Width>
                           <Style>
@@ -990,7 +1014,7 @@
                           <Top>0.08491in</Top>
                           <Left>4.91509in</Left>
                           <Height>0.25in</Height>
-                          <Width>1.50943in</Width>
+                          <Width>2.09276in</Width>
                           <ZIndex>3</ZIndex>
                           <Visibility>
                             <Hidden>=not Fields!ViewSupplier.Value</Hidden>
@@ -1025,7 +1049,7 @@
                           <Top>0.33491in</Top>
                           <Left>4.91509in</Left>
                           <Height>0.25in</Height>
-                          <Width>1.50943in</Width>
+                          <Width>2.09276in</Width>
                           <ZIndex>4</ZIndex>
                           <Visibility>
                             <Hidden>=not Fields!ViewWarehouse.Value</Hidden>
@@ -1060,7 +1084,7 @@
                           <Top>0.58491in</Top>
                           <Left>4.91509in</Left>
                           <Height>0.25in</Height>
-                          <Width>1.50943in</Width>
+                          <Width>2.09276in</Width>
                           <ZIndex>5</ZIndex>
                           <Visibility>
                             <Hidden>=not Fields!ViewWarehouseTo.Value</Hidden>
@@ -1299,6 +1323,142 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <Textbox Name="TransPaymentMethod2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!UnitTypeName.Value)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>TransPaymentMethod</rd:DefaultName>
+                          <Top>0.83491in</Top>
+                          <Left>1.50943in</Left>
+                          <Height>0.25in</Height>
+                          <Width>1.78302in</Width>
+                          <ZIndex>13</ZIndex>
+                          <Visibility>
+                            <Hidden>=not Fields!ViewPaymentMethod.Value</Hidden>
+                          </Visibility>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox8">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Tipe Unit :</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Top>0.83491in</Top>
+                          <Left>0in</Left>
+                          <Height>0.25in</Height>
+                          <Width>1.50943in</Width>
+                          <ZIndex>14</ZIndex>
+                          <Visibility>
+                            <Hidden>=not Fields!ViewPaymentMethod.Value</Hidden>
+                          </Visibility>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="TransPaymentMethod3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!JobTypeName.Value)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>TransPaymentMethod</rd:DefaultName>
+                          <Top>0.83491in</Top>
+                          <Left>4.91509in</Left>
+                          <Height>0.25in</Height>
+                          <Width>2.09276in</Width>
+                          <ZIndex>15</ZIndex>
+                          <Visibility>
+                            <Hidden>=not Fields!ViewPaymentMethod.Value</Hidden>
+                          </Visibility>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox10">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Jenis Pekerjaan :</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Top>0.83491in</Top>
+                          <Left>3.40566in</Left>
+                          <Height>0.25in</Height>
+                          <Width>1.50943in</Width>
+                          <ZIndex>16</ZIndex>
+                          <Visibility>
+                            <Hidden>=not Fields!ViewPaymentMethod.Value</Hidden>
+                          </Visibility>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
                       </ReportItems>
                       <KeepTogether>true</KeepTogether>
                       <Style>
@@ -1332,7 +1492,7 @@
         <DataSetName>TransTotalViewModel</DataSetName>
         <Top>0.43849in</Top>
         <Left>0.1366in</Left>
-        <Height>1.53773in</Height>
+        <Height>1.88679in</Height>
         <Width>8in</Width>
         <ZIndex>1</ZIndex>
         <Style>

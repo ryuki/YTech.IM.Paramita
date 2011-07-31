@@ -131,15 +131,45 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ShowWarehouse = true;
                     break;
                 case EnumReports.RptTransDetail:
-                    //switch (viewModel.TransStatus)
-                    //{
-                    //    case EnumTransactionStatus.PurchaseOrder:
-                    title = "Lap. Detail";
-                    viewModel.ShowDateFrom = true;
-                    viewModel.ShowDateTo = true;
-                    viewModel.ShowWarehouse = true;
-                    //        break;
-                    //}
+                    title = "Lap. Detail " + Helper.CommonHelper.GetStringValue(viewModel.TransStatus);
+                    switch (viewModel.TransStatus)
+                    {
+                        case EnumTransactionStatus.PurchaseOrder:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            break;
+                        case EnumTransactionStatus.Received:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            break;
+                        case EnumTransactionStatus.Purchase:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            break;
+                        case EnumTransactionStatus.ReturPurchase:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            break;
+                        case EnumTransactionStatus.Using:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            break;
+                        case EnumTransactionStatus.Mutation:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            break;
+                        case EnumTransactionStatus.Budgeting:
+                            //viewModel.ShowDateFrom = true;
+                            //viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            break;
+                    }
 
                     break;
                 case EnumReports.RptItem:
@@ -182,82 +212,92 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [ValidateInput(false)]
         public ActionResult Report(EnumReports reports, ReportParamViewModel viewModel, FormCollection formCollection)
         {
-            LocalReport localReport = new LocalReport();
-            localReport.ReportPath = Server.MapPath(string.Format("~/Views/Transaction/Report/{0}.rdlc", reports.ToString()));
+            //LocalReport localReport = new LocalReport();
+            //localReport.ReportPath = Server.MapPath(string.Format("~/Views/Transaction/Report/{0}.rdlc", reports.ToString()));
 
+            ReportDataSource[] repCol = new ReportDataSource[1];
             switch (reports)
             {
                 case EnumReports.RptBrand:
-                    localReport.DataSources.Add(GetBrand());
+                    repCol[0] = GetBrand();
                     break;
                 case EnumReports.RptCostCenter:
-                    localReport.DataSources.Add(GetCostCenter());
+                    repCol[0] = GetCostCenter();
                     break;
                 case EnumReports.RptJournal:
-                    localReport.DataSources.Add(GetJournalDet(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId));
+                    repCol[0] = GetJournalDet(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId);
                     break;
                 case EnumReports.RptNeraca:
-                    localReport.DataSources.Add(GetRecAccount(EnumAccountCatType.NERACA, viewModel.CostCenterId, viewModel.RecPeriodId));
+                    repCol[0] = GetRecAccount(EnumAccountCatType.NERACA, viewModel.CostCenterId, viewModel.RecPeriodId);
                     break;
                 case EnumReports.RptLR:
-                    localReport.DataSources.Add(GetRecAccount(EnumAccountCatType.LR, viewModel.CostCenterId, viewModel.RecPeriodId));
+                    repCol[0] = GetRecAccount(EnumAccountCatType.LR, viewModel.CostCenterId, viewModel.RecPeriodId);
                     break;
                 case EnumReports.RptStockCard:
-                    localReport.DataSources.Add(GetStockCard(viewModel.DateFrom, viewModel.DateTo, viewModel.ItemId, viewModel.WarehouseId));
+                    repCol[0] = GetStockCard(viewModel.DateFrom, viewModel.DateTo, viewModel.ItemId, viewModel.WarehouseId);
                     break;
                 case EnumReports.RptStockItem:
-                    localReport.DataSources.Add(GetStockItem(viewModel.ItemId, viewModel.WarehouseId));
+                    repCol[0] = GetStockItem(viewModel.ItemId, viewModel.WarehouseId);
                     break;
                 case EnumReports.RptAnalyzeBudgetDetail:
-                    localReport.DataSources.Add(GetTransDetForBudget(viewModel.ItemId, viewModel.WarehouseId, viewModel.DateFrom.Value, viewModel.DateTo.Value));
+                    repCol[0] = GetTransDetForBudget(viewModel.ItemId, viewModel.WarehouseId, viewModel.DateFrom.Value, viewModel.DateTo.Value);
                     break;
                 case EnumReports.RptTransDetail:
                     EnumTransactionStatus stat =
                         (EnumTransactionStatus)Enum.Parse(typeof(EnumTransactionStatus), formCollection["TransStatus"]);
-                    localReport.DataSources.Add(GetTransTotal(viewModel.DateFrom, viewModel.DateTo, viewModel.WarehouseId, stat));
+                    repCol[0] = GetTransTotal(viewModel.DateFrom, viewModel.DateTo, viewModel.WarehouseId, stat);
                     break;
                 case EnumReports.RptItem:
-                    localReport.DataSources.Add(GetItemViewModel());
+                    repCol[0] = GetItemViewModel();
                     break;
                 case EnumReports.RptBukuBesar:
-                    localReport.DataSources.Add(GetJournalDetFlow(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId));
+                    repCol[0] = GetJournalDetFlow(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId);
                     break;
             }
+            Session["ReportData"] = repCol;
 
-            string reportType = formCollection["ExportFormat"];
-            string mimeType, encoding, fileNameExtension;
+            var e = new
+            {
+                Success = true,
+                Message = "redirect",
+                UrlReport = string.Format("{0}", reports.ToString())
+            };
+            return Json(e, JsonRequestBehavior.AllowGet);
 
-            //The DeviceInfo settings should be changed based on the reportType
-            //http://msdn2.microsoft.com/en-us/library/ms155397.aspx
+            //string reportType = formCollection["ExportFormat"];
+            //string mimeType, encoding, fileNameExtension;
 
-            string deviceInfo =
-            "<DeviceInfo>" +
-            string.Format("  <OutputFormat>{0}</OutputFormat>", formCollection["ExportFormat"]) +
-            "  <PageWidth>8.5in</PageWidth>" +
-            "  <PageHeight>11in</PageHeight>" +
-            "  <MarginTop>0.5in</MarginTop>" +
-            "  <MarginLeft>0.5in</MarginLeft>" +
-            "  <MarginRight>0.5in</MarginRight>" +
-            "  <MarginBottom>0.5in</MarginBottom>" +
-            "</DeviceInfo>";
+            ////The DeviceInfo settings should be changed based on the reportType
+            ////http://msdn2.microsoft.com/en-us/library/ms155397.aspx
 
-            Warning[] warnings;
-            string[] streams;
-            byte[] renderedBytes;
+            //string deviceInfo =
+            //"<DeviceInfo>" +
+            //string.Format("  <OutputFormat>{0}</OutputFormat>", formCollection["ExportFormat"]) +
+            //"  <PageWidth>8.5in</PageWidth>" +
+            //"  <PageHeight>11in</PageHeight>" +
+            //"  <MarginTop>0.5in</MarginTop>" +
+            //"  <MarginLeft>0.5in</MarginLeft>" +
+            //"  <MarginRight>0.5in</MarginRight>" +
+            //"  <MarginBottom>0.5in</MarginBottom>" +
+            //"</DeviceInfo>";
 
-            //Render the report
-            renderedBytes = localReport.Render(
-                reportType,
-                deviceInfo,
-                out mimeType,
-                out encoding,
-                out fileNameExtension,
-                out streams,
-                out warnings);
+            //Warning[] warnings;
+            //string[] streams;
+            //byte[] renderedBytes;
 
-            Response.AddHeader("content-disposition", string.Format("attachment; filename={0}.{1}", reports.ToString(), fileNameExtension));
+            ////Render the report
+            //renderedBytes = localReport.Render(
+            //    reportType,
+            //    deviceInfo,
+            //    out mimeType,
+            //    out encoding,
+            //    out fileNameExtension,
+            //    out streams,
+            //    out warnings);
 
-            return File(renderedBytes, mimeType);
+            //Response.AddHeader("content-disposition", string.Format("attachment; filename={0}.{1}", reports.ToString(), fileNameExtension));
+
+            //return File(renderedBytes, mimeType);
         }
 
         private ReportDataSource GetJournalDetFlow(DateTime? dateFrom, DateTime? dateTo, string costCenterId)
@@ -282,7 +322,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                        }
             ;
 
-            ReportDataSource reportDataSource = new ReportDataSource("JournalDetFlowViewModel", list);
+            ReportDataSource reportDataSource = new ReportDataSource("JournalDetFlowViewModel", list.ToList());
             return reportDataSource;
         }
 
@@ -302,7 +342,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                        }
          ;
 
-            ReportDataSource reportDataSource = new ReportDataSource("ItemViewModel", list);
+            ReportDataSource reportDataSource = new ReportDataSource("ItemViewModel", list.ToList());
             return reportDataSource;
 
         }
@@ -310,12 +350,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private ReportDataSource GetTransTotal(DateTime? dateFrom, DateTime? dateTo, string warehouseId, EnumTransactionStatus transStatus)
         {
             Check.Require(transStatus != EnumTransactionStatus.None, "transStatus may not be None");
-            IList<TTransDet> dets;
-            MWarehouse warehouse = null;
-            if (!string.IsNullOrEmpty(warehouseId))
-                warehouse = _mWarehouseRepository.Get(warehouseId);
-            dets = _tTransDetRepository.GetByDateWarehouse(dateFrom, dateTo, warehouse, transStatus.ToString());
-
+            IList<TTransDet> dets = _tTransDetRepository.GetByDateWarehouse(dateFrom, dateTo, warehouseId, transStatus);
+            string TransName = Helper.CommonHelper.GetStringValue(transStatus);
             var list = from det in dets
                        select new
                                   {
@@ -347,11 +383,15 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       ViewPrice = SetView(det.TransId.TransStatus, EnumViewTrans.ViewPrice),
                                       ViewPaymentMethod =
                            SetView(det.TransId.TransStatus, EnumViewTrans.ViewPaymentMethod),
-                                      TransName = Helper.CommonHelper.GetStringValue(transStatus)
+                                      TransName ,
+                                     JobTypeId = det.TransId.JobTypeId != null ? det.TransId.JobTypeId.Id : null,
+                                     JobTypeName =  det.TransId.JobTypeId != null ? det.TransId.JobTypeId.JobTypeName : null,
+                                     UnitTypeId =   det.TransId.UnitTypeId != null ? det.TransId.UnitTypeId.Id : null,
+                                     UnitTypeName =   det.TransId.UnitTypeId != null ? det.TransId.UnitTypeId.UnitTypeName : null
                                   }
             ;
 
-            ReportDataSource reportDataSource = new ReportDataSource("TransTotalViewModel", list);
+            ReportDataSource reportDataSource = new ReportDataSource("TransTotalViewModel", list.ToList());
             return reportDataSource;
         }
 
@@ -389,7 +429,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                   }
             ;
 
-            ReportDataSource reportDataSource = new ReportDataSource("TransDetViewModel", list);
+            ReportDataSource reportDataSource = new ReportDataSource("TransDetViewModel", list.ToList());
             return reportDataSource;
         }
 
@@ -429,7 +469,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                        }
             ;
 
-            ReportDataSource reportDataSource = new ReportDataSource("StockItemViewModel", list);
+            ReportDataSource reportDataSource = new ReportDataSource("StockItemViewModel", list.ToList());
             return reportDataSource;
         }
 
@@ -460,7 +500,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                        }
             ;
 
-            ReportDataSource reportDataSource = new ReportDataSource("StockCardViewModel", list);
+            ReportDataSource reportDataSource = new ReportDataSource("StockCardViewModel", list.ToList());
             return reportDataSource;
         }
 
@@ -494,7 +534,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                        }
             ;
 
-            ReportDataSource reportDataSource = new ReportDataSource("RecAccountViewModel", list);
+            ReportDataSource reportDataSource = new ReportDataSource("RecAccountViewModel", list.ToList());
             return reportDataSource;
         }
 
@@ -520,14 +560,14 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       det.JournalDetEvidenceNo,
                                       det.JournalId.JournalVoucherNo,
                                       CostCenterId = det.JournalId.CostCenterId != null ? det.JournalId.CostCenterId.Id : null,
-                                     CostCenterName =  det.JournalId.CostCenterId != null ?  det.JournalId.CostCenterId.CostCenterName : null,
+                                      CostCenterName = det.JournalId.CostCenterId != null ? det.JournalId.CostCenterId.CostCenterName : null,
                                       det.JournalId.JournalDate,
                                       AccountId = det.AccountId != null ? det.AccountId.Id : null,
-                                      AccountName = det.AccountId != null ?  det.AccountId.AccountName : null
+                                      AccountName = det.AccountId != null ? det.AccountId.AccountName : null
                                   }
             ;
 
-            ReportDataSource reportDataSource = new ReportDataSource("JournalDetViewModel", list);
+            ReportDataSource reportDataSource = new ReportDataSource("JournalDetViewModel", list.ToList());
             return reportDataSource;
         }
 

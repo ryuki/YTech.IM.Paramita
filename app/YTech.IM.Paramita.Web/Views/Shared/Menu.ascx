@@ -126,6 +126,7 @@
         
             <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Adjusment), "Lap. Detail Penyesuaian")%>
         
+            <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Budgeting), "Lap. Detail RAB")%>
             <%--<hr />--%>
         
             <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptJournal), "Lap. Jurnal")%>

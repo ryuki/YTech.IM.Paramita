@@ -8,6 +8,7 @@ using YTech.IM.Paramita.Core.Master;
 using YTech.IM.Paramita.Core.RepositoryInterfaces;
 using YTech.IM.Paramita.Core.Transaction;
 using YTech.IM.Paramita.Core.Transaction.Inventory;
+using YTech.IM.Paramita.Enums;
 
 namespace YTech.IM.Paramita.Data.Repository
 {
@@ -65,23 +66,29 @@ namespace YTech.IM.Paramita.Data.Repository
             return null;
         }
 
-        public IList<TTransDet> GetByDateWarehouse(DateTime? dateFrom, DateTime? dateTo, MWarehouse warehouse, string transStatus)
+        public IList<TTransDet> GetByDateWarehouse(DateTime? dateFrom, DateTime? dateTo, string warehouseId, EnumTransactionStatus transStatus)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine(@"   select det
-                                from TTransDet as det
-                                    left outer join det.TransId trans
-                                    where trans.TransStatus = :TransStatus
-                                        and trans.TransDate between :dateFrom and :dateTo ");
-            if (warehouse != null)
-                sql.AppendLine(@"   and trans.WarehouseId = :warehouse");
+            sql.AppendLine(
+                @"   select det
+                        from TTransDet as det
+                            left outer join det.TransId trans
+                        where trans.TransStatus = :TransStatus ");
+            if (dateFrom.HasValue && dateTo.HasValue)
+                sql.AppendLine(@"   and trans.TransDate between :dateFrom and :dateTo");
+            if (!string.IsNullOrEmpty(warehouseId))
+                sql.AppendLine(@"   and trans.WarehouseId.Id = :warehouseId");
 
             IQuery q = Session.CreateQuery(sql.ToString());
-            q.SetString("TransStatus", transStatus);
-            q.SetDateTime("dateFrom", dateFrom.Value);
-            q.SetDateTime("dateTo", dateTo.Value);
-            if (warehouse != null)
-                q.SetEntity("warehouse", warehouse);
+            q.SetString("TransStatus", transStatus.ToString());
+            if (dateFrom.HasValue && dateTo.HasValue)
+            {
+                q.SetDateTime("dateFrom", dateFrom.Value);
+                q.SetDateTime("dateTo", dateTo.Value);
+            }
+
+            if (!string.IsNullOrEmpty(warehouseId))
+                q.SetString("warehouseId", warehouseId);
             return q.List<TTransDet>();
         }
     }
