@@ -55,6 +55,8 @@
     <Content Include="RptBukuBesar.rdlc" />
     <Content Include="RptItem.rdlc" />
     <Content Include="RptPrintKwitansi.rdlc" />
+    <Content Include="RptBukuBesarByCostCenter.rdlc" />
+    <Content Include="RptJournalByCostCenter.rdlc" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

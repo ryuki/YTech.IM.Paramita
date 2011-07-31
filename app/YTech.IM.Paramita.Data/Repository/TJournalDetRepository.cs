@@ -12,19 +12,20 @@ namespace YTech.IM.Paramita.Data.Repository
 {
     public class TJournalDetRepository : NHibernateRepositoryWithTypedId<TJournalDet, string>, ITJournalDetRepository
     {
-        public IList<TJournalDet> GetForReport(DateTime? dateFrom, DateTime? dateTo, MCostCenter costCenter)
+        public IList<TJournalDet> GetForReport(DateTime? dateFrom, DateTime? dateTo, string costCenterId)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine(@"  select det
                                 from TJournalDet as det
-                                    inner join det.JournalId j");
+                                    inner join det.JournalId j
+                                where 1=1 ");
             if (dateFrom.HasValue && dateTo.HasValue)
             {
-                sql.AppendLine(@"   where j.JournalDate between :dateFrom and :dateTo");
+                sql.AppendLine(@"   and j.JournalDate between :dateFrom and :dateTo");
             }
-            if (costCenter != null)
+            if (!string.IsNullOrEmpty(costCenterId))
             {
-                sql.AppendLine(@"   and j.CostCenterId = :costCenter");
+                sql.AppendLine(@"   and j.CostCenterId.Id = :costCenterId");
             }
 
             IQuery q = Session.CreateQuery(sql.ToString());
@@ -33,9 +34,9 @@ namespace YTech.IM.Paramita.Data.Repository
                 q.SetDateTime("dateFrom", dateFrom.Value);
                 q.SetDateTime("dateTo", dateTo.Value);
             }
-            if (costCenter != null)
+            if (!string.IsNullOrEmpty(costCenterId))
             {
-                q.SetEntity("costCenter", costCenter);
+                q.SetEntity("costCenterId", costCenterId);
             }
 
 

@@ -10,7 +10,7 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="JournalDetFlowViewModel">
+    <DataSet Name="JournalDetViewModel">
       <Fields>
         <Field Name="AccountId">
           <DataField>AccountId</DataField>
@@ -84,17 +84,9 @@
           <DataField>ModifiedDate</DataField>
           <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="RowNumber">
-          <DataField>RowNumber</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
         <Field Name="RowVersion">
           <DataField>RowVersion</DataField>
           <rd:TypeName>System.Byte[]</rd:TypeName>
-        </Field>
-        <Field Name="Saldo">
-          <DataField>Saldo</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
       </Fields>
       <Query>
@@ -103,61 +95,91 @@
       </Query>
       <rd:DataSetInfo>
         <rd:DataSetName>YTech.IM.Paramita.Web.Controllers.ViewModel.Reports</rd:DataSetName>
-        <rd:TableName>JournalDetFlowViewModel</rd:TableName>
-        <rd:ObjectDataSourceType>YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.JournalDetFlowViewModel, YTech.IM.Paramita.Web.Controllers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>JournalDetViewModel</rd:TableName>
+        <rd:ObjectDataSourceType>YTech.IM.Paramita.Web.Controllers.ViewModel.Reports.JournalDetViewModel, YTech.IM.Paramita.Web.Controllers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
   <Body>
     <ReportItems>
-      <Textbox Name="Textbox13">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Laporan Buku Besar</Value>
-                <Style>
-                  <FontFamily>Verdana</FontFamily>
-                  <FontSize>14pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Center</TextAlign>
-            </Style>
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox13</rd:DefaultName>
-        <Top>0.01396in</Top>
-        <Height>0.31604in</Height>
-        <Width>9.28452in</Width>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Tablix Name="Tablix3">
+      <Tablix Name="Tablix2">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>9.2845in</Width>
+              <Width>9.28452in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>1in</Height>
+              <Height>0.89623in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Rectangle Name="Rectangle2">
+                    <Rectangle Name="Rectangle1">
                       <ReportItems>
+                        <Textbox Name="CostCenterName">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!CostCenterName.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>CostCenterName</rd:DefaultName>
+                          <Left>1in</Left>
+                          <Height>0.25in</Height>
+                          <Width>2.59434in</Width>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox4">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Cost Center :</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox4</rd:DefaultName>
+                          <Height>0.25in</Height>
+                          <Width>1in</Width>
+                          <ZIndex>1</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
                         <Tablix Name="Tablix1">
                           <TablixBody>
                             <TablixColumns>
@@ -174,13 +196,16 @@
                                 <Width>1.00855in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.00855in</Width>
+                                <Width>1.2444in</Width>
                               </TablixColumn>
                               <TablixColumn>
                                 <Width>1.00855in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.70833in</Width>
+                                <Width>1.00855in</Width>
+                              </TablixColumn>
+                              <TablixColumn>
+                                <Width>1.00855in</Width>
                               </TablixColumn>
                               <TablixColumn>
                                 <Width>1.38591in</Width>
@@ -306,6 +331,82 @@
                                   </TablixCell>
                                   <TablixCell>
                                     <CellContents>
+                                      <Textbox Name="Textbox2">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>Kode Akun</Value>
+                                                <Style>
+                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>White</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Center</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox2</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#7292cc</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <BackgroundColor>#4c68a2</BackgroundColor>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox12">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>Nama Akun</Value>
+                                                <Style>
+                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>White</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Center</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox12</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#7292cc</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <BackgroundColor>#4c68a2</BackgroundColor>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
                                       <Textbox Name="Textbox3">
                                         <CanGrow>true</CanGrow>
                                         <KeepTogether>true</KeepTogether>
@@ -404,44 +505,6 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>Textbox7</rd:DefaultName>
-                                        <Style>
-                                          <Border>
-                                            <Color>#7292cc</Color>
-                                            <Style>Solid</Style>
-                                          </Border>
-                                          <BackgroundColor>#4c68a2</BackgroundColor>
-                                          <PaddingLeft>2pt</PaddingLeft>
-                                          <PaddingRight>2pt</PaddingRight>
-                                          <PaddingTop>2pt</PaddingTop>
-                                          <PaddingBottom>2pt</PaddingBottom>
-                                        </Style>
-                                      </Textbox>
-                                    </CellContents>
-                                  </TablixCell>
-                                  <TablixCell>
-                                    <CellContents>
-                                      <Textbox Name="Textbox1">
-                                        <CanGrow>true</CanGrow>
-                                        <KeepTogether>true</KeepTogether>
-                                        <Paragraphs>
-                                          <Paragraph>
-                                            <TextRuns>
-                                              <TextRun>
-                                                <Value>Saldo</Value>
-                                                <Style>
-                                                  <FontFamily>Verdana</FontFamily>
-                                                  <FontSize>9pt</FontSize>
-                                                  <FontWeight>Bold</FontWeight>
-                                                  <Color>White</Color>
-                                                </Style>
-                                              </TextRun>
-                                            </TextRuns>
-                                            <Style>
-                                              <TextAlign>Center</TextAlign>
-                                            </Style>
-                                          </Paragraph>
-                                        </Paragraphs>
-                                        <rd:DefaultName>Textbox1</rd:DefaultName>
                                         <Style>
                                           <Border>
                                             <Color>#7292cc</Color>
@@ -608,6 +671,74 @@
                                   </TablixCell>
                                   <TablixCell>
                                     <CellContents>
+                                      <Textbox Name="AccountId">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!AccountId.Value</Value>
+                                                <Style>
+                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Color>#4d4d4d</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>AccountId</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#e5e5e5</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="AccountName">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!AccountName.Value</Value>
+                                                <Style>
+                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Color>#4d4d4d</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>AccountName</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#e5e5e5</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
                                       <Textbox Name="JournalDetEvidenceNo">
                                         <CanGrow>true</CanGrow>
                                         <KeepTogether>true</KeepTogether>
@@ -712,43 +843,6 @@
                                   </TablixCell>
                                   <TablixCell>
                                     <CellContents>
-                                      <Textbox Name="Saldo">
-                                        <CanGrow>true</CanGrow>
-                                        <KeepTogether>true</KeepTogether>
-                                        <Paragraphs>
-                                          <Paragraph>
-                                            <TextRuns>
-                                              <TextRun>
-                                                <Value>=Fields!Saldo.Value</Value>
-                                                <Style>
-                                                  <FontFamily>Verdana</FontFamily>
-                                                  <FontSize>9pt</FontSize>
-                                                  <Format>N2</Format>
-                                                  <Color>#4d4d4d</Color>
-                                                </Style>
-                                              </TextRun>
-                                            </TextRuns>
-                                            <Style>
-                                              <TextAlign>Right</TextAlign>
-                                            </Style>
-                                          </Paragraph>
-                                        </Paragraphs>
-                                        <rd:DefaultName>Saldo</rd:DefaultName>
-                                        <Style>
-                                          <Border>
-                                            <Color>#e5e5e5</Color>
-                                            <Style>Solid</Style>
-                                          </Border>
-                                          <PaddingLeft>2pt</PaddingLeft>
-                                          <PaddingRight>2pt</PaddingRight>
-                                          <PaddingTop>2pt</PaddingTop>
-                                          <PaddingBottom>2pt</PaddingBottom>
-                                        </Style>
-                                      </Textbox>
-                                    </CellContents>
-                                  </TablixCell>
-                                  <TablixCell>
-                                    <CellContents>
                                       <Textbox Name="JournalDetDesc">
                                         <CanGrow>true</CanGrow>
                                         <KeepTogether>true</KeepTogether>
@@ -795,6 +889,7 @@
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
+                              <TablixMember />
                             </TablixMembers>
                           </TablixColumnHierarchy>
                           <TablixRowHierarchy>
@@ -808,111 +903,16 @@
                             </TablixMembers>
                           </TablixRowHierarchy>
                           <DataSetName>JournalDetViewModel</DataSetName>
-                          <Top>0.33359in</Top>
+                          <Top>0.31944in</Top>
                           <Height>0.5in</Height>
-                          <Width>8.73988in</Width>
+                          <Width>9.2845in</Width>
+                          <ZIndex>2</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
                           </Style>
                         </Tablix>
-                        <Textbox Name="AccountId3">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Akun :</Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>9pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>AccountId</rd:DefaultName>
-                          <Height>0.25in</Height>
-                          <Width>1.00855in</Width>
-                          <ZIndex>1</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="AccountId2">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!AccountId.Value</Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>9pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>AccountId</rd:DefaultName>
-                          <Left>1.06411in</Left>
-                          <Height>0.25in</Height>
-                          <Width>1.00855in</Width>
-                          <ZIndex>2</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="AccountName2">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!AccountName.Value</Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>9pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>AccountName</rd:DefaultName>
-                          <Left>2.07266in</Left>
-                          <Height>0.25in</Height>
-                          <Width>2.56443in</Width>
-                          <ZIndex>3</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
                       </ReportItems>
                       <KeepTogether>true</KeepTogether>
                       <Style>
@@ -935,29 +935,63 @@
         <TablixRowHierarchy>
           <TablixMembers>
             <TablixMember>
-              <Group Name="Details2">
+              <Group Name="Details1">
                 <GroupExpressions>
-                  <GroupExpression>=Fields!AccountId.Value</GroupExpression>
+                  <GroupExpression>=Fields!CostCenterId.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <Top>0.45604in</Top>
-        <Height>1in</Height>
-        <Width>9.2845in</Width>
-        <ZIndex>1</ZIndex>
+        <DataSetName>JournalDetViewModel</DataSetName>
+        <Top>0.3866in</Top>
+        <Height>0.89623in</Height>
+        <Width>9.28452in</Width>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Tablix>
+      <Textbox Name="Textbox13">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Laporan Jurnal Per Cost Center</Value>
+                <Style>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontSize>14pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox13</rd:DefaultName>
+        <Top>0.01396in</Top>
+        <Height>0.31604in</Height>
+        <Width>9.28452in</Width>
+        <ZIndex>1</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>1.66437in</Height>
+    <Height>1.39623in</Height>
     <Style />
   </Body>
-  <Width>9.50601in</Width>
+  <Width>9.28452in</Width>
   <Page>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>

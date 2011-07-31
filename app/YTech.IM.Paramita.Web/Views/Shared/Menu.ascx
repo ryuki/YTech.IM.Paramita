@@ -3,86 +3,56 @@
     <h3>
         <a href="#">Home</a></h3>
     <div class="child-menu-container">
-        
-            <%=Html.ActionLinkForAreas<HomeController>(c => c.Index(), "Home") %>
+        <%=Html.ActionLinkForAreas<HomeController>(c => c.Index(), "Home") %>
     </div>
     <% if (Request.IsAuthenticated)
        {
-%>
+    %>
     <h3>
         <a href="#">Data Pokok</a></h3>
     <div class="child-menu-container">
-        
-            <%= Html.ActionLinkForAreas<WarehouseController>(c => c.Index(),"Master Gudang") %>
-        
-            <%= Html.ActionLinkForAreas<JobTypeController>(c => c.Index(), "Master Jenis Pekerjaan")%>
-        
-            <%= Html.ActionLinkForAreas<MItemCatController>(c => c.Index(),"Master Kategori Produk") %>
-        
-            <%= Html.ActionLinkForAreas<BrandController>(c => c.Index(),"Master Merek") %>
-        
-            <%= Html.ActionLinkForAreas<ItemController>(c => c.Index(), "Master Produk")%>
-        
-           <%-- <hr />--%>
-        
-            <%= Html.ActionLinkForAreas<SupplierController>(c => c.Index(),"Master Supplier") %>
-        
-            <%--<hr />--%>
-        
-            <%= Html.ActionLinkForAreas<DepartmentController>(c => c.Index(),"Master Departemen") %>
-        
-            <%= Html.ActionLinkForAreas<EmployeeController>(c => c.Index(), "Master Karyawan")%>
-        
-            <%--<hr />--%>
-        
-            <%= Html.ActionLinkForAreas<CostCenterController>(c => c.Index(),"Master Cost Center") %>
-        
-            <%= Html.ActionLinkForAreas<AccountController>(c => c.Index(),"Master Akun") %>
+        <%= Html.ActionLinkForAreas<WarehouseController>(c => c.Index(),"Master Gudang") %>
+        <%= Html.ActionLinkForAreas<JobTypeController>(c => c.Index(), "Master Jenis Pekerjaan")%>
+        <%= Html.ActionLinkForAreas<MItemCatController>(c => c.Index(),"Master Kategori Produk") %>
+        <%= Html.ActionLinkForAreas<BrandController>(c => c.Index(),"Master Merek") %>
+        <%= Html.ActionLinkForAreas<ItemController>(c => c.Index(), "Master Produk")%>
+        <%-- <hr />--%>
+        <%= Html.ActionLinkForAreas<SupplierController>(c => c.Index(),"Master Supplier") %>
+        <%--<hr />--%>
+        <%= Html.ActionLinkForAreas<DepartmentController>(c => c.Index(),"Master Departemen") %>
+        <%= Html.ActionLinkForAreas<EmployeeController>(c => c.Index(), "Master Karyawan")%>
+        <%--<hr />--%>
+        <%= Html.ActionLinkForAreas<CostCenterController>(c => c.Index(),"Master Cost Center") %>
+        <%= Html.ActionLinkForAreas<AccountController>(c => c.Index(),"Master Akun") %>
     </div>
     <h3>
         <a href="#">Inventori</a></h3>
     <div class="child-menu-container">
-        
-            <%= Html.ActionLinkForAreas<InventoryController>(c => c.Index(), "Order Pembelian")%>
-        
-            <%= Html.ActionLinkForAreas<InventoryController>(c => c.Received(), "Penerimaan Stok")%>
-        
-            <%= Html.ActionLinkForAreas<InventoryController>(c => c.Purchase(), "Pembelian")%>
-        
-            <%= Html.ActionLinkForAreas<InventoryController>(c => c.ReturPurchase(), "Retur Pembelian")%>
-        
-            <%= Html.ActionLinkForAreas<InventoryController>(c => c.Using(), "Pemakaian Material")%>
-        
-            <%= Html.ActionLinkForAreas<InventoryController>(c => c.Mutation(), "Mutasi Stok")%>
-        
-            <%= Html.ActionLinkForAreas<InventoryController>(c => c.Adjusment(), "Penyesuaian Stok")%>
-        
-            <%--<hr />--%>
-        
-            <%= Html.ActionLinkForAreas<InventoryController>(c => c.Budgeting(), "Rencana Anggaran Belanja")%>
-              
-            <%--<hr />--%>
-        
-            <%= Html.ActionLinkForAreas<RealController>(c => c.Index(), "Realisasi Proyek")%>
+        <%= Html.ActionLinkForAreas<InventoryController>(c => c.Index(), "Order Pembelian")%>
+        <%= Html.ActionLinkForAreas<InventoryController>(c => c.Received(), "Penerimaan Stok")%>
+        <%= Html.ActionLinkForAreas<InventoryController>(c => c.Purchase(), "Pembelian")%>
+        <%= Html.ActionLinkForAreas<InventoryController>(c => c.ReturPurchase(), "Retur Pembelian")%>
+        <%= Html.ActionLinkForAreas<InventoryController>(c => c.Using(), "Pemakaian Material")%>
+        <%= Html.ActionLinkForAreas<InventoryController>(c => c.Mutation(), "Mutasi Stok")%>
+        <%= Html.ActionLinkForAreas<InventoryController>(c => c.Adjusment(), "Penyesuaian Stok")%>
+        <%--<hr />--%>
+        <%= Html.ActionLinkForAreas<InventoryController>(c => c.Budgeting(), "Rencana Anggaran Belanja")%>
+        <%--<hr />--%>
+        <%= Html.ActionLinkForAreas<RealController>(c => c.Index(), "Realisasi Proyek")%>
     </div>
     <h3>
         <a href="#">Penjualan Unit</a></h3>
     <div class="child-menu-container">
-        
-            <%=Html.ActionLinkForAreas<UnitController>(c => c.Index(), "Daftar Unit") %>
-        
-            <%=Html.ActionLinkForAreas<CustomerController>(c => c.Index(), "Daftar Pembeli") %>
+        <%=Html.ActionLinkForAreas<UnitController>(c => c.Index(), "Daftar Unit") %>
+        <%=Html.ActionLinkForAreas<CustomerController>(c => c.Index(), "Daftar Pembeli") %>
     </div>
     <h3>
         <a href="#">Pembukuan</a></h3>
     <div class="child-menu-container">
-        
-            <%= Html.ActionLinkForAreas<AccountingController>(c => c.GeneralLedger(), "General Ledger")%>
-        
-            <%= Html.ActionLinkForAreas<AccountingController>(c => c.CashIn(), "Kas Masuk")%>
-        
-            <%= Html.ActionLinkForAreas<AccountingController>(c => c.CashOut(), "Kas Keluar")%>
-       <%--   
+        <%= Html.ActionLinkForAreas<AccountingController>(c => c.GeneralLedger(), "General Ledger")%>
+        <%= Html.ActionLinkForAreas<AccountingController>(c => c.CashIn(), "Kas Masuk")%>
+        <%= Html.ActionLinkForAreas<AccountingController>(c => c.CashOut(), "Kas Keluar")%>
+        <%--   
             <hr />
         </div>
         
@@ -97,61 +67,37 @@
     <h3>
         <a href="#">Laporan</a></h3>
     <div class="child-menu-container">
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBrand), "Daftar Merek")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptCostCenter), "Daftar Cost Center")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptItem), "Daftar Produk")%>
-        
-            <%--<hr />--%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptStockCard), "Kartu Stok")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptStockItem), "Laporan Stok Per Gudang")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptAnalyzeBudgetDetail), "Laporan Analisa Budget")%>
-        
-            <%--<hr />--%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.PurchaseOrder), "Lap. Detail Order Pembelian")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Received), "Lap. Detail Penerimaan Stok")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.ReturPurchase), "Lap. Detail Retur Pembelian")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Using), "Lap. Detail Pemakaian")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Mutation), "Lap. Detail Mutasi Stok")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Adjusment), "Lap. Detail Penyesuaian")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Budgeting), "Lap. Detail RAB")%>
-            <%--<hr />--%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptJournal), "Lap. Jurnal")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBukuBesar), "Lap. Buku Besar")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptNeraca), "Lap. Neraca")%>
-        
-            <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptLR), "Lap. Laba / Rugi")%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBrand), CommonHelper.GetStringValue(EnumReports.RptBrand))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptCostCenter), CommonHelper.GetStringValue(EnumReports.RptCostCenter))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptItem), CommonHelper.GetStringValue(EnumReports.RptItem))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptStockCard), CommonHelper.GetStringValue(EnumReports.RptStockCard))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptStockItem), CommonHelper.GetStringValue(EnumReports.RptStockItem))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptAnalyzeBudgetDetail), CommonHelper.GetStringValue(EnumReports.RptAnalyzeBudgetDetail))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.PurchaseOrder), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.PurchaseOrder)))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Received), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.Received)))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.ReturPurchase), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.ReturPurchase)))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Using), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.Using)))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Mutation), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.Mutation)))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Adjusment), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.Adjusment)))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Budgeting), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.Budgeting)))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptJournal), CommonHelper.GetStringValue(EnumReports.RptJournal))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBukuBesar), CommonHelper.GetStringValue(EnumReports.RptBukuBesar))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptJournalPerCostCenter), CommonHelper.GetStringValue(EnumReports.RptJournalPerCostCenter))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBukuBesarPerCostCenter), CommonHelper.GetStringValue(EnumReports.RptBukuBesarPerCostCenter))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptNeraca), CommonHelper.GetStringValue(EnumReports.RptNeraca))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptLR), CommonHelper.GetStringValue(EnumReports.RptLR))%>
     </div>
     <h3>
         <a href="#">Utiliti</a></h3>
     <div class="child-menu-container">
-        
-            <%= Html.ActionLinkForAreas<UserAdministrationController>(c => c.Index(null), "Daftar Pengguna")%>
-        
-           <%-- Ganti Password</div>
+        <%= Html.ActionLinkForAreas<UserAdministrationController>(c => c.Index(null), "Daftar Pengguna")%>
+        <%-- Ganti Password</div>
         
             Backup Database</div>--%>
-        
-            <%= Html.ActionLinkForAreas<AccountingController>(c => c.Closing(), "Tutup Buku")%>
-        
-            <%= Html.ActionLinkForAreas<AccountingController>(c => c.Opening(), "Buka Buku")%>
+        <%= Html.ActionLinkForAreas<AccountingController>(c => c.Closing(), "Tutup Buku")%>
+        <%= Html.ActionLinkForAreas<AccountingController>(c => c.Opening(), "Buka Buku")%>
     </div>
     <%
-        }
-%>
+       }
+    %>
 </div>

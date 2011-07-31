@@ -85,53 +85,44 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             {
                 viewModel.TransStatus = TransStatus;
             }
-            string title = string.Empty;
+            string title = Helper.CommonHelper.GetStringValue(reports);
             switch (reports)
             {
                 case EnumReports.RptBrand:
-                    title = "Daftar Master Merek";
 
                     break;
                 case EnumReports.RptCostCenter:
-                    title = "Daftar Master Cost Center";
                     break;
                 case EnumReports.RptJournal:
-                    title = "Daftar Jurnal";
                     viewModel.ShowDateFrom = true;
                     viewModel.ShowDateTo = true;
-                    viewModel.ShowCostCenter = true;
                     break;
                 case EnumReports.RptNeraca:
-                    title = "Laporan Neraca";
                     viewModel.ShowCostCenter = true;
                     viewModel.ShowRecPeriod = true;
                     break;
                 case EnumReports.RptLR:
-                    title = "Laporan Laba / Rugi";
                     viewModel.ShowCostCenter = true;
                     viewModel.ShowRecPeriod = true;
                     break;
                 case EnumReports.RptStockCard:
-                    title = "Kartu Stok";
                     viewModel.ShowDateFrom = true;
                     viewModel.ShowDateTo = true;
                     viewModel.ShowItem = true;
                     viewModel.ShowWarehouse = true;
                     break;
                 case EnumReports.RptStockItem:
-                    title = "Lap. Stok Per Gudang";
                     viewModel.ShowItem = true;
                     viewModel.ShowWarehouse = true;
                     break;
                 case EnumReports.RptAnalyzeBudgetDetail:
-                    title = "Lap. Analisa Budget";
                     viewModel.ShowDateFrom = true;
                     viewModel.ShowDateTo = true;
                     viewModel.ShowItem = true;
                     viewModel.ShowWarehouse = true;
                     break;
                 case EnumReports.RptTransDetail:
-                    title = "Lap. Detail " + Helper.CommonHelper.GetStringValue(viewModel.TransStatus);
+                    title = string.Format(title, Helper.CommonHelper.GetStringValue(viewModel.TransStatus));
                     switch (viewModel.TransStatus)
                     {
                         case EnumTransactionStatus.PurchaseOrder:
@@ -173,11 +164,18 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
                     break;
                 case EnumReports.RptItem:
-                    title = "Daftar Master Produk";
 
                     break;
                 case EnumReports.RptBukuBesar:
-                    title = "Lap. Buku Besar";
+                    viewModel.ShowDateFrom = true;
+                    viewModel.ShowDateTo = true;
+                    break;
+                case EnumReports.RptJournalPerCostCenter:
+                    viewModel.ShowDateFrom = true;
+                    viewModel.ShowDateTo = true;
+                    viewModel.ShowCostCenter = true;
+                    break;
+                case EnumReports.RptBukuBesarPerCostCenter:
                     viewModel.ShowDateFrom = true;
                     viewModel.ShowDateTo = true;
                     viewModel.ShowCostCenter = true;
@@ -252,6 +250,12 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumReports.RptBukuBesar:
                     repCol[0] = GetJournalDetFlow(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId);
+                    break;
+                case EnumReports.RptJournalPerCostCenter:
+                    repCol[0] = GetJournalDet(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId);
+                    break;
+                case EnumReports.RptBukuBesarPerCostCenter:
+                    repCol[0] = GetJournalDet(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId);
                     break;
             }
             Session["ReportData"] = repCol;
@@ -383,11 +387,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       ViewPrice = SetView(det.TransId.TransStatus, EnumViewTrans.ViewPrice),
                                       ViewPaymentMethod =
                            SetView(det.TransId.TransStatus, EnumViewTrans.ViewPaymentMethod),
-                                      TransName ,
-                                     JobTypeId = det.TransId.JobTypeId != null ? det.TransId.JobTypeId.Id : null,
-                                     JobTypeName =  det.TransId.JobTypeId != null ? det.TransId.JobTypeId.JobTypeName : null,
-                                     UnitTypeId =   det.TransId.UnitTypeId != null ? det.TransId.UnitTypeId.Id : null,
-                                     UnitTypeName =   det.TransId.UnitTypeId != null ? det.TransId.UnitTypeId.UnitTypeName : null
+                                      TransName,
+                                      JobTypeId = det.TransId.JobTypeId != null ? det.TransId.JobTypeId.Id : null,
+                                      JobTypeName = det.TransId.JobTypeId != null ? det.TransId.JobTypeId.JobTypeName : null,
+                                      UnitTypeId = det.TransId.UnitTypeId != null ? det.TransId.UnitTypeId.Id : null,
+                                      UnitTypeName = det.TransId.UnitTypeId != null ? det.TransId.UnitTypeId.UnitTypeName : null
                                   }
             ;
 
@@ -540,11 +544,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         private ReportDataSource GetJournalDet(DateTime? dateFrom, DateTime? dateTo, string costCenterId)
         {
-            IList<TJournalDet> dets;
+            IList<TJournalDet> dets = _tJournalDetRepository.GetForReport(dateFrom, dateTo, costCenterId);
             if (!string.IsNullOrEmpty(costCenterId))
             {
                 MCostCenter costCenter = _mCostCenterRepository.Get(costCenterId);
-                dets = _tJournalDetRepository.GetForReport(dateFrom, dateTo, costCenter);
             }
             else
             {
