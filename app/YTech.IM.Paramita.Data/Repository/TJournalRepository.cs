@@ -29,7 +29,7 @@ namespace YTech.IM.Paramita.Data.Repository
             return dt;
             try
             {
-               
+
             }
             catch (Exception)
             {
@@ -72,12 +72,12 @@ namespace YTech.IM.Paramita.Data.Repository
             }
             if (!string.IsNullOrEmpty(searchBy) && !string.IsNullOrEmpty(searchText))
             {
-                q.SetString("searchText", searchText);
+                q.SetString("searchText", string.Format("%{0}%", searchText.Trim()));
             }
             q.SetMaxResults(maxRows);
             q.SetFirstResult((pageIndex - 1) * maxRows);
             IEnumerable<TJournal> list = q.List<TJournal>();
-            return list; 
+            return list;
         }
     }
 }

@@ -11,7 +11,7 @@
         <label for="ddlSearchBy">
             Cari berdasar :</label>
         <select id="ddlSearchBy" name="ddlSearchBy">
-            <option value="VoucherNo">No Voucher</option>
+            <option value="JournalVoucherNo">No Voucher</option>
         </select>
         <input id="txtSearch" type="text" />
         <input id="btnSearch" type="button" value="Cari" />
@@ -87,6 +87,8 @@
             );
 
               $('#btnSearch').click(function () {
+//              alert($('#ddlSearchBy option:selected').val());
+//              alert($('#txtSearch').val());
                 $("#list").jqGrid().trigger("reloadGrid");
 
             });
