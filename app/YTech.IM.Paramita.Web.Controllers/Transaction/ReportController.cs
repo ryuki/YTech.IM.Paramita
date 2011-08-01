@@ -170,12 +170,12 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ShowDateFrom = true;
                     viewModel.ShowDateTo = true;
                     break;
-                case EnumReports.RptJournalPerCostCenter:
+                case EnumReports.RptJournalByCostCenter:
                     viewModel.ShowDateFrom = true;
                     viewModel.ShowDateTo = true;
                     viewModel.ShowCostCenter = true;
                     break;
-                case EnumReports.RptBukuBesarPerCostCenter:
+                case EnumReports.RptBukuBesarByCostCenter:
                     viewModel.ShowDateFrom = true;
                     viewModel.ShowDateTo = true;
                     viewModel.ShowCostCenter = true;
@@ -251,11 +251,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 case EnumReports.RptBukuBesar:
                     repCol[0] = GetJournalDetFlow(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId);
                     break;
-                case EnumReports.RptJournalPerCostCenter:
+                case EnumReports.RptJournalByCostCenter:
                     repCol[0] = GetJournalDet(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId);
                     break;
-                case EnumReports.RptBukuBesarPerCostCenter:
-                    repCol[0] = GetJournalDet(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId);
+                case EnumReports.RptBukuBesarByCostCenter:
+                    repCol[0] = GetJournalDetFlow(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId);
                     break;
             }
             Session["ReportData"] = repCol;
@@ -545,14 +545,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private ReportDataSource GetJournalDet(DateTime? dateFrom, DateTime? dateTo, string costCenterId)
         {
             IList<TJournalDet> dets = _tJournalDetRepository.GetForReport(dateFrom, dateTo, costCenterId);
-            if (!string.IsNullOrEmpty(costCenterId))
-            {
-                MCostCenter costCenter = _mCostCenterRepository.Get(costCenterId);
-            }
-            else
-            {
-                dets = _tJournalDetRepository.GetForReport(dateFrom, dateTo, null);
-            }
 
             var list = from det in dets
                        select new

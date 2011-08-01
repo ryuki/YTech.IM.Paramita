@@ -82,8 +82,8 @@
         <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Budgeting), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.Budgeting)))%>
         <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptJournal), CommonHelper.GetStringValue(EnumReports.RptJournal))%>
         <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBukuBesar), CommonHelper.GetStringValue(EnumReports.RptBukuBesar))%>
-        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptJournalPerCostCenter), CommonHelper.GetStringValue(EnumReports.RptJournalPerCostCenter))%>
-        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBukuBesarPerCostCenter), CommonHelper.GetStringValue(EnumReports.RptBukuBesarPerCostCenter))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptJournalByCostCenter), CommonHelper.GetStringValue(EnumReports.RptJournalByCostCenter))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBukuBesarByCostCenter), CommonHelper.GetStringValue(EnumReports.RptBukuBesarByCostCenter))%>
         <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptNeraca), CommonHelper.GetStringValue(EnumReports.RptNeraca))%>
         <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptLR), CommonHelper.GetStringValue(EnumReports.RptLR))%>
     </div>

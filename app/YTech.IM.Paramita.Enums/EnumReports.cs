@@ -30,8 +30,8 @@ namespace YTech.IM.Paramita.Enums
         [StringValue("Laporan Buku Besar")]
         RptBukuBesar,
         [StringValue("Laporan Jurnal Per Cost Center")]
-        RptJournalPerCostCenter,
+        RptJournalByCostCenter,
         [StringValue("Laporan Buku Besar Per Cost Center")]
-        RptBukuBesarPerCostCenter
+        RptBukuBesarByCostCenter
     }
 }
