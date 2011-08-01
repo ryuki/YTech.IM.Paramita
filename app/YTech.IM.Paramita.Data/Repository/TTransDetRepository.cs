@@ -79,6 +79,8 @@ namespace YTech.IM.Paramita.Data.Repository
             if (!string.IsNullOrEmpty(warehouseId))
                 sql.AppendLine(@"   and trans.WarehouseId.Id = :warehouseId");
 
+            sql.AppendLine(@"   order by trans.TransDate, trans.TransFactur, det.TransDetNo ");
+
             IQuery q = Session.CreateQuery(sql.ToString());
             q.SetString("TransStatus", transStatus.ToString());
             if (dateFrom.HasValue && dateTo.HasValue)

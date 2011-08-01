@@ -27,6 +27,7 @@ namespace YTech.IM.Paramita.Data.Repository
             {
                 sql.AppendLine(@"   and j.CostCenterId.Id = :costCenterId");
             }
+            sql.AppendLine(@"   order by j.JournalDate, j.JournalVoucherNo, det.JournalDetStatus ");
 
             IQuery q = Session.CreateQuery(sql.ToString());
             if (dateFrom.HasValue && dateTo.HasValue)

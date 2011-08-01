@@ -325,7 +325,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return SaveTransactionInterface(Trans, formCollection);
         }
 
-        [Transaction]
+
         public ActionResult Adjusment()
         {
             TransactionFormViewModel viewModel = TransactionFormViewModel.CreateTransactionFormViewModel(_tTransRepository, _mWarehouseRepository, _mSupplierRepository, _mUnitTypeRepository, _mJobTypeRepository);
