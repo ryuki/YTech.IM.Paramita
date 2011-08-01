@@ -29,7 +29,7 @@
             color: #999;  
             padding: 5px 10px;  
            color: #025185; text-decoration: none;
-           width : 220px;
+           width : 90%;
            float:left;
         }
          #accordion .child-menu-container a:hover
