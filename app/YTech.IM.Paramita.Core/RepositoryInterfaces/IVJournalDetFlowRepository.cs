@@ -11,6 +11,6 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
     public interface IVJournalDetFlowRepository : INHibernateRepositoryWithTypedId<VJournalDetFlow, string>
     {
-        IList<VJournalDetFlow> GetForReport(DateTime? dateFrom, DateTime? dateTo, string costCenterId);
+        IList<VJournalDetFlow> GetForReport(DateTime? dateFrom, DateTime? dateTo, string costCenterId, string accountId);
     }
 }

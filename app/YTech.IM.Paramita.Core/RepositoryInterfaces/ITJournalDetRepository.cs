@@ -9,7 +9,7 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
     public interface ITJournalDetRepository : INHibernateRepositoryWithTypedId<TJournalDet, string>
     {
-        IList<TJournalDet> GetForReport(DateTime? dateFrom, DateTime? dateTo, string costCenterId);
+        IList<TJournalDet> GetForReport(DateTime? dateFrom, DateTime? dateTo, string costCenterId, string accountId);
 
         IList<TJournalDet> GetDetailByJournalId(string journalId);
     }

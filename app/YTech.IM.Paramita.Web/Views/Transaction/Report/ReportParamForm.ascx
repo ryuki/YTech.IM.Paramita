@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl<YTech.IM.Paramita.Web.Controllers.ViewModel.ReportParamViewModel>" %>
 <%--<% using (Html.BeginForm())
    { %>--%>
-     <% using (Ajax.BeginForm(new AjaxOptions
+<% using (Ajax.BeginForm(new AjaxOptions
                                        {
                                            //UpdateTargetId = "status",
                                            InsertionMode = InsertionMode.Replace,
@@ -9,11 +9,11 @@
                                        }
 
           ))
-                       {%>
+   {%>
 <%= Html.AntiForgeryToken() %>
 <%= Html.Hidden("TransStatus", ViewData.Model.TransStatus )%>
 <table>
-   <%-- <tr>
+    <%-- <tr>
         <td>
             <label for="ExportFormat">
                 Format Laporan :</label>
@@ -58,7 +58,7 @@
         </td>
     </tr>
     <% } %>
-     <% if (ViewData.Model.ShowItem)
+    <% if (ViewData.Model.ShowItem)
        {	%>
     <tr>
         <td>
@@ -94,6 +94,26 @@
         </td>
     </tr>
     <% } %>
+    <% if (ViewData.Model.ShowAccount)
+       {	%>
+    <tr>
+        <td>
+            <label for="AccountId">
+                Akun :</label>
+        </td>
+        <td>
+            <%= Html.TextBox("AccountId", Model.AccountId)%>&nbsp;<img src='<%= Url.Content("~/Content/Images/window16.gif") %>'
+                style='cursor: hand;' id='imgAccountId' />
+        </td>
+    </tr>
+    <tr>
+        <td>
+        </td>
+        <td>
+            <%= Html.TextBox("AccountName", Model.AccountId )%>
+        </td>
+    </tr>
+    <% } %>
     <tr>
         <td colspan="2" align="center">
             <button id="Save" type="submit" name="Save">
@@ -102,6 +122,9 @@
     </tr>
 </table>
 <% } %>
+<div id='popup'>
+    <iframe width='100%' height='400px' id="popup_frame" frameborder="0"></iframe>
+</div>
 <script language="javascript" type="text/javascript">
     function onSavedSuccess(e) {
         var json = e.get_response().get_object();
@@ -110,8 +133,38 @@
         window.open(urlreport);
     }
     $(document).ready(function () {
-//        $("#Save").button();
+        //        $("#Save").button();
         $("#DateFrom").datepicker({ dateFormat: "dd-M-yy" });
         $("#DateTo").datepicker({ dateFormat: "dd-M-yy" });
+
+        $("#popup").dialog({
+            autoOpen: false,
+            height: 420,
+            width: '80%',
+            modal: true,
+            close: function (event, ui) {
+                //$("#list").trigger("reloadGrid");
+            }
+        });
+
+        $('#imgAccountId').click(function () {
+            OpenPopupAccountSearch();
+        });
     });
+
+    function OpenPopupAccountSearch() {
+        var popup_frame = $("#popup_frame");
+        var new_url = '<%= ResolveUrl("~/Master/Account/Search") %>';
+        if (popup_frame.attr("src") != new_url) {
+            popup_frame.attr("src", new_url);
+        }
+        $("#popup").dialog("open");
+        return false;
+    }
+
+    function SetAccountDetail(accountId, accountName) {
+        $("#popup").dialog("close");
+        $('#AccountId').attr('value', accountId);
+        $('#AccountName').attr('value', accountName);
+    }
 </script>
