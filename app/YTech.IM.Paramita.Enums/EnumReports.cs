@@ -32,6 +32,12 @@ namespace YTech.IM.Paramita.Enums
         [StringValue("Laporan Jurnal Per Cost Center")]
         RptJournalByCostCenter,
         [StringValue("Laporan Buku Besar Per Cost Center")]
-        RptBukuBesarByCostCenter
+        RptBukuBesarByCostCenter,
+        [StringValue("Cetak Bukti Kas")]
+        RptPrintCash,
+        [StringValue("Cetak Kwitansi")]
+        RptPrintKwitansi,
+        [StringValue("Cetak Bukti Jurnal Umum")]
+        RptPrintGL
     }
 }

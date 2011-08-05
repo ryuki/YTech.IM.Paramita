@@ -55,9 +55,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [Transaction]
         public ActionResult GeneralLedger()
         {
-            GeneralLedgerViewModel viewModel = GeneralLedgerViewModel.CreateGeneralLedgerViewModel(_tJournalRepository, _mCostCenterRepository);
+            CashFormViewModel viewModel = CashFormViewModel.CreateCashFormViewModel(_tJournalRepository, _mCostCenterRepository, _mAccountRepository);
             viewModel.Journal = SetNewJournal(EnumJournalType.GeneralLedger);
-            viewModel.Title = "General Ledger";
+            viewModel.Title = "Jurnal Umum";
 
             ListJournalDet = new List<TJournalDet>();
             ViewData["CurrentItem"] = viewModel.Title;
@@ -69,7 +69,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult GeneralLedger(TJournal journal, FormCollection formCollection)
         {
-            return SaveJournal(journal, formCollection);
+            return SaveJournalInterface(journal, formCollection);
         }
 
         [Transaction]
@@ -99,11 +99,15 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             else if (formCollection["btnPrint"] != null || formCollection["btnPrintKwitansi"] != null)
             {
                 //save data to session
-                SetDataForPrint(journal.Id);
+                SetDataForPrint(journal.Id, journal.JournalType);
                 string reportUrl = string.Empty;
                 if (formCollection["btnPrint"] != null)
                 {
-                    reportUrl = Url.Content("~/ReportViewer.aspx?rpt=RptPrintCash");
+                    EnumReports reportToPrint = EnumReports.RptPrintCash;
+                    if (journal.JournalType == EnumJournalType.GeneralLedger.ToString())
+                        reportToPrint = EnumReports.RptPrintGL;
+
+                    reportUrl = Url.Content("~/ReportViewer.aspx?rpt=" + reportToPrint.ToString());
                 }
                 else if (formCollection["btnPrintKwitansi"] != null)
                 {
@@ -141,31 +145,36 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return SaveJournalInterface(journal, formCollection);
         }
 
-        private void SetDataForPrint(string journalId)
+        private void SetDataForPrint(string journalId, string journalType)
         {
             ReportDataSource[] repCol = new ReportDataSource[1];
             IList<TJournalDet> listDets = _tJournalDetRepository.GetDetailByJournalId(journalId);
-            var detailHeaders = from det in listDets
-                                where det.JournalDetNo.Value == 0
-                                select det
-            ;
-            TJournalDet detailHeader = new TJournalDet();
-            if (detailHeaders != null)
+
+            //set header for cash in or out
+            TJournalDet detailHeader = null;
+            if (journalType != EnumJournalType.GeneralLedger.ToString())
             {
-                detailHeader = (detailHeaders.ToList() as IList<TJournalDet>)[0];
+                var detailHeaders = from det in listDets
+                                    where det.JournalDetNo.Value == 0
+                                    select det
+           ;
+                if (detailHeaders != null)
+                {
+                    detailHeader = (detailHeaders.ToList() as IList<TJournalDet>)[0];
+                }
             }
 
             var list = from det in listDets
                        where det.JournalDetNo != 0
                        select new
                        {
-                           AccountId = detailHeader.AccountId.Id,
-                           detailHeader.AccountId.AccountName,
+                           AccountId = detailHeader != null ? detailHeader.AccountId.Id : null,
+                           AccountName = detailHeader != null ? detailHeader.AccountId.AccountName : null,
                            JournalDate = det.JournalId != null ? det.JournalId.JournalDate : null,
-                           CostCenterId = det.JournalId.CostCenterId.Id,
-                           det.JournalId.CostCenterId.CostCenterName,
-                           JournalVoucherNo = det.JournalId.JournalVoucherNo,
-                           JournalId = det.JournalId.Id,
+                           CostCenterId = det.JournalId != null ? det.JournalId.CostCenterId.Id : null,
+                           CostCenterName = det.JournalId != null ? det.JournalId.CostCenterId.CostCenterName : null,
+                           JournalVoucherNo = det.JournalId != null ? det.JournalId.JournalVoucherNo : null,
+                           JournalId = det.JournalId != null ? det.JournalId.Id : null,
                            det.JournalId.JournalPic,
                            det.JournalId.JournalPic2,
                            det.JournalDetAmmount,
@@ -239,6 +248,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
                     detToInsert.JournalDetAmmount = det.JournalDetAmmount;
                     detToInsert.JournalDetNo = det.JournalDetNo;
+                    detToInsert.JournalDetEvidenceNo = det.JournalDetEvidenceNo;
                     detToInsert.JournalDetDesc = det.JournalDetDesc;
                     detToInsert.CreatedBy = User.Identity.Name;
                     detToInsert.CreatedDate = DateTime.Now;
@@ -545,19 +555,28 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         public ActionResult GetJsonJournal(string journalId)
         {
             TJournal journal = _tJournalRepository.Get(journalId);
-
             MAccount cashAccount = null;
-            string detailStatus = journal.JournalType == EnumJournalType.CashIn.ToString()
-                                      ? EnumJournalStatus.D.ToString()
-                                      : EnumJournalStatus.K.ToString();
-            cashAccount = (from s in journal.JournalDets
-                           where s.JournalDetStatus == detailStatus
-                           select s.AccountId).First();
 
-            IList<TJournalDet> others = (from s in journal.JournalDets
-                                         where s.JournalDetStatus != detailStatus
-                                         select s).ToList();
-            ListJournalDet = others.ToList();
+            //set account cash for cash in / out
+            if (journal.JournalType.Equals(EnumJournalType.CashIn.ToString()) || journal.JournalType.Equals(EnumJournalType.CashOut.ToString()))
+            {
+                string detailStatus = journal.JournalType == EnumJournalType.CashIn.ToString()
+                                          ? EnumJournalStatus.D.ToString()
+                                          : EnumJournalStatus.K.ToString();
+                cashAccount = (from s in journal.JournalDets
+                               where s.JournalDetStatus == detailStatus
+                               select s.AccountId).First();
+
+                IList<TJournalDet> others = (from s in journal.JournalDets
+                                             where s.JournalDetStatus != detailStatus
+                                             select s).ToList();
+                ListJournalDet = others.ToList();
+            }
+            else
+            {
+                ListJournalDet = journal.JournalDets.ToList();
+            }
+
             var t = new
             {
                 JournalId = journal.Id,

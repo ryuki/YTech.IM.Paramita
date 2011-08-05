@@ -49,7 +49,7 @@
     <h3>
         <a href="#">Pembukuan</a></h3>
     <div class="child-menu-container">
-        <%= Html.ActionLinkForAreas<AccountingController>(c => c.GeneralLedger(), "General Ledger")%>
+        <%= Html.ActionLinkForAreas<AccountingController>(c => c.GeneralLedger(), "Jurnal Umum")%>
         <%= Html.ActionLinkForAreas<AccountingController>(c => c.CashIn(), "Kas Masuk")%>
         <%= Html.ActionLinkForAreas<AccountingController>(c => c.CashOut(), "Kas Keluar")%>
         <%--   

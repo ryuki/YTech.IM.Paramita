@@ -265,9 +265,9 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 
 
     function CalculateTotal() {
-        var price = $('#TransDetPrice').val().replace(",","");
-        var qty = $('#TransDetQty').val().replace(",","");
-        var disc = $('#TransDetDisc').val().replace(",","");
+        var price = $('#TransDetPrice').val().replace(/,/g,"");
+        var qty = $('#TransDetQty').val().replace(/,/g,"");
+        var disc = $('#TransDetDisc').val().replace(/,/g,"");
         var subtotal = (price * qty)
         var total = subtotal - (disc * subtotal / 100);
 
