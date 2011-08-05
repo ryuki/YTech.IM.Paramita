@@ -9,6 +9,7 @@ using YTech.IM.Paramita.Enums;
 using YTech.IM.Paramita.Data.Repository;
 using YTech.IM.Paramita.Core.RepositoryInterfaces;
 using YTech.IM.Paramita.Core;
+using YTech.IM.Paramita.Web.Controllers.ViewModel;
 
 namespace YTech.IM.Paramita.Web.Controllers.Helper
 {
@@ -150,7 +151,100 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
             return attribs.Length > 0 ? attribs[0].StringValue : value.ToString();
         }
 
-
+        public static void SetViewModelByStatus(TransactionFormViewModel viewModel, EnumTransactionStatus enumTransactionStatus)
+        {
+            switch (enumTransactionStatus)
+            {
+                case EnumTransactionStatus.PurchaseOrder:
+                    viewModel.ViewWarehouse = true;
+                    viewModel.ViewWarehouseTo = false;
+                    viewModel.ViewSupplier = true;
+                    viewModel.ViewDate = true;
+                    viewModel.ViewFactur = true;
+                    viewModel.ViewPrice = true;
+                    viewModel.ViewPaymentMethod = false;
+                    viewModel.IsGenerateFactur = true;
+                    break;
+                case EnumTransactionStatus.Purchase:
+                    viewModel.ViewWarehouse = true;
+                    viewModel.ViewWarehouseTo = false;
+                    viewModel.ViewSupplier = true;
+                    viewModel.ViewDate = true;
+                    viewModel.ViewFactur = true;
+                    viewModel.ViewPrice = true;
+                    viewModel.ViewPaymentMethod = true;
+                    viewModel.IsGenerateFactur = false;
+                    break;
+                case EnumTransactionStatus.ReturPurchase:
+                    viewModel.ViewWarehouse = true;
+                    viewModel.ViewWarehouseTo = false;
+                    viewModel.ViewSupplier = true;
+                    viewModel.ViewDate = true;
+                    viewModel.ViewFactur = true;
+                    viewModel.ViewPrice = true;
+                    viewModel.ViewPaymentMethod = true;
+                    viewModel.IsGenerateFactur = true;
+                    break;
+                case EnumTransactionStatus.Sales:
+                    break;
+                case EnumTransactionStatus.ReturSales:
+                    break;
+                case EnumTransactionStatus.Using:
+                    viewModel.ViewWarehouse = true;
+                    viewModel.ViewWarehouseTo = false;
+                    viewModel.ViewSupplier = false;
+                    viewModel.ViewDate = true;
+                    viewModel.ViewFactur = true;
+                    viewModel.ViewPrice = false;
+                    viewModel.ViewPaymentMethod = false;
+                    viewModel.ViewUnitType = true;
+                    viewModel.ViewJobType = true;
+                    viewModel.IsGenerateFactur = true;
+                    break;
+                case EnumTransactionStatus.Mutation:
+                    viewModel.ViewWarehouse = true;
+                    viewModel.ViewWarehouseTo = true;
+                    viewModel.ViewSupplier = false;
+                    viewModel.ViewDate = true;
+                    viewModel.ViewFactur = true;
+                    viewModel.ViewPrice = false;
+                    viewModel.ViewPaymentMethod = false;
+                    viewModel.IsGenerateFactur = true;
+                    break;
+                case EnumTransactionStatus.Adjusment:
+                    viewModel.ViewWarehouse = true;
+                    viewModel.ViewWarehouseTo = false;
+                    viewModel.ViewSupplier = false;
+                    viewModel.ViewDate = true;
+                    viewModel.ViewFactur = true;
+                    viewModel.ViewPrice = false;
+                    viewModel.ViewPaymentMethod = false;
+                    viewModel.IsGenerateFactur = true;
+                    break;
+                case EnumTransactionStatus.Received:
+                    viewModel.ViewWarehouse = true;
+                    viewModel.ViewWarehouseTo = false;
+                    viewModel.ViewSupplier = true;
+                    viewModel.ViewDate = true;
+                    viewModel.ViewFactur = true;
+                    viewModel.ViewPaymentMethod = false;
+                    viewModel.IsGenerateFactur = true;
+                    break;
+                case EnumTransactionStatus.Budgeting:
+                    viewModel.ViewWarehouse = true;
+                    viewModel.ViewWarehouseTo = false;
+                    viewModel.ViewSupplier = false;
+                    viewModel.ViewDate = false;
+                    viewModel.ViewFactur = true;
+                    viewModel.ViewPrice = true;
+                    viewModel.ViewPaymentMethod = false;
+                    viewModel.ViewUnitType = true;
+                    viewModel.ViewJobType = true;
+                    viewModel.IsGenerateFactur = true;
+                    break;
+            }
+            viewModel.Title = Helper.CommonHelper.GetStringValue(enumTransactionStatus);
+        }
 
     }
 }

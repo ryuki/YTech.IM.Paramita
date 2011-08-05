@@ -75,99 +75,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return View(viewModel);
         }
 
-        private void SetViewModelByStatus(TransactionFormViewModel viewModel, EnumTransactionStatus enumTransactionStatus)
+        protected void SetViewModelByStatus(TransactionFormViewModel viewModel, EnumTransactionStatus enumTransactionStatus)
         {
-            switch (enumTransactionStatus)
-            {
-                case EnumTransactionStatus.PurchaseOrder:
-                    viewModel.ViewWarehouse = true;
-                    viewModel.ViewWarehouseTo = false;
-                    viewModel.ViewSupplier = true;
-                    viewModel.ViewDate = true;
-                    viewModel.ViewFactur = true;
-                    viewModel.ViewPrice = true;
-                    viewModel.ViewPaymentMethod = false;
-                    viewModel.IsGenerateFactur = true;
-                    break;
-                case EnumTransactionStatus.Purchase:
-                    viewModel.ViewWarehouse = true;
-                    viewModel.ViewWarehouseTo = false;
-                    viewModel.ViewSupplier = true;
-                    viewModel.ViewDate = true;
-                    viewModel.ViewFactur = true;
-                    viewModel.ViewPrice = true;
-                    viewModel.ViewPaymentMethod = true;
-                    viewModel.IsGenerateFactur = false;
-                    break;
-                case EnumTransactionStatus.ReturPurchase:
-                    viewModel.ViewWarehouse = true;
-                    viewModel.ViewWarehouseTo = false;
-                    viewModel.ViewSupplier = true;
-                    viewModel.ViewDate = true;
-                    viewModel.ViewFactur = true;
-                    viewModel.ViewPrice = true;
-                    viewModel.ViewPaymentMethod = true;
-                    viewModel.IsGenerateFactur = true;
-                    break;
-                case EnumTransactionStatus.Sales:
-                    break;
-                case EnumTransactionStatus.ReturSales:
-                    break;
-                case EnumTransactionStatus.Using:
-                    viewModel.ViewWarehouse = true;
-                    viewModel.ViewWarehouseTo = false;
-                    viewModel.ViewSupplier = false;
-                    viewModel.ViewDate = true;
-                    viewModel.ViewFactur = true;
-                    viewModel.ViewPrice = false;
-                    viewModel.ViewPaymentMethod = false;
-                    viewModel.ViewUnitType = true;
-                    viewModel.ViewJobType = true;
-                    viewModel.IsGenerateFactur = true;
-                    break;
-                case EnumTransactionStatus.Mutation:
-                    viewModel.ViewWarehouse = true;
-                    viewModel.ViewWarehouseTo = true;
-                    viewModel.ViewSupplier = false;
-                    viewModel.ViewDate = true;
-                    viewModel.ViewFactur = true;
-                    viewModel.ViewPrice = false;
-                    viewModel.ViewPaymentMethod = false;
-                    viewModel.IsGenerateFactur = true;
-                    break;
-                case EnumTransactionStatus.Adjusment:
-                    viewModel.ViewWarehouse = true;
-                    viewModel.ViewWarehouseTo = false;
-                    viewModel.ViewSupplier = false;
-                    viewModel.ViewDate = true;
-                    viewModel.ViewFactur = true;
-                    viewModel.ViewPrice = false;
-                    viewModel.ViewPaymentMethod = false;
-                    viewModel.IsGenerateFactur = true;
-                    break;
-                case EnumTransactionStatus.Received:
-                    viewModel.ViewWarehouse = true;
-                    viewModel.ViewWarehouseTo = false;
-                    viewModel.ViewSupplier = true;
-                    viewModel.ViewDate = true;
-                    viewModel.ViewFactur = true;
-                    viewModel.ViewPaymentMethod = false;
-                    viewModel.IsGenerateFactur = true;
-                    break;
-                case EnumTransactionStatus.Budgeting:
-                    viewModel.ViewWarehouse = true;
-                    viewModel.ViewWarehouseTo = false;
-                    viewModel.ViewSupplier = false;
-                    viewModel.ViewDate = false;
-                    viewModel.ViewFactur = true;
-                    viewModel.ViewPrice = true;
-                    viewModel.ViewPaymentMethod = false;
-                    viewModel.ViewUnitType = true;
-                    viewModel.ViewJobType = true;
-                    viewModel.IsGenerateFactur = true;
-                    break;
-            }
-            viewModel.Title = Helper.CommonHelper.GetStringValue(enumTransactionStatus);
+          Helper.CommonHelper.SetViewModelByStatus(viewModel, enumTransactionStatus);
 
             ViewData["CurrentItem"] = viewModel.Title;
             //ViewData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.NotSaved;
@@ -420,13 +330,28 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                            });
             }
 
+            var footer = new
+                             {
+                                 ItemName = "Total",
+                                 TransDetQty =
+                                     transDets.Sum(det => det.TransDetQty).HasValue
+                                         ? transDets.Sum(det => det.TransDetQty).Value.ToString(
+                                             Helper.CommonHelper.NumberFormat)
+                                         : "0",
+                                 TransDetTotal =
+                                     transDets.Sum(det => det.TransDetTotal).HasValue
+                                         ? transDets.Sum(det => det.TransDetTotal).Value.ToString(
+                                             Helper.CommonHelper.NumberFormat)
+                                         : "0"
+                             };
+
             var jsonData = new
             {
                 total = totalPages,
                 page = page,
                 records = totalRecords,
-                rows = result.ToArray()
-                //userdata: {price:1240.00} 
+                rows = result.ToArray(),
+                userdata = footer
             };
             return Json(jsonData, JsonRequestBehavior.AllowGet);
         }

@@ -356,6 +356,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             Check.Require(transStatus != EnumTransactionStatus.None, "transStatus may not be None");
             IList<TTransDet> dets = _tTransDetRepository.GetByDateWarehouse(dateFrom, dateTo, warehouseId, transStatus);
             string TransName = Helper.CommonHelper.GetStringValue(transStatus);
+
+            TransactionFormViewModel viewModel = new TransactionFormViewModel();
+            Helper.CommonHelper.SetViewModelByStatus(viewModel, transStatus);
+
             var list = from det in dets
                        select new
                                   {
@@ -379,14 +383,15 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       det.TransId.TransSubTotal,
                                       det.TransId.TransPaymentMethod,
                                       TransId = det.TransId.Id,
-                                      ViewWarehouse = SetView(det.TransId.TransStatus, EnumViewTrans.ViewWarehouse),
-                                      ViewWarehouseTo = SetView(det.TransId.TransStatus, EnumViewTrans.ViewWarehouseTo),
-                                      ViewSupplier = SetView(det.TransId.TransStatus, EnumViewTrans.ViewSupplier),
-                                      ViewDate = SetView(det.TransId.TransStatus, EnumViewTrans.ViewDate),
-                                      ViewFactur = SetView(det.TransId.TransStatus, EnumViewTrans.ViewFactur),
-                                      ViewPrice = SetView(det.TransId.TransStatus, EnumViewTrans.ViewPrice),
-                                      ViewPaymentMethod =
-                           SetView(det.TransId.TransStatus, EnumViewTrans.ViewPaymentMethod),
+                                      viewModel.ViewWarehouse ,
+                                      viewModel.ViewWarehouseTo,
+                                      viewModel.ViewSupplier,
+                                      viewModel.ViewDate,
+                                      viewModel.ViewFactur,
+                                      viewModel.ViewPrice,
+                                      viewModel.ViewPaymentMethod,
+                                      viewModel.ViewJobType,
+                                      viewModel.ViewUnitType,
                                       TransName,
                                       JobTypeId = det.TransId.JobTypeId != null ? det.TransId.JobTypeId.Id : null,
                                       JobTypeName = det.TransId.JobTypeId != null ? det.TransId.JobTypeId.JobTypeName : null,
