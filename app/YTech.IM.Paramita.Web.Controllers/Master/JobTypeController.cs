@@ -15,15 +15,18 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
     [HandleError]
     public class JobTypeController : Controller
     {
-        public JobTypeController() : this(new MJobTypeRepository())
-         {}
-
         private readonly IMJobTypeRepository _mJobTypeRepository;
-        public JobTypeController(IMJobTypeRepository mJobTypeRepository)
+        private readonly IMAccountRefRepository _mAccountRefRepository;
+        private readonly IMAccountRepository _mAccountRepository;
+        public JobTypeController(IMJobTypeRepository mJobTypeRepository, IMAccountRefRepository mAccountRefRepository, IMAccountRepository mAccountRepository)
         {
             Check.Require(mJobTypeRepository != null, "mJobTypeRepository may not be null");
+            Check.Require(mAccountRefRepository != null, "mAccountRefRepository may not be null");
+            Check.Require(mAccountRepository != null, "mAccountRepository may not be null");
 
             _mJobTypeRepository = mJobTypeRepository;
+            this._mAccountRefRepository = mAccountRefRepository;
+            this._mAccountRepository = mAccountRepository;
         }
 
         public ActionResult Index()
@@ -52,6 +55,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                             jobType.Id, 
                             jobType.JobTypeName, 
                             jobType.JobTypeStatus,
+                             GetAccountRef(jobType.Id) != null ? GetAccountRef(jobType.Id).AccountId.Id : null,
+                         GetAccountRef(jobType.Id) != null ? GetAccountRef(jobType.Id).AccountId.AccountName : null,
                             jobType.JobTypeDesc
                         }
                     }).ToArray()
@@ -61,19 +66,39 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             return Json(jsonData, JsonRequestBehavior.AllowGet);
         }
 
+        private MAccountRef GetAccountRef(string jobTypeId)
+        {
+            MAccountRef accountRef = _mAccountRefRepository.GetByRefTableId(EnumReferenceTable.JobType, jobTypeId);
+            if (accountRef != null)
+            {
+                return accountRef;
+            }
+            return null;
+        }
+
+        [Transaction]
         public ActionResult Insert(MJobType viewModel, FormCollection formCollection)
         {
-            MJobType mJobTypeToInsert = new MJobType();
-            TransferFormValuesTo(mJobTypeToInsert, viewModel);
-            mJobTypeToInsert.SetAssignedIdTo(viewModel.Id);
-            mJobTypeToInsert.CreatedDate = DateTime.Now;
-            mJobTypeToInsert.CreatedBy = User.Identity.Name;
-            mJobTypeToInsert.DataStatus = EnumDataStatus.New.ToString();
-
-            _mJobTypeRepository.Save(mJobTypeToInsert);
-
             try
             {
+                _mJobTypeRepository.DbContext.BeginTransaction();
+
+                MJobType mJobTypeToInsert = new MJobType();
+                TransferFormValuesTo(mJobTypeToInsert, viewModel);
+                mJobTypeToInsert.SetAssignedIdTo(viewModel.Id);
+                mJobTypeToInsert.CreatedDate = DateTime.Now;
+                mJobTypeToInsert.CreatedBy = User.Identity.Name;
+                mJobTypeToInsert.DataStatus = EnumDataStatus.New.ToString();
+
+                _mJobTypeRepository.Save(mJobTypeToInsert);
+
+                MAccountRef accountRef = new MAccountRef();
+                accountRef.SetAssignedIdTo(Guid.NewGuid().ToString());
+                accountRef.ReferenceId = mJobTypeToInsert.Id;
+                accountRef.ReferenceTable = EnumReferenceTable.JobType.ToString();
+                accountRef.ReferenceType = EnumReferenceTable.JobType.ToString();
+                accountRef.AccountId = _mAccountRepository.Get(formCollection["AccountId"]);
+                _mAccountRefRepository.Save(accountRef);
                 _mJobTypeRepository.DbContext.CommitChanges();
             }
             catch (Exception e)
@@ -116,16 +141,39 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         [Transaction]
         public ActionResult Update(MJobType viewModel, FormCollection formCollection)
         {
-            MJobType mJobTypeToUpdate = _mJobTypeRepository.Get(viewModel.Id);
-            TransferFormValuesTo(mJobTypeToUpdate, viewModel);
-            mJobTypeToUpdate.ModifiedDate = DateTime.Now;
-            mJobTypeToUpdate.ModifiedBy = User.Identity.Name;
-            mJobTypeToUpdate.DataStatus = EnumDataStatus.Updated.ToString();
-
-            _mJobTypeRepository.Update(mJobTypeToUpdate);
-
             try
             {
+                _mJobTypeRepository.DbContext.BeginTransaction();
+
+                MJobType mJobTypeToUpdate = _mJobTypeRepository.Get(viewModel.Id);
+                TransferFormValuesTo(mJobTypeToUpdate, viewModel);
+                mJobTypeToUpdate.ModifiedDate = DateTime.Now;
+                mJobTypeToUpdate.ModifiedBy = User.Identity.Name;
+                mJobTypeToUpdate.DataStatus = EnumDataStatus.Updated.ToString();
+
+                _mJobTypeRepository.Update(mJobTypeToUpdate);
+
+                bool isSave = false;
+                MAccountRef accountRef = GetAccountRef(mJobTypeToUpdate.Id);
+                if (accountRef == null)
+                {
+                    accountRef = new MAccountRef();
+                    accountRef.SetAssignedIdTo(Guid.NewGuid().ToString());
+                    isSave = true;
+                }
+                accountRef.ReferenceId = mJobTypeToUpdate.Id;
+                accountRef.ReferenceTable = EnumReferenceTable.JobType.ToString();
+                accountRef.ReferenceType = EnumReferenceTable.JobType.ToString();
+                accountRef.AccountId = _mAccountRepository.Get(formCollection["AccountId"]);
+                if (isSave)
+                {
+                    _mAccountRefRepository.Save(accountRef);
+                }
+                else
+                {
+                    _mAccountRefRepository.Update(accountRef);
+
+                }
                 _mJobTypeRepository.DbContext.CommitChanges();
             }
             catch (Exception e)

@@ -50,6 +50,7 @@
     <Compile Include="EnumMonth.cs" />
     <Compile Include="EnumPaymentMethod.cs" />
     <Compile Include="EnumPeriodType.cs" />
+    <Compile Include="EnumReferenceTable.cs" />
     <Compile Include="EnumReferenceType.cs" />
     <Compile Include="EnumReports.cs" />
     <Compile Include="EnumSaveState.cs" />
