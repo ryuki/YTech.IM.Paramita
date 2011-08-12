@@ -340,6 +340,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       det.TransDetDisc,
                                       ItemId = det.ItemId.Id,
                                       det.ItemId.ItemName,
+                                      ItemUom =  det.ItemId.ItemUom.ItemUomName,
                                       SupplierName = det.TransId.TransBy,
                                       det.TransId.TransFactur,
                                       det.TransId.TransDate,

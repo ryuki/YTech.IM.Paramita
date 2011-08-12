@@ -414,7 +414,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             url: '<%= Url.Action("List", "Inventory", new { usePrice = ViewData.Model.ViewPrice} ) %>',
             datatype: 'json',
             mtype: 'GET',
-            colNames: ['Id', 'Produk', 'Produk', 'Kuantitas',
+            colNames: ['Id', 'Produk', 'Produk', 'Satuan','Kuantitas',
             <% if (ViewData.Model.ViewPrice)
                {%> 'Harga', 'Diskon', 'Total',
                    <%
@@ -427,6 +427,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                         "elmsuffix": "&nbsp;<img src='" + imgLov + "' style='cursor:hand;' id='imgItemId' />"
                     } }, 
                     { name: 'ItemName', index: 'ItemName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { edithidden: true} },
+                    { name: 'ItemUom', index: 'ItemUom', width: 200, align: 'left', editable: false, edittype: 'text', editrules: { edithidden: true} },
 //                    { name: 'ItemId', index: 'ItemId', width: 200, align: 'left', editable: true, edittype: 'select', editrules: { edithidden: true }, hidden: true },
 //                    { name: 'ItemName', index: 'ItemName', width: 200, align: 'left', editable: false, edittype: 'select', editrules: { edithidden: true} },
                      { name: 'TransDetQty', index: 'TransDetQty', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false  },

@@ -20,11 +20,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
     [HandleError]
     public class InventoryController : Controller
     {
-        public InventoryController()
-            : this(new TTransRepository(), new MWarehouseRepository(), new MSupplierRepository(), new MItemRepository(), new TStockCardRepository(), new TStockItemRepository(), new TTransRefRepository(), new TStockRepository(), new TStockRefRepository(), new MUnitTypeRepository(), new MJobTypeRepository())
-        {
-        }
-
         private readonly ITTransRepository _tTransRepository;
         private readonly IMWarehouseRepository _mWarehouseRepository;
         private readonly IMSupplierRepository _mSupplierRepository;
@@ -36,8 +31,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private readonly ITStockRefRepository _tStockRefRepository;
         private readonly IMUnitTypeRepository _mUnitTypeRepository;
         private readonly IMJobTypeRepository _mJobTypeRepository;
+        private readonly IMItemUomRepository _mItemUomRepository;
 
-        public InventoryController(ITTransRepository tTransRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository, IMItemRepository mItemRepository, ITStockCardRepository tStockCardRepository, ITStockItemRepository tStockItemRepository, ITTransRefRepository tTransRefRepository, ITStockRepository tStockRepository, ITStockRefRepository tStockRefRepository, IMUnitTypeRepository mUnitTypeRepository, IMJobTypeRepository mJobTypeRepository)
+        public InventoryController(ITTransRepository tTransRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository, IMItemRepository mItemRepository, ITStockCardRepository tStockCardRepository, ITStockItemRepository tStockItemRepository, ITTransRefRepository tTransRefRepository, ITStockRepository tStockRepository, ITStockRefRepository tStockRefRepository, IMUnitTypeRepository mUnitTypeRepository, IMJobTypeRepository mJobTypeRepository, IMItemUomRepository mItemUomRepository)
         {
             Check.Require(tTransRepository != null, "tTransRepository may not be null");
             Check.Require(mWarehouseRepository != null, "mWarehouseRepository may not be null");
@@ -50,6 +46,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             Check.Require(tStockRefRepository != null, "tStockRefRepository may not be null");
             Check.Require(mUnitTypeRepository != null, "mUnitTypeRepository may not be null");
             Check.Require(mJobTypeRepository != null, "mJobTypeRepository may not be null");
+            Check.Require(mItemUomRepository != null, "mItemUomRepository may not be null");
 
             this._tTransRepository = tTransRepository;
             this._mWarehouseRepository = mWarehouseRepository;
@@ -62,6 +59,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             this._tStockRefRepository = tStockRefRepository;
             _mUnitTypeRepository = mUnitTypeRepository;
             _mJobTypeRepository = mJobTypeRepository;
+            this._mItemUomRepository = mItemUomRepository;
         }
 
         public ActionResult Index()
@@ -77,7 +75,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         protected void SetViewModelByStatus(TransactionFormViewModel viewModel, EnumTransactionStatus enumTransactionStatus)
         {
-          Helper.CommonHelper.SetViewModelByStatus(viewModel, enumTransactionStatus);
+            Helper.CommonHelper.SetViewModelByStatus(viewModel, enumTransactionStatus);
 
             ViewData["CurrentItem"] = viewModel.Title;
             //ViewData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.NotSaved;
@@ -290,6 +288,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [Transaction]
         public virtual ActionResult List(string sidx, string sord, int page, int rows, string usePrice)
         {
+            _tTransRepository.DbContext.BeginTransaction();
+
             int totalRecords = 0;
             var transDets = ListDetTrans;
             int pageSize = rows;
@@ -305,6 +305,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                                          det.Id,
                                                          det.ItemId != null ? det.ItemId.Id : null,
                                                          det.ItemId != null ? det.ItemId.ItemName : null,
+                                                        //  det.ItemId != null ? det.ItemId.ItemUom.ItemUomName : null,
+                                                        Helper.CommonHelper.GetItemUomName(_mItemUomRepository,det.ItemId),
                                                          det.TransDetQty.HasValue ?  det.TransDetQty.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                                                         det.TransDetPrice.HasValue ?  det.TransDetPrice.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                                                         det.TransDetDisc.HasValue ?   det.TransDetDisc.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
@@ -324,6 +326,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                                          det.Id,
                                                          det.ItemId != null ? det.ItemId.Id : null,
                                                          det.ItemId != null ? det.ItemId.ItemName : null,
+                                                        Helper.CommonHelper.GetItemUomName(_mItemUomRepository,det.ItemId),
                                                        det.TransDetQty.HasValue ?    det.TransDetQty.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                                                          det.TransDetDesc
                                                      }

@@ -40,6 +40,19 @@ namespace YTech.IM.Paramita.Core.Master
         public virtual byte[] RowVersion { get; set; }
 
         public virtual IList<MItemUom> ItemUoms { get; protected set; }
+
+        public virtual MItemUom ItemUom
+        {
+            get
+            {
+                if (ItemUoms != null)
+                    if (ItemUoms.Count > 0)
+                    {
+                        return ItemUoms[0];
+                    }
+                return new MItemUom();
+            }
+        }
         #region Implementation of IHasAssignedId<string>
 
         public virtual void SetAssignedIdTo(string assignedId)

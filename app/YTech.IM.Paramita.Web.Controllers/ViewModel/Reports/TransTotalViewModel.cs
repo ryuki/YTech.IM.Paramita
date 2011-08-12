@@ -11,6 +11,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel.Reports
     public class TransTotalViewModel : TTransDet
     {
         public string ItemName { get; set; }
+        public string ItemUom { get; set; }
         public string SupplierName { get; set; }
         public string TransFactur { get; set; }
         public DateTime? TransDate { get; set; }

@@ -8,7 +8,7 @@ namespace YTech.IM.Paramita.Core.Master
 {
     public class MItemUom : EntityWithTypedId<string>, IHasAssignedId<string>
     {
-        protected MItemUom() { }
+        public MItemUom() { }
 
         public MItemUom(MItem item)
         {

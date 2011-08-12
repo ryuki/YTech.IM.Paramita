@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using YTech.IM.Paramita.Core.Master;
 using YTech.IM.Paramita.Core.Transaction;
 using YTech.IM.Paramita.Enums;
 using YTech.IM.Paramita.Data.Repository;
@@ -61,7 +62,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
 
         public static string GetFacturNo(EnumTransactionStatus transactionStatus, bool automatedIncrease)
         {
-            TReference refer = GetReference((EnumReferenceType)Enum.Parse(typeof(EnumReferenceType), transactionStatus.ToString())); 
+            TReference refer = GetReference((EnumReferenceType)Enum.Parse(typeof(EnumReferenceType), transactionStatus.ToString()));
             decimal no = Convert.ToDecimal(refer.ReferenceValue) + 1;
             refer.ReferenceValue = no.ToString();
             if (automatedIncrease)
@@ -69,7 +70,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                 ITReferenceRepository referenceRepository = new TReferenceRepository();
                 referenceRepository.Update(refer);
                 referenceRepository.DbContext.CommitChanges();
-            } 
+            }
 
             string tipeTrans = string.Empty;
             char[] charTransArray = transactionStatus.ToString().ToCharArray();
@@ -98,7 +99,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
 
         public static string GetVoucherNo(bool automatedIncrease)
         {
-            TReference refer = GetReference(EnumReferenceType.VoucherNo); 
+            TReference refer = GetReference(EnumReferenceType.VoucherNo);
             decimal no = Convert.ToDecimal(refer.ReferenceValue) + 1;
             refer.ReferenceValue = no.ToString();
             if (automatedIncrease)
@@ -246,5 +247,17 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
             viewModel.Title = Helper.CommonHelper.GetStringValue(enumTransactionStatus);
         }
 
+        internal static string GetItemUomName(IMItemUomRepository mItemUomRepository, MItem mItem)
+        {
+            if (mItem != null)
+            {
+                MItemUom itemUom = mItemUomRepository.GetByItem(mItem);
+                if (itemUom != null)
+                {
+                    return itemUom.ItemUomName;
+                }
+            }
+            return string.Empty;
+        }
     }
 }
