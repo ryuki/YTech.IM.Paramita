@@ -7,7 +7,9 @@ namespace YTech.IM.Paramita.Enums
 {
     public enum EnumReferenceTable
     {
-         Warehouse,
-        JobType
+        Warehouse,
+        JobType,
+        Supplier,
+        Transaction
     }
 }

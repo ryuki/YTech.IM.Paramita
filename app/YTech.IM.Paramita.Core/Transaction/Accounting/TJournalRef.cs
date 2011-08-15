@@ -11,7 +11,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Accounting
     {
         [DomainSignature]
         [NotNull, NotEmpty]
-        public virtual TJournal JournalId { get; protected set; }
+        public virtual TJournal JournalId { get; set; }
         public virtual string ReferenceTable { get; set; }
         public virtual string ReferenceType { get; set; }
         public virtual string ReferenceId { get; set; }

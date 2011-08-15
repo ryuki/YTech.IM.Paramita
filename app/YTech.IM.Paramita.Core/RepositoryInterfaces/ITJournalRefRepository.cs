@@ -8,5 +8,6 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
     public interface ITJournalRefRepository : INHibernateRepositoryWithTypedId<TJournalRef, string>
     {
+        TJournalRef GetByReference(Enums.EnumReferenceTable enumReferenceTable, string transStatus, string transId);
     }
 }

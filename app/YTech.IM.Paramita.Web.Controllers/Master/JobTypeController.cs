@@ -98,6 +98,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                 accountRef.ReferenceTable = EnumReferenceTable.JobType.ToString();
                 accountRef.ReferenceType = EnumReferenceTable.JobType.ToString();
                 accountRef.AccountId = _mAccountRepository.Get(formCollection["AccountId"]);
+                accountRef.CreatedDate = DateTime.Now;
+                accountRef.CreatedBy = User.Identity.Name;
+                accountRef.DataStatus = EnumDataStatus.New.ToString();
                 _mAccountRefRepository.Save(accountRef);
                 _mJobTypeRepository.DbContext.CommitChanges();
             }
@@ -159,7 +162,16 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                 {
                     accountRef = new MAccountRef();
                     accountRef.SetAssignedIdTo(Guid.NewGuid().ToString());
+                    accountRef.CreatedDate = DateTime.Now;
+                    accountRef.CreatedBy = User.Identity.Name;
+                    accountRef.DataStatus = EnumDataStatus.New.ToString();
                     isSave = true;
+                }
+                else
+                {
+                    accountRef.ModifiedDate = DateTime.Now;
+                    accountRef.ModifiedBy = User.Identity.Name;
+                    accountRef.DataStatus = EnumDataStatus.Updated.ToString();
                 }
                 accountRef.ReferenceId = mJobTypeToUpdate.Id;
                 accountRef.ReferenceTable = EnumReferenceTable.JobType.ToString();

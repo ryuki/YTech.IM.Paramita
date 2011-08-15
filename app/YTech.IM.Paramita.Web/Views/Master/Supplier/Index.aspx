@@ -8,11 +8,28 @@
     </div>
     <div id="listPsetcols" class="scroll" style="text-align: center;">
     </div>
+    <div id="dialog" title="Status">
+        <p>
+        </p>
+    </div>
+    <div id='popup'>
+        <iframe width='100%' height='380px' id="popup_frame" frameborder="0"></iframe>
+    </div>
     <script type="text/javascript">
         $(document).ready(function () {
 
             $("#dialog").dialog({
                 autoOpen: false
+            });
+
+            $("#popup").dialog({
+                autoOpen: false,
+                height: 420,
+                width: '80%',
+                modal: true,
+                close: function (event, ui) {
+
+                }
             });
 
             var editDialog = {
@@ -32,6 +49,9 @@
                 }
                 , afterShowForm: function (eparams) {
                     $('#Id').attr('disabled', 'disabled');
+                    $('#imgAccountId').click(function () {
+                        OpenPopupAccountSearch();
+                    });
                 }
                 , width: "400"
                 , afterComplete: function (response, postdata, formid) {
@@ -46,6 +66,9 @@
                 , modal: true
                 , afterShowForm: function (eparams) {
                     $('#Id').removeAttr('disabled');
+                    $('#imgAccountId').click(function () {
+                        OpenPopupAccountSearch();
+                    });
                 }
                 , afterComplete: function (response, postdata, formid) {
                     $('#dialog p:first').text(response.responseText);
@@ -70,15 +93,21 @@
             $.jgrid.edit.editCaption = "Edit Supplier";
             $.jgrid.del.caption = "Hapus Supplier";
             $.jgrid.del.msg = "Anda yakin menghapus Supplier yang dipilih?";
+            var imgLov = '<%= Url.Content("~/Content/Images/window16.gif") %>';
             $("#list").jqGrid({
                 url: '<%= Url.Action("List", "Supplier") %>',
                 datatype: 'json',
                 mtype: 'GET',
-                colNames: ['Kode Supplier', 'Nama', 'Maksimal Hutang', 'Status', 'Alamat', '', '', 'Telp', 'Kota', 'Keterangan'],
+                colNames: ['Kode Supplier', 'Nama', 'Akun Hutang', 'Nama Akun', 'Maksimal Hutang', 'Status', 'Alamat', '', '', 'Telp', 'Kota', 'Keterangan'],
                 colModel: [
                     { name: 'Id', index: 'Id', width: 100, align: 'left', key: true, editrules: { required: true, edithidden: false }, hidedlg: true, hidden: false, editable: true },
                     { name: 'SupplierName', index: 'SupplierName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { required: true }, formoptions: { elmsuffix: ' *'} },
-
+                       { name: 'AccountId', index: 'AccountId', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { required: false },
+                           formoptions: {
+                               "elmsuffix": "&nbsp;<img src='" + imgLov + "' style='cursor:hand;' id='imgAccountId' />"
+                           }
+                       },
+                   { name: 'AccountName', index: 'AccountName', width: 200, align: 'left', editable: true, edittype: 'text', editrules: { required: false} },
                    { name: 'SupplierMaxDebt', index: 'SupplierMaxDebt', width: 200, sortable: false, align: 'right', editable: true, editrules: { required: false },
                        editoptions: {
                            dataInit: function (elem) {
@@ -117,10 +146,21 @@
                 insertDialog,
                 deleteDialog
             );
-        });       
+            });
+            function OpenPopupAccountSearch() {
+                var popup_frame = $("#popup_frame");
+                var new_url = '<%= Url.Content("~/Master/Account/Search") %>';
+                if (popup_frame.attr("src") != new_url) {
+                    popup_frame.attr("src", new_url);
+                }
+                $("#popup").dialog("open");
+                return false;
+            }
+
+            function SetAccountDetail(accountId, accountName) {
+                $("#popup").dialog("close");
+                $('#AccountId').val(accountId);
+                $('#AccountName').val(accountName);
+            }        
     </script>
-    <div id="dialog" title="Status">
-        <p>
-        </p>
-    </div>
 </asp:Content>

@@ -54,5 +54,24 @@ namespace YTech.IM.Paramita.Data.Repository
             IList<MAccount> list = criteria.List<MAccount>();
             return list;
         }
+
+        public IList<string> GetLevel2Accounts(string accountCatType)
+        {
+            IQuery q = Session.CreateQuery(@"
+                select distinct acc.Id
+                from MAccount as acc
+                where acc.AccountParentId.Id in (
+                        select distinct acc.Id
+                        from MAccount as acc
+                        where acc.AccountCatId.AccountCatType = :accountCatType
+                            and acc.AccountParentId is null
+                        )
+                    or ( acc.AccountCatId.AccountCatType = :accountCatType
+                    and acc.AccountParentId is null )
+            ");
+            if (!string.IsNullOrEmpty(accountCatType))
+                q.SetString("accountCatType", accountCatType);
+            return q.List<string>();
+        }
     }
 }

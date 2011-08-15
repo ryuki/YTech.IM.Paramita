@@ -19,6 +19,14 @@ namespace YTech.IM.Paramita.Enums
         Mutation,
         Adjusment,
         Received,
-        Budgeting
+        Budgeting,
+
+        DefaultWarehouse,
+        PurchaseAccountId,
+        CashAccountId,
+        HppAccountId,
+        SalesAccountId,
+        ReturPurchaseAccountId,
+        ReturSalesAccountId
     }
 }

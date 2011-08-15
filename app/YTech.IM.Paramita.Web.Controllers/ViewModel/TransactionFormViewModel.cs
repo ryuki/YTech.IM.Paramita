@@ -17,9 +17,12 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
 {
     public class TransactionFormViewModel
     {
-        public static TransactionFormViewModel CreateTransactionFormViewModel(ITTransRepository transRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository, IMUnitTypeRepository mUnitTypeRepository, IMJobTypeRepository mJobTypeRepository)
+        public static TransactionFormViewModel Create(EnumTransactionStatus enumTransactionStatus, ITTransRepository transRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository, IMUnitTypeRepository mUnitTypeRepository, IMJobTypeRepository mJobTypeRepository)
         {
             TransactionFormViewModel viewModel = new TransactionFormViewModel();
+
+            viewModel.Trans = SetNewTrans(enumTransactionStatus);
+            Helper.CommonHelper.SetViewModelByStatus(viewModel, enumTransactionStatus);
 
             IList<MWarehouse> list = mWarehouseRepository.GetAll();
             MWarehouse mWarehouse = new MWarehouse();
@@ -52,12 +55,22 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
 
             viewModel.PaymentMethodList = new SelectList(values, "Id", "Name");
 
-            viewModel.ViewWarehouseTo = false;
-            viewModel.ViewSupplier = false;
-            viewModel.ViewDate = false;
-            viewModel.ViewFactur = false;
+            //viewModel.ViewWarehouseTo = false;
+            //viewModel.ViewSupplier = false;
+            //viewModel.ViewDate = false;
+            //viewModel.ViewFactur = false;
 
             return viewModel;
+        }
+
+        private static TTrans SetNewTrans(EnumTransactionStatus enumTransactionStatus)
+        {
+            TTrans trans = new TTrans();
+            trans.TransDate = DateTime.Today;
+            trans.TransFactur = Helper.CommonHelper.GetFacturNo(enumTransactionStatus, false);
+            trans.SetAssignedIdTo(Guid.NewGuid().ToString());
+            trans.TransStatus = enumTransactionStatus.ToString();
+            return trans;
         }
 
         public TTrans Trans { get; internal set; }
@@ -81,6 +94,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public string Title { get; internal set; }
         public bool IsAddStock { get; internal set; }
         public bool IsGenerateFactur { get; internal set; }
+        public bool IsCalculateStock { get; internal set; }
 
     }
 }

@@ -8,5 +8,6 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
     public interface ITStockRefRepository : INHibernateRepositoryWithTypedId<TStockRef, string>
     {
+        void DeleteByTransDetId(object[] detailIdList);
     }
 }

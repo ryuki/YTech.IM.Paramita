@@ -775,7 +775,6 @@
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
                                       </Textbox>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell>
@@ -970,6 +969,7 @@
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
                                       </Textbox>
+                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                 </TablixCells>
@@ -1144,6 +1144,9 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>TransDetQty1</rd:DefaultName>
+                                        <Visibility>
+                                          <Hidden>=not Fields!ViewPrice.Value</Hidden>
+                                        </Visibility>
                                         <Style>
                                           <Border>
                                             <Color>#e5e5e5</Color>
@@ -1181,6 +1184,9 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>Textbox18</rd:DefaultName>
+                                        <Visibility>
+                                          <Hidden>=not Fields!ViewPrice.Value</Hidden>
+                                        </Visibility>
                                         <Style>
                                           <Border>
                                             <Color>#e5e5e5</Color>
@@ -1218,6 +1224,9 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>Textbox19</rd:DefaultName>
+                                        <Visibility>
+                                          <Hidden>=not Fields!ViewPrice.Value</Hidden>
+                                        </Visibility>
                                         <Style>
                                           <Border>
                                             <Color>#e5e5e5</Color>
@@ -1256,6 +1265,9 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>TransDetTotal1</rd:DefaultName>
+                                        <Visibility>
+                                          <Hidden>=not Fields!ViewPrice.Value</Hidden>
+                                        </Visibility>
                                         <Style>
                                           <Border>
                                             <Color>#e5e5e5</Color>

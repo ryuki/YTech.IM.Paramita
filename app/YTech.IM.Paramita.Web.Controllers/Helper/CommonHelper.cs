@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using YTech.IM.Paramita.Core.Master;
 using YTech.IM.Paramita.Core.Transaction;
+using YTech.IM.Paramita.Core.Transaction.Inventory;
 using YTech.IM.Paramita.Enums;
 using YTech.IM.Paramita.Data.Repository;
 using YTech.IM.Paramita.Core.RepositoryInterfaces;
@@ -165,6 +166,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                     viewModel.ViewPrice = true;
                     viewModel.ViewPaymentMethod = false;
                     viewModel.IsGenerateFactur = true;
+                    viewModel.IsCalculateStock = false;
+                    viewModel.IsAddStock = true;
                     break;
                 case EnumTransactionStatus.Purchase:
                     viewModel.ViewWarehouse = true;
@@ -175,6 +178,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                     viewModel.ViewPrice = true;
                     viewModel.ViewPaymentMethod = true;
                     viewModel.IsGenerateFactur = false;
+                    viewModel.IsCalculateStock = false;
+                    viewModel.IsAddStock = true;
                     break;
                 case EnumTransactionStatus.ReturPurchase:
                     viewModel.ViewWarehouse = true;
@@ -185,6 +190,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                     viewModel.ViewPrice = true;
                     viewModel.ViewPaymentMethod = true;
                     viewModel.IsGenerateFactur = true;
+                    viewModel.IsCalculateStock = false;
+                    viewModel.IsAddStock = true;
                     break;
                 case EnumTransactionStatus.Sales:
                     break;
@@ -201,6 +208,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                     viewModel.ViewUnitType = true;
                     viewModel.ViewJobType = true;
                     viewModel.IsGenerateFactur = true;
+                    viewModel.IsCalculateStock = true;
+                    viewModel.IsAddStock = false;
                     break;
                 case EnumTransactionStatus.Mutation:
                     viewModel.ViewWarehouse = true;
@@ -211,6 +220,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                     viewModel.ViewPrice = false;
                     viewModel.ViewPaymentMethod = false;
                     viewModel.IsGenerateFactur = true;
+                    viewModel.IsCalculateStock = true;
+                    viewModel.IsAddStock = false;
                     break;
                 case EnumTransactionStatus.Adjusment:
                     viewModel.ViewWarehouse = true;
@@ -221,6 +232,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                     viewModel.ViewPrice = false;
                     viewModel.ViewPaymentMethod = false;
                     viewModel.IsGenerateFactur = true;
+                    viewModel.IsCalculateStock = true;
+                    viewModel.IsAddStock = false;
                     break;
                 case EnumTransactionStatus.Received:
                     viewModel.ViewWarehouse = true;
@@ -228,8 +241,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                     viewModel.ViewSupplier = true;
                     viewModel.ViewDate = true;
                     viewModel.ViewFactur = true;
+                    viewModel.ViewPrice = true;
                     viewModel.ViewPaymentMethod = false;
                     viewModel.IsGenerateFactur = true;
+                    viewModel.IsCalculateStock = true;
+                    viewModel.IsAddStock = true;
                     break;
                 case EnumTransactionStatus.Budgeting:
                     viewModel.ViewWarehouse = true;
@@ -242,9 +258,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                     viewModel.ViewUnitType = true;
                     viewModel.ViewJobType = true;
                     viewModel.IsGenerateFactur = true;
+                    viewModel.IsCalculateStock = false;
+                    viewModel.IsAddStock = true;
                     break;
             }
-            viewModel.Title = Helper.CommonHelper.GetStringValue(enumTransactionStatus);
+            viewModel.Title = GetStringValue(enumTransactionStatus);
         }
 
         internal static string GetItemUomName(IMItemUomRepository mItemUomRepository, MItem mItem)
@@ -258,6 +276,20 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                 }
             }
             return string.Empty;
+        }
+
+        internal static bool CheckStock(MWarehouse mWarehouse, MItem item, decimal? qty)
+        {
+            ITStockItemRepository stockItemRepository = new TStockItemRepository();
+            TStockItem stockItem = stockItemRepository.GetByItemAndWarehouse(item, mWarehouse);
+            if (stockItem != null)
+            {
+                if (stockItem.ItemStock > qty)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

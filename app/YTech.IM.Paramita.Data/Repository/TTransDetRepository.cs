@@ -93,5 +93,29 @@ namespace YTech.IM.Paramita.Data.Repository
                 q.SetString("warehouseId", warehouseId);
             return q.List<TTransDet>();
         }
+
+        public IList<TTransDet> GetListById(object[] detailIdList)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendLine(@"   select det
+                                from TTransDet det
+                                        where det.Id in (:detailIdList) ");
+
+            IQuery q = Session.CreateQuery(sql.ToString());
+            q.SetParameterList("detailIdList", detailIdList);
+            return q.List<TTransDet>();
+        }
+
+        public void DeleteById(object[] detailIdList)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendLine(@"   delete
+                                from TTransDet det
+                                        where det.Id in (:detailIdList) ");
+
+            IQuery q = Session.CreateQuery(sql.ToString());
+            q.SetParameterList("detailIdList", detailIdList);
+            q.ExecuteUpdate();
+        }
     }
 }

@@ -43,6 +43,33 @@ namespace YTech.IM.Paramita.Core.Transaction.Inventory
 
         public virtual IList<TTransDet> TransDets { get; protected set; }
 
+        public virtual decimal? TransGrandTotal
+        {
+            get
+            {
+                if (!TransSubTotal.HasValue)
+                {
+                    return 0;
+                }
+                decimal grandtotal = TransSubTotal.Value;
+                if (!TransDiscount.HasValue && !TransTax.HasValue)
+                {
+                    return grandtotal;
+                }
+                if (TransDiscount.HasValue)
+                {
+                    decimal disc = TransDiscount.Value;
+                    grandtotal = (grandtotal - (grandtotal * disc / 100));
+                }
+                if (TransTax.HasValue)
+                {
+                    decimal tax = TransTax.Value;
+                    grandtotal = (grandtotal - (grandtotal * tax / 100));
+                }
+                return grandtotal;
+            }
+        }
+
         public virtual string DataStatus { get; set; }
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? CreatedDate { get; set; }

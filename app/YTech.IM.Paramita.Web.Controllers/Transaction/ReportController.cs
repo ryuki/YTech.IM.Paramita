@@ -480,17 +480,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         private ReportDataSource GetRecAccount(EnumAccountCatType accountCatType, string costCenterId, string recPeriodId)
         {
-            IList<TRecAccount> dets;
-            TRecPeriod recPeriod = _tRecPeriodRepository.Get(recPeriodId);
-            if (!string.IsNullOrEmpty(costCenterId))
-            {
-                MCostCenter costCenter = _mCostCenterRepository.Get(costCenterId);
-                dets = _tRecAccountRepository.GetByAccountType(accountCatType.ToString(), costCenter, recPeriod);
-            }
-            else
-            {
-                dets = _tRecAccountRepository.GetByAccountType(accountCatType.ToString(), null, recPeriod);
-            }
+            //get account to level 2
+            IList<string> listLevel2Account = _mAccountRepository.GetLevel2Accounts(accountCatType.ToString());
+
+            IList<TRecAccount> dets = _tRecAccountRepository.GetByAccount(listLevel2Account, costCenterId, recPeriodId);
+            //IList<TRecAccount> dets = _tRecAccountRepository.GetByAccountType(accountCatType.ToString(), costCenterId, recPeriodId);
 
             var list = from det in dets
                        select new

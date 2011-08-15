@@ -9,6 +9,8 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
     public interface ITRecAccountRepository : INHibernateRepositoryWithTypedId<TRecAccount, string>
     {
         void RunClosing (TRecPeriod recPeriod);
-        IList<TRecAccount> GetByAccountType(string accountCatType, MCostCenter costCenter, TRecPeriod recPeriod);
+        IList<TRecAccount> GetByAccountType(string accountCatType, string costCenterId, string recPeriodId);
+
+        IList<TRecAccount> GetByAccount(IList<string> listAccount, string costCenterId, string recPeriodId);
     }
 }

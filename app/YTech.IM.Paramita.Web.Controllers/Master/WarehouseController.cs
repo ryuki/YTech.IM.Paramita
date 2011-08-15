@@ -131,6 +131,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                 accountRef.ReferenceTable = EnumReferenceTable.Warehouse.ToString();
                 accountRef.ReferenceType = EnumReferenceTable.Warehouse.ToString();
                 accountRef.AccountId = _mAccountRepository.Get(formCollection["AccountId"]);
+                accountRef.CreatedDate = DateTime.Now;
+                accountRef.CreatedBy = User.Identity.Name;
+                accountRef.DataStatus = EnumDataStatus.New.ToString();
                 _mAccountRefRepository.Save(accountRef);
 
                 _mWarehouseRepository.DbContext.CommitChanges();
@@ -204,7 +207,16 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                 {
                     accountRef = new MAccountRef();
                     accountRef.SetAssignedIdTo(Guid.NewGuid().ToString());
+                    accountRef.CreatedDate = DateTime.Now;
+                    accountRef.CreatedBy = User.Identity.Name;
+                    accountRef.DataStatus = EnumDataStatus.New.ToString();
                     isSave = true;
+                }
+                else
+                {
+                    accountRef.ModifiedDate = DateTime.Now;
+                    accountRef.ModifiedBy = User.Identity.Name;
+                    accountRef.DataStatus = EnumDataStatus.Updated.ToString();
                 }
                 accountRef.ReferenceId = mWarehouseToUpdate.Id;
                 accountRef.ReferenceTable = EnumReferenceTable.Warehouse.ToString();
