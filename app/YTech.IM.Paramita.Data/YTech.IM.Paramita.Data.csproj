@@ -101,6 +101,8 @@
     </Compile>
     <Compile Include="NHibernateMaps\Master\RefAddressMap.cs" />
     <Compile Include="NHibernateMaps\Master\RefPersonMap.cs" />
+    <Compile Include="NHibernateMaps\Payment\TPaymentDetMap.cs" />
+    <Compile Include="NHibernateMaps\Payment\TPaymentMap.cs" />
     <Compile Include="NHibernateMaps\Transaction\TRealMap.cs" />
     <Compile Include="NHibernateMaps\Transaction\TJournalDetMap.cs" />
     <Compile Include="NHibernateMaps\Transaction\TJournalMap.cs" />
@@ -122,6 +124,8 @@
     <Compile Include="Repository\MJobTypeRepository.cs" />
     <Compile Include="Repository\MProductRepository.cs" />
     <Compile Include="Repository\MUnitTypeRepository.cs" />
+    <Compile Include="Repository\TPaymentDetRepository.cs" />
+    <Compile Include="Repository\TPaymentRepository.cs" />
     <Compile Include="Repository\TRealRepository.cs" />
     <Compile Include="Repository\MAccountCatRepository.cs" />
     <Compile Include="Repository\MCustomerRepository.cs" />

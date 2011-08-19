@@ -58,6 +58,8 @@
     <Content Include="RptBukuBesarByCostCenter.rdlc" />
     <Content Include="RptJournalByCostCenter.rdlc" />
     <Content Include="RptPrintGL.rdlc" />
+    <Content Include="RptNeracaSum.rdlc" />
+    <Content Include="RptLRSum.rdlc" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -91,6 +91,8 @@
     <Compile Include="RepositoryInterfaces\IMJobTypeRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMProductRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMUnitTypeRepository.cs" />
+    <Compile Include="RepositoryInterfaces\ITPaymentDetRepository.cs" />
+    <Compile Include="RepositoryInterfaces\ITPaymentRepository.cs" />
     <Compile Include="RepositoryInterfaces\ITRealRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMAccountCatRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMAccountRefRepository.cs" />
@@ -142,6 +144,9 @@
     <Compile Include="Transaction\Inventory\TTrans.cs" />
     <Compile Include="Transaction\Inventory\TTransDet.cs" />
     <Compile Include="Transaction\Inventory\TTransRef.cs" />
+    <Compile Include="Transaction\Payment\TGiro.cs" />
+    <Compile Include="Transaction\Payment\TPayment.cs" />
+    <Compile Include="Transaction\Payment\TPaymentDet.cs" />
     <Compile Include="Transaction\TReference.cs" />
     <Compile Include="Transaction\Unit\TTransUnit.cs" />
     <Compile Include="Transaction\Unit\TUnit.cs" />

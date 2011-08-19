@@ -31,7 +31,7 @@ namespace YTech.IM.Paramita.Data.Repository
             if (!string.IsNullOrEmpty(accountId))
                 sql.AppendLine(@"   and det.AccountId.Id = :accountId");
 
-            sql.AppendLine(@"  order by j.JournalDate, det.RowNumber ");
+            sql.AppendLine(@"  order by det.AccountId.Id, j.JournalDate, det.RowNumber ");
 
             IQuery q = Session.CreateQuery(sql.ToString());
             if (dateFrom.HasValue && dateTo.HasValue)

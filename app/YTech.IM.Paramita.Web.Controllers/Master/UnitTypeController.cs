@@ -7,6 +7,7 @@ using SharpArch.Core;
 using SharpArch.Web.NHibernate;
 using YTech.IM.Paramita.Core.Master;
 using YTech.IM.Paramita.Core.RepositoryInterfaces;
+using YTech.IM.Paramita.Core.Transaction.Unit;
 using YTech.IM.Paramita.Enums;
 
 namespace YTech.IM.Paramita.Web.Controllers.Master
@@ -16,14 +17,17 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
     {
         private readonly IMUnitTypeRepository _mUnitTypeRepository;
         private readonly IMCostCenterRepository _mCostCenterRepository;
+        private readonly ITUnitRepository _tUnitRepository;
 
-        public UnitTypeController(IMUnitTypeRepository mUnitTypeRepository, IMCostCenterRepository mCostCenterRepository)
+        public UnitTypeController(IMUnitTypeRepository mUnitTypeRepository, IMCostCenterRepository mCostCenterRepository, ITUnitRepository tUnitRepository)
         {
             Check.Require(mUnitTypeRepository != null, "mUnitTypeRepository may be not null");
             Check.Require(mCostCenterRepository != null, "mCostCenterRepository may be not null");
+            Check.Require(tUnitRepository != null, "tUnitRepository may not be null");
 
             _mUnitTypeRepository = mUnitTypeRepository;
             _mCostCenterRepository = mCostCenterRepository;
+            this._tUnitRepository = tUnitRepository;
         }
 
         public ActionResult Index()
@@ -39,17 +43,18 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             var jsonData = new
             {
                 rows = (
-                    from unitType in unitTypes select new
-                    {
-                        i = unitType.Id.ToString(),
-                        cell = new string[]
+                    from unitType in unitTypes
+                    select new
+                        {
+                            i = unitType.Id.ToString(),
+                            cell = new string[]
                         {
                             unitType.UnitTypeName,
                             unitType.UnitTypeTotal.HasValue ? unitType.UnitTypeTotal.Value.ToString(Helper.CommonHelper.NumberFormat) : null,
                             unitType.UnitTypeDesc               
                         }
-                    }
-                ).ToArray()                       
+                        }
+                ).ToArray()
             };
 
             return Json(jsonData, JsonRequestBehavior.AllowGet);
@@ -74,17 +79,18 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                 page = page,
                 records = totalRecords,
                 rows = (
-                    from unitType in unitTypes select new
-                    {
-                        i = unitType.Id.ToString(),
-                        cell = new string[]
+                    from unitType in unitTypes
+                    select new
+                        {
+                            i = unitType.Id.ToString(),
+                            cell = new string[]
                         {
                             unitType.Id,
                             unitType.UnitTypeName,
                             unitType.UnitTypeTotal.ToString(),
                             unitType.UnitTypeDesc               
                         }
-                    }).ToArray()
+                        }).ToArray()
             };
             return Json(jsonData, JsonRequestBehavior.AllowGet);
         }
@@ -92,18 +98,20 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
         [Transaction]
         public ActionResult Insert(MUnitType viewModel, FormCollection formCollection)
         {
-            UpdateNumericData(viewModel, formCollection);
-            MUnitType unitType = new MUnitType();
-            unitType.SetAssignedIdTo(Guid.NewGuid().ToString());
-            TransferFormValuesTo(unitType, viewModel);
-            unitType.CostCenterId = _mCostCenterRepository.Get(formCollection["CostCenterId"]);
-            unitType.CreatedDate = DateTime.Now;
-            unitType.CreatedBy = User.Identity.Name;
-
-            _mUnitTypeRepository.Save(unitType);
-
             try
             {
+                UpdateNumericData(viewModel, formCollection);
+                MUnitType unitType = new MUnitType();
+                unitType.SetAssignedIdTo(Guid.NewGuid().ToString());
+                TransferFormValuesTo(unitType, viewModel);
+                unitType.CostCenterId = _mCostCenterRepository.Get(formCollection["CostCenterId"]);
+                unitType.CreatedDate = DateTime.Now;
+                unitType.CreatedBy = User.Identity.Name;
+
+                _mUnitTypeRepository.Save(unitType);
+
+                GenerateEachUnit(unitType);
+
                 _mUnitTypeRepository.DbContext.CommitChanges();
             }
             catch (Exception e)
@@ -116,6 +124,28 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             }
 
             return Content("success");
+        }
+
+        private void GenerateEachUnit(MUnitType unitType)
+        {
+            if (unitType.UnitTypeTotal.HasValue)
+            {
+                TUnit unit;
+                for (int i = 0; i < unitType.UnitTypeTotal.Value; i++)
+                {
+                    unit = new TUnit();
+                    unit.CostCenterId = unitType.CostCenterId;
+                    unit.UnitTypeId = unitType;
+                    unit.UnitStatus = EnumUnitStatus.New.ToString();
+                    unit.UnitNo = (i + 1).ToString();
+
+                    unit.SetAssignedIdTo(Guid.NewGuid().ToString());
+                    unit.CreatedDate = DateTime.Now;
+                    unit.CreatedBy = User.Identity.Name;
+                    unit.DataStatus = EnumDataStatus.New.ToString();
+                    _tUnitRepository.Save(unit);
+                }
+            }
         }
 
         [Transaction]

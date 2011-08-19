@@ -17,6 +17,10 @@ namespace YTech.IM.Paramita.Enums
         RptNeraca,
         [StringValue("Laporan Laba / Rugi")]
         RptLR,
+        [StringValue("Laporan Neraca Gabungan")]
+        RptNeracaSum,
+        [StringValue("Laporan Laba / Rugi Gabungan")]
+        RptLRSum,
         [StringValue("Laporan Kartu Stok")]
         RptStockCard,
         [StringValue("Laporan Stok Per Gudang")]

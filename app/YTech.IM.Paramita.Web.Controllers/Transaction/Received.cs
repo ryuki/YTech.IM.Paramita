@@ -27,21 +27,23 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         {
             string desc = string.Format("Penerimaan Stok dari {0}", trans.TransBy);
             string newVoucher = Helper.CommonHelper.GetVoucherNo(false);
+            //delete journal first
+            DeleteJournal(EnumReferenceTable.Transaction, trans.TransStatus, trans.Id);
             //save header of journal
-            TJournal journal = SaveJournalHeader(newVoucher, trans, desc);
+            TJournal journal = SaveJournalHeader(trans.WarehouseId.CostCenterId, newVoucher, trans.TransBy, trans.TransDate, trans.TransFactur, desc);
             MAccountRef accountRef = null;
 
             //save persediaan
             accountRef = AccountRefRepository.GetByRefTableId(EnumReferenceTable.Warehouse, trans.WarehouseId.Id);
-            SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.D, totalHPP, trans, desc);
+            SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.D, totalHPP, trans.TransFactur, desc);
 
             //save ikhtiar LR
-            SaveJournalDet(journal, newVoucher, Helper.AccountHelper.GetHppAccount(), EnumJournalStatus.K, totalHPP, trans, desc);
+            SaveJournalDet(journal, newVoucher, Helper.AccountHelper.GetHppAccount(), EnumJournalStatus.K, totalHPP, trans.TransFactur, desc);
 
             JournalRepository.Save(journal);
 
             //save journal ref
-            SaveJournalRef(trans, journal);
+            SaveJournalRef(journal, trans.Id, trans.TransStatus, trans.TransDesc);
         }
 
         #endregion

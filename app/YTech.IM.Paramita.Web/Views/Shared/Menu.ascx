@@ -46,6 +46,11 @@
         <%=Html.ActionLinkForAreas<UnitController>(c => c.Index(), "Daftar Unit") %>
         <%=Html.ActionLinkForAreas<CustomerController>(c => c.Index(), "Daftar Pembeli") %>
     </div>
+     <h3>
+        <a href="#">Hutang</a></h3>
+     <div class="child-menu-container">
+            <%= Html.ActionLinkForAreas<PaymentController>(c => c.Index(EnumPaymentType.Hutang), "Pembayaran Hutang")%>
+    </div>
     <h3>
         <a href="#">Pembukuan</a></h3>
     <div class="child-menu-container">
@@ -86,6 +91,8 @@
         <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBukuBesarByCostCenter), CommonHelper.GetStringValue(EnumReports.RptBukuBesarByCostCenter))%>
         <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptNeraca), CommonHelper.GetStringValue(EnumReports.RptNeraca))%>
         <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptLR), CommonHelper.GetStringValue(EnumReports.RptLR))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptNeracaSum), CommonHelper.GetStringValue(EnumReports.RptNeracaSum))%>
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptLRSum), CommonHelper.GetStringValue(EnumReports.RptLRSum))%>
     </div>
     <h3>
         <a href="#">Utiliti</a></h3>

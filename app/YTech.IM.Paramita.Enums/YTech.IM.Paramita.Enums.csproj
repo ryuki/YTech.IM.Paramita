@@ -49,6 +49,7 @@
     <Compile Include="EnumJournalType.cs" />
     <Compile Include="EnumMonth.cs" />
     <Compile Include="EnumPaymentMethod.cs" />
+    <Compile Include="EnumPaymentType.cs" />
     <Compile Include="EnumPeriodType.cs" />
     <Compile Include="EnumReferenceTable.cs" />
     <Compile Include="EnumReferenceType.cs" />

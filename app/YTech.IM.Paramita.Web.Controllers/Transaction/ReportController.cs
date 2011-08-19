@@ -101,6 +101,12 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     viewModel.ShowCostCenter = true;
                     viewModel.ShowRecPeriod = true;
                     break;
+                case EnumReports.RptNeracaSum:
+                    viewModel.ShowRecPeriod = true;
+                    break;
+                case EnumReports.RptLRSum:
+                    viewModel.ShowRecPeriod = true;
+                    break;
                 case EnumReports.RptStockCard:
                     viewModel.ShowDateFrom = true;
                     viewModel.ShowDateTo = true;
@@ -230,6 +236,12 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     repCol[0] = GetRecAccount(EnumAccountCatType.NERACA, viewModel.CostCenterId, viewModel.RecPeriodId);
                     break;
                 case EnumReports.RptLR:
+                    repCol[0] = GetRecAccount(EnumAccountCatType.LR, viewModel.CostCenterId, viewModel.RecPeriodId);
+                    break;
+                case EnumReports.RptNeracaSum:
+                    repCol[0] = GetRecAccount(EnumAccountCatType.NERACA, viewModel.CostCenterId, viewModel.RecPeriodId);
+                    break;
+                case EnumReports.RptLRSum:
                     repCol[0] = GetRecAccount(EnumAccountCatType.LR, viewModel.CostCenterId, viewModel.RecPeriodId);
                     break;
                 case EnumReports.RptStockCard:

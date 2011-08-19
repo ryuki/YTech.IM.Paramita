@@ -27,22 +27,24 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         {
             string desc = string.Format("Pemakaian material untuk {0}", trans.JobTypeId.JobTypeName);
             string newVoucher = Helper.CommonHelper.GetVoucherNo(false);
+            //delete journal first
+            DeleteJournal(EnumReferenceTable.Transaction, trans.TransStatus, trans.Id);
             //save header of journal
-            TJournal journal = SaveJournalHeader(newVoucher, trans, desc);
+            TJournal journal = SaveJournalHeader(trans.WarehouseId.CostCenterId, newVoucher, trans.TransBy, trans.TransDate, trans.TransFactur, desc);
             MAccountRef accountRef = null;
             
             //save biaya pemakaian
             accountRef = AccountRefRepository.GetByRefTableId(EnumReferenceTable.JobType, trans.JobTypeId.Id);
-            SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.D, totalHPP, trans, desc);
+            SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.D, totalHPP, trans.TransFactur, desc);
 
             //save persediaan
             accountRef = AccountRefRepository.GetByRefTableId(EnumReferenceTable.Warehouse, trans.WarehouseId.Id);
-            SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.K, totalHPP, trans, desc);
+            SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.K, totalHPP, trans.TransFactur, desc);
 
             JournalRepository.Save(journal);
 
             //save journal ref
-            SaveJournalRef(trans, journal);
+            SaveJournalRef(journal, trans.Id, trans.TransStatus, trans.TransDesc);
         }
 
         #endregion

@@ -111,6 +111,8 @@
     <Compile Include="Transaction\InventoryController.Accounting.cs" />
     <Compile Include="Transaction\InventoryController.Stock.cs" />
     <Compile Include="Transaction\Mutation.cs" />
+    <Compile Include="Transaction\Payment.cs" />
+    <Compile Include="Transaction\PaymentController.cs" />
     <Compile Include="Transaction\Purchase.cs" />
     <Compile Include="Transaction\RealController.cs" />
     <Compile Include="Transaction\Received.cs" />
@@ -127,6 +129,7 @@
     <Compile Include="ViewModel\ClosingViewModel.cs" />
     <Compile Include="ViewModel\GeneralLedgerViewModel.cs" />
     <Compile Include="ViewModel\OpeningViewModel.cs" />
+    <Compile Include="ViewModel\PaymentViewModel.cs" />
     <Compile Include="ViewModel\RealFormViewModel.cs" />
     <Compile Include="ViewModel\ReportParamViewModel.cs" />
     <Compile Include="ViewModel\Reports\CashJournalViewModel.cs" />
