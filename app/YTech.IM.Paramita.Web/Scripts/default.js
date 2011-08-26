@@ -18,3 +18,19 @@ function () {
         })
     })
 };
+
+
+function RemoveAttribute(ctlId, attr) {
+    // alert($.browser.msie);
+    // alert($.browser.version);
+    if ($.browser.msie && $.browser.version == '6.0') {
+        // alert('this ie6 and ie');
+        //ie6 bugs
+        var obj = document.getElementById(ctlId);
+        if (obj)
+            obj.setAttribute(attr, "");
+    }
+    else {
+        $("#" + ctlId).removeAttr(attr);
+    }
+}

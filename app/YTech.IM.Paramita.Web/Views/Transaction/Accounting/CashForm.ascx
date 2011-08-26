@@ -187,8 +187,8 @@
         }
         else {
             $("#btnSave").attr('disabled', 'disabled');
-            $("#btnPrint").removeAttr('disabled');
-            $("#btnPrintKwitansi").removeAttr('disabled');
+            RemoveAttribute("btnPrint","disabled");  
+            RemoveAttribute("btnPrintKwitansi","disabled");  
             $('#dialog p:first').text(msg);
             $("#Journal_JournalVoucherNo").val(json.voucherNo);
             
@@ -359,7 +359,7 @@
                 , closeAfterEdit: true
                 , modal: true
                 , afterShowForm: function (eparams) {
-                    $('#Id').removeAttr('disabled');
+                RemoveAttribute("Id","disabled"); 
                     $('#JournalDetAmmount').attr('value', '0');
                     $('#imgAccountId').click(function () {
                         OpenPopupAccountSearch();
@@ -538,8 +538,9 @@
             $("#Journal_JournalDesc").val(journal.JournalDesc);
 
             setTimeout("$('#list').trigger('reloadGrid')", 1000);
-            $("#btnPrint").removeAttr('disabled');
-            $("#btnPrintKwitansi").removeAttr('disabled');
+            RemoveAttribute("btnPrint","disabled"); 
+            RemoveAttribute("btnPrintKwitansi","disabled"); 
+            RemoveAttribute("btnSave","disabled"); 
         }
 
     } 

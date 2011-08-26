@@ -103,7 +103,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 _tStockRepository.Save(stock);
 
                 //set hpp equals price * quantity
-                hpp = price.Value * qty.Value;
+                decimal checkqty = qty.HasValue ? qty.Value : 0;
+                decimal checkprice = price.HasValue ? price.Value : 0;
+                hpp = checkqty * checkprice;
             }
             else
             {
@@ -140,7 +142,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     _tStockRefRepository.Save(stockRef);
 
                     qty = qty - sisa;
-                    hpp += stockRef.StockRefQty.Value * stock.StockPrice.Value;
+                    decimal checkqty = stockRef.StockRefQty.HasValue ? stockRef.StockRefQty.Value : 0;
+                    decimal checkprice = stock.StockPrice.HasValue ? stock.StockPrice.Value : 0;
+                    hpp += checkqty * checkprice;
                     if (qty <= 0)
                     {
                         break;

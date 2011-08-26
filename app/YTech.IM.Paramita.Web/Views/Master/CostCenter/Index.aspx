@@ -65,7 +65,7 @@
                 , closeAfterEdit: true
                 , modal: true
                 , afterShowForm: function (eparams) {
-                    $('#Id').removeAttr('disabled');
+                    RemoveAttribute("Id","disabled"); 
 //                    $('#CostCenterStartDate').datepicker({ dateFormat: "dd-M-yy" });
 //                    $('#CostCenterEndDate').datepicker({ dateFormat: "dd-M-yy" }); 
 

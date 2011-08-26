@@ -134,7 +134,7 @@
                         return [true, ''];
                 }
                 , afterShowForm: function (eparams) {
-                    $('#Id').removeAttr('disabled');
+                    RemoveAttribute("Id","disabled"); 
                     //    $('#imgItemId').click(function () {
                     //        OpenPopupItemSearch();
                     //    });

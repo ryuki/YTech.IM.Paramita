@@ -56,7 +56,7 @@
                 , closeAfterEdit: true
                 , modal: true
                 , afterShowForm: function (eparams) {
-                    $('#Id').removeAttr('disabled');
+                    RemoveAttribute("Id","disabled"); 
                 }
                 , beforeSubmit: function (postdata, formid) {
                     //                    alert($('#AccountCatId option:selected').val());

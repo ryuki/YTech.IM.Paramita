@@ -851,7 +851,13 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     else
                     {
                         //get HPP from existing detail
-                        // totalHpp +=
+                        if (addStock)
+                        {
+                            decimal qty = det.TransDet.TransDetQty.HasValue ? det.TransDet.TransDetQty.Value : 0;
+                            decimal price = det.TransDet.TransDetPrice.HasValue ? det.TransDet.TransDetPrice.Value : 0;
+                            totalHpp += qty * price;
+                        }
+
                     }
                 }
                 //save journal

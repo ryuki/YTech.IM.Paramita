@@ -39,5 +39,5 @@
     <script src="<%= Url.Content("~/Scripts/jquery.tooltip.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/date.format.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/NumberFormat.js") %>" type="text/javascript"></script>
-    <script src="<%= Url.Content("~/Scripts/default.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/default.js?v1.0") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/complex.js") %>" type="text/javascript"></script>

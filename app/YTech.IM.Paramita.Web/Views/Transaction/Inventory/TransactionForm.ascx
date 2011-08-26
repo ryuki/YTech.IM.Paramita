@@ -35,7 +35,7 @@
             Cetak Faktur</button>--%>
         <button id="btnDelete" name="btnDelete" type="submit">
             Hapus</button>
-           <%-- <%= ViewData.Model.Title %>--%>
+        <%-- <%= ViewData.Model.Title %>--%>
         <button id="btnList" name="btnList" type="button">
             Edit
             <%= ViewData.Model.Title %></button>
@@ -212,7 +212,7 @@ function onSavedSuccess(e) {
     else{
         $("#btnSave").attr('disabled', 'disabled');
         $("#btnDelete").attr('disabled', 'disabled');
-        $("#btnPrint").removeAttr('disabled');
+        RemoveAttribute("btnPrint","disabled");  
         $('#dialog p:first').text(msg);
         $("#Trans_TransFactur").val(json.FacturNo);
         $("#dialog").dialog("open"); 
@@ -365,7 +365,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                     return [true, ''];
                 }
                 , afterShowForm: function (eparams) {
-                    $('#Id').removeAttr('disabled');
+                    RemoveAttribute("Id","disabled");  
                     $('#TransDetQty').attr('value', '1');
                      <% if (ViewData.Model.ViewPrice)
                {%> 
@@ -597,8 +597,9 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             $("#Trans_JobTypeId").val(trans.JobTypeId); 
 
             setTimeout("$('#list').trigger('reloadGrid')",1000); 
-             $("#btnPrint").removeAttr('disabled');
-             $("#btnDelete").removeAttr('disabled');
+            RemoveAttribute("btnPrint","disabled");  
+            RemoveAttribute("btnDelete","disabled"); 
+            RemoveAttribute("btnSave","disabled");  
         }
 
         } 
