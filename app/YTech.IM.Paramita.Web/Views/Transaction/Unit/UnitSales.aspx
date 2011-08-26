@@ -8,6 +8,7 @@
             $('#Save').button();
             $("#TransUnitDate").datepicker({ dateFormat: "dd-M-yy" });
             $('#TransUnitPrice').autoNumeric();
+            $('#TransUnitPrice').attr("style", "text-align:right;");
         });
     </script>
 </asp:Content>

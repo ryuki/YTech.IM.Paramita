@@ -9,6 +9,7 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
         IEnumerable<MAccount> GetPagedAccountList(string orderCol, string orderBy, int pageIndex, int maxRows, ref int totalRows,MAccountCat accountCat);
         IList<MAccount> GetByAccountCat(MAccountCat accountCat);
 
-        IList<string> GetLevel2Accounts(string accountCatType);
+        IList<string> GetLevelAccounts(int level, string accountCatType);
+
     }
 }

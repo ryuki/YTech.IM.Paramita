@@ -96,16 +96,20 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 case EnumReports.RptNeraca:
                     viewModel.ShowCostCenter = true;
                     viewModel.ShowRecPeriod = true;
+                    viewModel.ShowGenerateDetail = true;
                     break;
                 case EnumReports.RptLR:
                     viewModel.ShowCostCenter = true;
                     viewModel.ShowRecPeriod = true;
+                    viewModel.ShowGenerateDetail = true;
                     break;
                 case EnumReports.RptNeracaSum:
                     viewModel.ShowRecPeriod = true;
+                    viewModel.ShowGenerateDetail = true;
                     break;
                 case EnumReports.RptLRSum:
                     viewModel.ShowRecPeriod = true;
+                    viewModel.ShowGenerateDetail = true;
                     break;
                 case EnumReports.RptStockCard:
                     viewModel.ShowDateFrom = true;
@@ -233,16 +237,16 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     repCol[0] = GetCostCenter();
                     break;
                 case EnumReports.RptNeraca:
-                    repCol[0] = GetRecAccount(EnumAccountCatType.NERACA, viewModel.CostCenterId, viewModel.RecPeriodId);
+                    repCol[0] = GetRecAccount(EnumAccountCatType.NERACA, viewModel.CostCenterId, viewModel.RecPeriodId, viewModel.GenerateDetail);
                     break;
                 case EnumReports.RptLR:
-                    repCol[0] = GetRecAccount(EnumAccountCatType.LR, viewModel.CostCenterId, viewModel.RecPeriodId);
+                    repCol[0] = GetRecAccount(EnumAccountCatType.LR, viewModel.CostCenterId, viewModel.RecPeriodId, viewModel.GenerateDetail);
                     break;
                 case EnumReports.RptNeracaSum:
-                    repCol[0] = GetRecAccount(EnumAccountCatType.NERACA, viewModel.CostCenterId, viewModel.RecPeriodId);
+                    repCol[0] = GetRecAccount(EnumAccountCatType.NERACA, viewModel.CostCenterId, viewModel.RecPeriodId, viewModel.GenerateDetail);
                     break;
                 case EnumReports.RptLRSum:
-                    repCol[0] = GetRecAccount(EnumAccountCatType.LR, viewModel.CostCenterId, viewModel.RecPeriodId);
+                    repCol[0] = GetRecAccount(EnumAccountCatType.LR, viewModel.CostCenterId, viewModel.RecPeriodId, viewModel.GenerateDetail);
                     break;
                 case EnumReports.RptStockCard:
                     repCol[0] = GetStockCard(viewModel.DateFrom, viewModel.DateTo, viewModel.ItemId, viewModel.WarehouseId);
@@ -262,7 +266,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     repCol[0] = GetItemViewModel();
                     break;
                 case EnumReports.RptJournal:
-                    repCol[0] = GetJournalDet(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId,viewModel.AccountId);
+                    repCol[0] = GetJournalDet(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId, viewModel.AccountId);
                     break;
                 case EnumReports.RptBukuBesar:
                     repCol[0] = GetJournalDetFlow(viewModel.DateFrom, viewModel.DateTo, viewModel.CostCenterId, viewModel.AccountId);
@@ -352,7 +356,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       det.TransDetDisc,
                                       ItemId = det.ItemId.Id,
                                       det.ItemId.ItemName,
-                                      ItemUom =  det.ItemId.ItemUom.ItemUomName,
+                                      ItemUom = det.ItemId.ItemUom.ItemUomName,
                                       SupplierName = det.TransId.TransBy,
                                       det.TransId.TransFactur,
                                       det.TransId.TransDate,
@@ -365,7 +369,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                                       det.TransId.TransSubTotal,
                                       det.TransId.TransPaymentMethod,
                                       TransId = det.TransId.Id,
-                                      viewModel.ViewWarehouse ,
+                                      viewModel.ViewWarehouse,
                                       viewModel.ViewWarehouseTo,
                                       viewModel.ViewSupplier,
                                       viewModel.ViewDate,
@@ -490,10 +494,15 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return reportDataSource;
         }
 
-        private ReportDataSource GetRecAccount(EnumAccountCatType accountCatType, string costCenterId, string recPeriodId)
+        private ReportDataSource GetRecAccount(EnumAccountCatType accountCatType, string costCenterId, string recPeriodId, bool generateDetail)
         {
-            //get account to level 2
-            IList<string> listLevel2Account = _mAccountRepository.GetLevel2Accounts(accountCatType.ToString());
+            //if generatedetail is false, generate only level 1
+            IList<string> listLevel2Account = new List<string>();
+            if (!generateDetail)
+            {
+                //get account to level 2
+                listLevel2Account = _mAccountRepository.GetLevelAccounts(0, accountCatType.ToString());
+            }
 
             IList<TRecAccount> dets = _tRecAccountRepository.GetByAccount(listLevel2Account, costCenterId, recPeriodId);
             //IList<TRecAccount> dets = _tRecAccountRepository.GetByAccountType(accountCatType.ToString(), costCenterId, recPeriodId);
@@ -518,7 +527,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return reportDataSource;
         }
 
-        private ReportDataSource GetJournalDet(DateTime? dateFrom, DateTime? dateTo, string costCenterId,string accountId)
+        private ReportDataSource GetJournalDet(DateTime? dateFrom, DateTime? dateTo, string costCenterId, string accountId)
         {
             IList<TJournalDet> dets = _tJournalDetRepository.GetForReport(dateFrom, dateTo, costCenterId, accountId);
 

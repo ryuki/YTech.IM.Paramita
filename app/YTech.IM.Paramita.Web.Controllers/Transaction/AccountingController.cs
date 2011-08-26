@@ -95,7 +95,18 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private ActionResult SaveJournalInterface(TJournal journal, FormCollection formCollection)
         {
             if (formCollection["btnSave"] != null)
+            {
+                if (journal.JournalType == EnumJournalType.GeneralLedger.ToString() && !ValidateDebetKredit())
+                {
+                    var e = new
+                                {
+                                    Success = false,
+                                    Message = "Total Debet dan Kredit tidak sama."
+                                };
+                    return Json(e, JsonRequestBehavior.AllowGet);
+                }
                 return SaveJournal(journal, formCollection);
+            }
             else if (formCollection["btnPrint"] != null || formCollection["btnPrintKwitansi"] != null)
             {
                 //save data to session
@@ -200,7 +211,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             try
             {
                 _tJournalRepository.DbContext.BeginTransaction();
-
+                
                 //check first
                 TJournal journal1 = _tJournalRepository.Get(formCollection["Journal.Id"]);
                 voucherNo = journal.JournalVoucherNo;
@@ -307,6 +318,14 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             //return RedirectToAction(journal.JournalType);
         }
 
+        private bool ValidateDebetKredit()
+        {
+            var journalDets = ListJournalDet;
+            decimal? debetSum = journalDets.Where(d => d.JournalDetStatus == "D").Sum(det => det.JournalDetAmmount);
+            decimal? kreditSum = journalDets.Where(d => d.JournalDetStatus == "K").Sum(det => det.JournalDetAmmount);
+            return debetSum == kreditSum;
+        }
+
         private TJournal SetNewJournal(EnumJournalType journalType)
         {
             TJournal journal = new TJournal();
@@ -390,12 +409,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             TransferFormValuesTo(journalDet, viewModel);
             journalDet.SetAssignedIdTo(Guid.NewGuid().ToString());
             journalDet.AccountId = _mAccountRepository.Get(formCollection["AccountId"]);
-            journalDet.SetAssignedIdTo(viewModel.Id);
             journalDet.CreatedDate = DateTime.Now;
             journalDet.CreatedBy = User.Identity.Name;
             journalDet.DataStatus = EnumDataStatus.New.ToString();
-
-
+            
             ListJournalDet.Add(journalDet);
             return Content("Detail transaksi berhasil disimpan");
         }
@@ -427,6 +444,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Update(TJournalDet viewModel, FormCollection formCollection)
         {
+            //ListJournalDet.RemoveAt(int.Parse(formCollection["Id"]));
+            
             UpdateNumericData(viewModel, formCollection);
             TJournalDet journalDet = new TJournalDet();
             TransferFormValuesTo(journalDet, viewModel);

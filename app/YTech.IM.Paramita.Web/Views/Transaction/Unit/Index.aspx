@@ -203,7 +203,7 @@
         });    
         function OpenPopup(id)
         {
-        var url = "<%= Url.Action("UnitSales", "Unit" ) %>?unitId="+id;
+            var url = "<%= Url.Action("UnitSales", "Unit" ) %>?unitId="+id+"&rand="+ (new Date()).getTime();
             $("#popup_frame").attr("src", url);
             $("#popup").dialog("open");
             return false;   

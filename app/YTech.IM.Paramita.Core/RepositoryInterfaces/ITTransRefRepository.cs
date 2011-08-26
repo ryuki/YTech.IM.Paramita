@@ -8,5 +8,6 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
     public interface ITTransRefRepository : INHibernateRepository<TTransRef>
     {
+        TTransRef GetByRefId(string transId);
     }
 }

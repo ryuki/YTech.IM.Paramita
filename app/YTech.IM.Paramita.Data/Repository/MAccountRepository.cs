@@ -55,9 +55,22 @@ namespace YTech.IM.Paramita.Data.Repository
             return list;
         }
 
-        public IList<string> GetLevel2Accounts(string accountCatType)
+        public IList<string> GetLevelAccounts(int level, string accountCatType)
         {
-            IQuery q = Session.CreateQuery(@"
+            string sql = string.Empty;
+            switch (level)
+            {
+                case 0:
+                    sql = @"
+                select distinct acc.Id
+                from MAccount as acc
+                where acc.AccountCatId.AccountCatType = :accountCatType
+                    and acc.AccountParentId is null
+            ";
+
+                    break;
+                case 1:
+                    sql = @"
                 select distinct acc.Id
                 from MAccount as acc
                 where acc.AccountParentId.Id in (
@@ -68,7 +81,13 @@ namespace YTech.IM.Paramita.Data.Repository
                         )
                     or ( acc.AccountCatId.AccountCatType = :accountCatType
                     and acc.AccountParentId is null )
-            ");
+            ";
+                    break;
+
+            }
+
+
+            IQuery q = Session.CreateQuery(sql);
             if (!string.IsNullOrEmpty(accountCatType))
                 q.SetString("accountCatType", accountCatType);
             return q.List<string>();

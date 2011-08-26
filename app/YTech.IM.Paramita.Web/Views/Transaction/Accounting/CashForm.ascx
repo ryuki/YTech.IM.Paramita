@@ -168,9 +168,9 @@
         var json = e.get_response().get_object();
         //alert(json);
         var success = json.Success;
+            var msg = json.Message;
         // alert(json.Success);
         if (success == false) {
-            var msg = json.Message;
             //        alert(json.Message);
             if (msg) {
                 if (msg == "redirect") {
@@ -191,6 +191,8 @@
             $("#btnPrintKwitansi").removeAttr('disabled');
             $('#dialog p:first').text(msg);
             $("#Journal_JournalVoucherNo").val(json.voucherNo);
+            
+            $('#dialog p:first').text(msg);
             $("#dialog").dialog("open");
         }
     }
@@ -446,7 +448,7 @@
             }, footerrow: true, userDataOnFooter: true, altRows: true
         }).navGrid('#listPager',
                 {
-                    edit: false, add: true, del: true, search: false, refresh: true, view: false
+                    edit: true, add: true, del: true, search: false, refresh: true, view: false
                 },
                 editDialog,
                 insertDialog,

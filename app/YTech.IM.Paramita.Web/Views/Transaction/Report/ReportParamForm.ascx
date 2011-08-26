@@ -114,6 +114,18 @@
         </td>
     </tr>
     <% } %>
+     <% if (ViewData.Model.ShowGenerateDetail)
+       {	%>
+    <tr>
+        <td>
+            <label for="GenerateDetail">
+                Detail :</label>
+        </td>
+        <td>
+            <%= Html.CheckBox("GenerateDetail", Model.GenerateDetail)%>
+        </td>
+    </tr>
+    <% } %>
     <tr>
         <td colspan="2" align="center">
             <button id="Save" type="submit" name="Save">

@@ -392,6 +392,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Update(TTransDet viewModel, FormCollection formCollection)
         {
+
+
             TTransDet transDetToInsert = new TTransDet();
             TransferFormValuesTo(transDetToInsert, viewModel);
             transDetToInsert.SetAssignedIdTo(viewModel.Id);
@@ -532,11 +534,37 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private ActionResult SaveTransactionInterface(TTrans Trans, FormCollection formCollection)
         {
             if (formCollection["btnSave"] != null)
+            {
+                string msg = string.Empty;
+                if (!ValidateTrans(Trans, out msg))
+                {
+                    var e = new
+                                {
+                                    Success = false,
+                                    Message = msg
+                                };
+                    return Json(e, JsonRequestBehavior.AllowGet);
+                }
                 return SaveTransaction(Trans, formCollection, false);
+            }
             else if (formCollection["btnDelete"] != null)
                 return SaveTransaction(Trans, formCollection, true);
 
             return View();
+        }
+
+        private bool ValidateTrans(TTrans trans, out string msg)
+        {
+            msg = string.Empty;
+            //check if used in trans ref
+            TTransRef transRef = _tTransRefRepository.GetByRefId(trans.Id);
+            if (transRef != null)
+            {
+                if (trans.TransStatus.Equals(EnumTransactionStatus.Received.ToString()))
+                    msg = "Transaksi penerimaan barang telah diinput ke pembelian";
+                return false;
+            }
+            return true;
         }
 
         private ActionResult SaveTransaction(TTrans Trans, FormCollection formCollection, bool isDelete)
@@ -667,7 +695,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     tr.TransDueDate = Trans.TransDueDate;
                     tr.TransBy = Trans.TransBy;
                     tr.TransPaymentMethod = Trans.TransPaymentMethod;
-                    SaveTransaction(Trans, formCollection, addStock, calculateStock, isEdit);
+                    SaveTransaction(tr, formCollection, addStock, calculateStock, isEdit);
                 }
                 else
                 {
