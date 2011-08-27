@@ -135,21 +135,71 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                             viewModel.ShowDateFrom = true;
                             viewModel.ShowDateTo = true;
                             viewModel.ShowWarehouse = true;
+                            viewModel.ShowSupplier = true;
                             break;
                         case EnumTransactionStatus.Received:
                             viewModel.ShowDateFrom = true;
                             viewModel.ShowDateTo = true;
                             viewModel.ShowWarehouse = true;
+                            viewModel.ShowSupplier = true;
                             break;
                         case EnumTransactionStatus.Purchase:
                             viewModel.ShowDateFrom = true;
                             viewModel.ShowDateTo = true;
                             viewModel.ShowWarehouse = true;
+                            viewModel.ShowSupplier = true;
                             break;
                         case EnumTransactionStatus.ReturPurchase:
                             viewModel.ShowDateFrom = true;
                             viewModel.ShowDateTo = true;
                             viewModel.ShowWarehouse = true;
+                            viewModel.ShowSupplier = true;
+                            break;
+                        case EnumTransactionStatus.Using:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            break;
+                        case EnumTransactionStatus.Mutation:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            break;
+                        case EnumTransactionStatus.Budgeting:
+                            //viewModel.ShowDateFrom = true;
+                            //viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            break;
+                    }
+
+                    break;
+                case EnumReports.RptTransRecap:
+                    title = string.Format(title, Helper.CommonHelper.GetStringValue(viewModel.TransStatus),"");
+                    switch (viewModel.TransStatus)
+                    {
+                        case EnumTransactionStatus.PurchaseOrder:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            viewModel.ShowSupplier = true;
+                            break;
+                        case EnumTransactionStatus.Received:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            viewModel.ShowSupplier = true;
+                            break;
+                        case EnumTransactionStatus.Purchase:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            viewModel.ShowSupplier = true;
+                            break;
+                        case EnumTransactionStatus.ReturPurchase:
+                            viewModel.ShowDateFrom = true;
+                            viewModel.ShowDateTo = true;
+                            viewModel.ShowWarehouse = true;
+                            viewModel.ShowSupplier = true;
                             break;
                         case EnumTransactionStatus.Using:
                             viewModel.ShowDateFrom = true;
@@ -259,6 +309,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     break;
                 case EnumReports.RptTransDetail:
                     EnumTransactionStatus stat =
+                        (EnumTransactionStatus)Enum.Parse(typeof(EnumTransactionStatus), formCollection["TransStatus"]);
+                    repCol[0] = GetTransTotal(viewModel.DateFrom, viewModel.DateTo, viewModel.WarehouseId, stat);
+                    break;
+                case EnumReports.RptTransRecap:
+                    stat =
                         (EnumTransactionStatus)Enum.Parse(typeof(EnumTransactionStatus), formCollection["TransStatus"]);
                     repCol[0] = GetTransTotal(viewModel.DateFrom, viewModel.DateTo, viewModel.WarehouseId, stat);
                     break;

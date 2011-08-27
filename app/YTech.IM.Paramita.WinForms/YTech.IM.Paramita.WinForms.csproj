@@ -79,6 +79,7 @@
     <Content Include="RptStockCard.rdlc" />
     <Content Include="RptStockItem.rdlc" />
     <Content Include="RptTransDetail.rdlc" />
+    <Content Include="RptTransRecap.rdlc" />
     <None Include="Properties\DataSources\YTech.IM.Paramita.Core.Master.MAccount.datasource" />
     <None Include="Properties\DataSources\YTech.IM.Paramita.Core.Master.MAccountRef.datasource" />
     <None Include="Properties\DataSources\YTech.IM.Paramita.Core.Master.MBrand.datasource" />

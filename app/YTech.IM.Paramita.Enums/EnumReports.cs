@@ -42,6 +42,8 @@ namespace YTech.IM.Paramita.Enums
         [StringValue("Cetak Kwitansi")]
         RptPrintKwitansi,
         [StringValue("Cetak Bukti Jurnal Umum")]
-        RptPrintGL
+        RptPrintGL,
+        [StringValue("Laporan Rekap {0} {1}")]
+        RptTransRecap
     }
 }

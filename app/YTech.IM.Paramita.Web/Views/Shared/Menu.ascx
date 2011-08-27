@@ -46,10 +46,10 @@
         <%=Html.ActionLinkForAreas<UnitController>(c => c.Index(), "Daftar Unit") %>
         <%=Html.ActionLinkForAreas<CustomerController>(c => c.Index(), "Daftar Pembeli") %>
     </div>
-     <h3>
+    <h3>
         <a href="#">Hutang</a></h3>
-     <div class="child-menu-container">
-            <%= Html.ActionLinkForAreas<PaymentController>(c => c.Index(EnumPaymentType.Hutang), "Pembayaran Hutang")%>
+    <div class="child-menu-container">
+        <%= Html.ActionLinkForAreas<PaymentController>(c => c.Index(EnumPaymentType.Hutang), "Pembayaran Hutang")%>
     </div>
     <h3>
         <a href="#">Pembukuan</a></h3>
@@ -85,6 +85,9 @@
         <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Mutation), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.Mutation)))%>
         <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Adjusment), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.Adjusment)))%>
         <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransDetail, EnumTransactionStatus.Budgeting), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransDetail), CommonHelper.GetStringValue(EnumTransactionStatus.Budgeting)))%>
+
+        <%= Html.ActionLinkForAreas<ReportController>(c => c.ReportTrans(EnumReports.RptTransRecap, EnumTransactionStatus.Received), string.Format(CommonHelper.GetStringValue(EnumReports.RptTransRecap), CommonHelper.GetStringValue(EnumTransactionStatus.Received),"Per Supplier"))%>
+
         <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptJournal), CommonHelper.GetStringValue(EnumReports.RptJournal))%>
         <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptBukuBesar), CommonHelper.GetStringValue(EnumReports.RptBukuBesar))%>
         <%= Html.ActionLinkForAreas<ReportController>(c => c.Report(EnumReports.RptJournalByCostCenter), CommonHelper.GetStringValue(EnumReports.RptJournalByCostCenter))%>
