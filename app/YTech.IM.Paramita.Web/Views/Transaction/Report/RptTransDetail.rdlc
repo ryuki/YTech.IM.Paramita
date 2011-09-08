@@ -456,9 +456,6 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>Textbox7</rd:DefaultName>
-                                        <Visibility>
-                                          <Hidden>=not Fields!ViewPrice.Value</Hidden>
-                                        </Visibility>
                                         <Style>
                                           <Border>
                                             <Color>#7292cc</Color>
@@ -477,6 +474,7 @@
                                     <CellContents>
                                       <Textbox Name="Textbox9">
                                         <CanGrow>true</CanGrow>
+                                        <CanShrink>true</CanShrink>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -518,6 +516,7 @@
                                     <CellContents>
                                       <Textbox Name="Textbox11">
                                         <CanGrow>true</CanGrow>
+                                        <CanShrink>true</CanShrink>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -559,6 +558,7 @@
                                     <CellContents>
                                       <Textbox Name="Textbox13">
                                         <CanGrow>true</CanGrow>
+                                        <CanShrink>true</CanShrink>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -801,9 +801,6 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>TransDetQty</rd:DefaultName>
-                                        <Visibility>
-                                          <Hidden>=not Fields!ViewPrice.Value</Hidden>
-                                        </Visibility>
                                         <Style>
                                           <Border>
                                             <Color>#e5e5e5</Color>
@@ -821,6 +818,7 @@
                                     <CellContents>
                                       <Textbox Name="TransDetPrice">
                                         <CanGrow>true</CanGrow>
+                                        <CanShrink>true</CanShrink>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -861,6 +859,7 @@
                                     <CellContents>
                                       <Textbox Name="TransDetDisc">
                                         <CanGrow>true</CanGrow>
+                                        <CanShrink>true</CanShrink>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -901,6 +900,7 @@
                                     <CellContents>
                                       <Textbox Name="TransDetTotal">
                                         <CanGrow>true</CanGrow>
+                                        <CanShrink>true</CanShrink>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -969,7 +969,6 @@
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
                                       </Textbox>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                 </TablixCells>
@@ -1144,9 +1143,6 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>TransDetQty1</rd:DefaultName>
-                                        <Visibility>
-                                          <Hidden>=not Fields!ViewPrice.Value</Hidden>
-                                        </Visibility>
                                         <Style>
                                           <Border>
                                             <Color>#e5e5e5</Color>
@@ -1164,6 +1160,7 @@
                                     <CellContents>
                                       <Textbox Name="Textbox18">
                                         <CanGrow>true</CanGrow>
+                                        <CanShrink>true</CanShrink>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -1204,6 +1201,7 @@
                                     <CellContents>
                                       <Textbox Name="Textbox19">
                                         <CanGrow>true</CanGrow>
+                                        <CanShrink>true</CanShrink>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -1244,6 +1242,7 @@
                                     <CellContents>
                                       <Textbox Name="TransDetTotal1">
                                         <CanGrow>true</CanGrow>
+                                        <CanShrink>true</CanShrink>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -1327,9 +1326,21 @@
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
-                              <TablixMember />
-                              <TablixMember />
-                              <TablixMember />
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=not Fields!ViewPrice.Value</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=not Fields!ViewPrice.Value</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=not Fields!ViewPrice.Value</Hidden>
+                                </Visibility>
+                              </TablixMember>
                               <TablixMember />
                             </TablixMembers>
                           </TablixColumnHierarchy>

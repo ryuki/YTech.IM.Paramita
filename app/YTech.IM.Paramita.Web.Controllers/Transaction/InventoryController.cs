@@ -392,14 +392,19 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public ActionResult Update(TTransDet viewModel, FormCollection formCollection)
         {
+            //remove use native predicate function from list, awesome, no need foreach anymore
+            ListDetTrans.Remove(ListDetTrans.Find(ByTransDetId(viewModel.Id)));
+            ListDeleteDetailTrans.Add(viewModel.Id);
 
-
+            UpdateNumericData(viewModel, formCollection);
             TTransDet transDetToInsert = new TTransDet();
             TransferFormValuesTo(transDetToInsert, viewModel);
-            transDetToInsert.SetAssignedIdTo(viewModel.Id);
-            transDetToInsert.CreatedDate = DateTime.Now;
-            transDetToInsert.CreatedBy = User.Identity.Name;
-            transDetToInsert.DataStatus = EnumDataStatus.New.ToString();
+            transDetToInsert.ItemId = _mItemRepository.Get(formCollection["ItemId"]);
+            transDetToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
+            transDetToInsert.ModifiedDate = DateTime.Now;
+            transDetToInsert.ModifiedBy = User.Identity.Name;
+            transDetToInsert.DataStatus = EnumDataStatus.Updated.ToString();
+
 
             TransDetViewModel detViewModel = new TransDetViewModel();
             detViewModel.TransDet = transDetToInsert;
@@ -456,7 +461,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             TransferFormValuesTo(transDetToInsert, viewModel);
             transDetToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
             transDetToInsert.ItemId = _mItemRepository.Get(formCollection["ItemId"]);
-            transDetToInsert.SetAssignedIdTo(viewModel.Id);
             transDetToInsert.CreatedDate = DateTime.Now;
             transDetToInsert.CreatedBy = User.Identity.Name;
             transDetToInsert.DataStatus = EnumDataStatus.New.ToString();

@@ -346,6 +346,25 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                      $('#imgItemId').click(function(){
                         OpenPopupItemSearch();
                         });
+
+                        <% if (ViewData.Model.ViewPrice)
+               {%> 
+//                    $('#ItemId').change(function () {
+//                        var price = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/Get") %>/' + $('#ItemId :selected').val(), async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
+//                        $('#TransDetPrice').attr('value', price);
+//                        CalculateTotal(); 
+//                    });
+                    $('#TransDetPrice').change(function () {
+                        CalculateTotal();
+                    });
+                    $('#TransDetQty').change(function () {
+                        CalculateTotal();
+                    });
+                    $('#TransDetDisc').change(function () {
+                        CalculateTotal();
+                    });
+                   <%
+               }%>  
                 }
                 , width: "400"
                 , afterComplete: function (response, postdata, formid) {
@@ -375,11 +394,11 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 
                        <% if (ViewData.Model.ViewPrice)
                {%> 
-                    $('#ItemId').change(function () {
-                        var price = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/Get") %>/' + $('#ItemId :selected').val(), async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
-                        $('#TransDetPrice').attr('value', price);
-                        CalculateTotal(); 
-                    });
+//                    $('#ItemId').change(function () {
+//                        var price = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/Get") %>/' + $('#ItemId :selected').val(), async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
+//                        $('#TransDetPrice').attr('value', price);
+//                        CalculateTotal(); 
+//                    });
                     $('#TransDetPrice').change(function () {
                         CalculateTotal();
                     });
@@ -496,7 +515,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             }, footerrow: true, userDataOnFooter: true, altRows: true
         }).navGrid('#listPager',
                 {
-                    edit: false, add: true, del: true, search: false, refresh: true, view: false
+                    edit: true, add: true, del: true, search: false, refresh: true, view: false
                 },
                 editDialog,
                 insertDialog,

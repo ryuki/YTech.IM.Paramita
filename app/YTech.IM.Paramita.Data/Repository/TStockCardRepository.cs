@@ -29,7 +29,7 @@ namespace YTech.IM.Paramita.Data.Repository
             {
                  criteria.Add(Expression.Eq("WarehouseId", warehouse));
             }
-           
+
             criteria.SetCacheable(true);
             IList<TStockCard> list = criteria.List<TStockCard>();
             return list;

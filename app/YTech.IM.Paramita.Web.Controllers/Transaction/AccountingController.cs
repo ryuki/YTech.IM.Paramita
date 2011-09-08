@@ -445,7 +445,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         public ActionResult Update(TJournalDet viewModel, FormCollection formCollection)
         {
             //ListJournalDet.RemoveAt(int.Parse(formCollection["Id"]));
-            
+            ListJournalDet.Remove(viewModel);
+
             UpdateNumericData(viewModel, formCollection);
             TJournalDet journalDet = new TJournalDet();
             TransferFormValuesTo(journalDet, viewModel);
