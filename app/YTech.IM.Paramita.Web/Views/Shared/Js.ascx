@@ -20,7 +20,7 @@
         type="text/javascript"></script>--%>
       <script src="<%= Url.Content("~/Scripts/MicrosoftMvcValidation.debug.js") %>" type="text/javascript"></script>
     <%--<script src="<%= Url.Content("~/Scripts/jquery-1.4.4.min.js") %>" type="text/javascript"></script>--%>
-    <script src="<%= Url.Content("~/Scripts/jquery-1.6.2.min.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/jquery-1.6.3.min.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/samplebrowser.js") %>" type="text/javascript"></script>
     <link href="<%= Url.Content("~/Content/ui.jqgrid.css") %>" rel="stylesheet" type="text/css" />
     <link href="<%= Url.Content("~/Content/css/start/jquery-ui.css") %>" rel="Stylesheet"

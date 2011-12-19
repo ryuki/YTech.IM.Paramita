@@ -7,11 +7,20 @@ using YTech.IM.Paramita.Core.Master;
 
 namespace YTech.IM.Paramita.Core.Transaction.Inventory
 {
-  public  class TTransRef : EntityWithTypedId<string>, IHasAssignedId<string>
+    public class TTransRef : EntityWithTypedId<string>, IHasAssignedId<string>
     {
+        public TTransRef() { }
+
+        public TTransRef(TTrans trans)
+        {
+            Check.Require(trans != null, "journal may not be null");
+
+            TransId = trans;
+        }
+
         [DomainSignature]
         [NotNull, NotEmpty]
-        public virtual TTrans TransId { get; set; }
+        public virtual TTrans TransId { get; protected set; }
         public virtual TTrans TransIdRef { get; set; }
 
         public virtual string TransRefStatus { get; set; }

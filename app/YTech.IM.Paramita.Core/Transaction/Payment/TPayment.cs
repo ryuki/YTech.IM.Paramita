@@ -30,6 +30,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Payment
         public virtual decimal? PaymentTotal { get; set; }
         public virtual string PaymentStatus { get; set; }
         public virtual string PaymentDesc { get; set; }
+        public virtual string PaymentPic { get; set; }
 
         public virtual IList<TPaymentDet> PaymentDets { get; protected set; }
         

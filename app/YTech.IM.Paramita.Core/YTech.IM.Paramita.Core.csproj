@@ -88,6 +88,7 @@
     <Compile Include="Master\MSupplier.cs" />
     <Compile Include="Master\RefPerson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryInterfaces\IVStockCardFlowRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMJobTypeRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMProductRepository.cs" />
     <Compile Include="RepositoryInterfaces\IMUnitTypeRepository.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Transaction\TReference.cs" />
     <Compile Include="Transaction\Unit\TTransUnit.cs" />
     <Compile Include="Transaction\Unit\TUnit.cs" />
+    <Compile Include="View\VStockCardFlow.cs" />
     <Compile Include="View\VJournalDetFlow.cs" />
   </ItemGroup>
   <ItemGroup>

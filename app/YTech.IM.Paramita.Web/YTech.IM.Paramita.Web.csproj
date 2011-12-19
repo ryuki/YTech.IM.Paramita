@@ -227,6 +227,7 @@
     <Content Include="Content\Images\home-icon.png" />
     <Content Include="Content\Images\hoverSkins.png" />
     <Content Include="Content\Images\l.gif" />
+    <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\Mvc2Validation.png" />
     <Content Include="Content\Images\navigation-menu.png" />
@@ -296,6 +297,8 @@
     <Content Include="Scripts\jquery-1.4.4.min.js" />
     <Content Include="Scripts\jquery-1.6.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.2.min.js" />
+    <Content Include="Scripts\jquery-1.6.3-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.6.3.min.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.colorbox-min.js" />
     <Content Include="Scripts\jquery.jqGrid.min.js" />
@@ -325,6 +328,7 @@
     <Content Include="Views\Shared\Js.ascx" />
     <Content Include="Views\Shared\LogOnUserControl.ascx" />
     <Content Include="Views\Shared\Menu.ascx" />
+    <Content Include="Views\Shared\Progress.ascx" />
     <Content Include="Views\Shared\Status.ascx" />
     <Content Include="Views\Transaction\Accounting\Opening.aspx" />
     <Content Include="Views\Transaction\Accounting\ListCash.aspx" />

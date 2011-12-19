@@ -33,13 +33,13 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             TJournal journal = SaveJournalHeader(trans.WarehouseId.CostCenterId, newVoucher, trans.TransBy, trans.TransDate, trans.TransFactur, desc);
             MAccountRef accountRef = null;
             
-            //save biaya pemakaian
-            accountRef = AccountRefRepository.GetByRefTableId(EnumReferenceTable.JobType, trans.JobTypeId.Id);
-            SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.D, totalHPP, trans.TransFactur, desc);
+            ////save biaya pemakaian
+            //accountRef = AccountRefRepository.GetByRefTableId(EnumReferenceTable.JobType, trans.JobTypeId.Id);
+            //SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.D, totalHPP, trans.TransFactur, desc);
 
-            //save persediaan
-            accountRef = AccountRefRepository.GetByRefTableId(EnumReferenceTable.Warehouse, trans.WarehouseId.Id);
-            SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.K, totalHPP, trans.TransFactur, desc);
+            ////save persediaan
+            //accountRef = AccountRefRepository.GetByRefTableId(EnumReferenceTable.Warehouse, trans.WarehouseId.Id);
+            //SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.K, totalHPP, trans.TransFactur, desc);
 
             JournalRepository.Save(journal);
 

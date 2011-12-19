@@ -33,5 +33,32 @@ namespace YTech.IM.Paramita.Data.Repository
 
             return q.List();
         }
+
+        public decimal? GetTotalStockBeforeDate(string warehouseId, DateTime dateFrom)
+        {
+            StringBuilder sql = new StringBuilder();
+
+            sql.AppendLine(@"  select sum(s.StockQty * s.StockPrice) ");
+            sql.AppendLine(@"   from TStock s ");
+            sql.AppendLine(@"   where s.WarehouseId.Id = :warehouseId");
+            sql.AppendLine(@"       and s.StockDate <= :dateFrom");
+
+            IQuery q = Session.CreateQuery(sql.ToString());
+            q.SetString("warehouseId", warehouseId);
+            q.SetDateTime("dateFrom", dateFrom);
+            decimal totalIn = Convert.ToDecimal(q.UniqueResult());
+
+            sql = new StringBuilder();
+            sql.AppendLine(@"  select sum(r.StockRefQty * r.StockRefPrice) ");
+            sql.AppendLine(@"   from TStock s inner join s.StockRefs r  ");
+            sql.AppendLine(@"   where s.WarehouseId.Id = :warehouseId");
+            sql.AppendLine(@"       and r.StockRefDate <= :dateFrom");
+
+            q = Session.CreateQuery(sql.ToString());
+            q.SetString("warehouseId", warehouseId);
+            q.SetDateTime("dateFrom", dateFrom);
+            decimal totalOut = Convert.ToDecimal(q.UniqueResult());
+            return totalIn - totalOut;
+        }
     }
 }

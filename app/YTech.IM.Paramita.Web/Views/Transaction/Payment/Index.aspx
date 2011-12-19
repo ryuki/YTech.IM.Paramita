@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/MyMaster.master" AutoEventWireup="true"
-    Inherits="System.Web.Mvc.ViewPage<YTech.IM.Paramita.Web.Controllers.ViewModel.PaymentViewModel>" %>
+    Inherits="System.Web.Mvc.ViewPage<PaymentViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -18,7 +18,8 @@
                                   {
                                       InsertionMode = InsertionMode.Replace,
                                       OnBegin = "ajaxValidate",
-                                      OnSuccess = "onSavedSuccess"
+                                      OnSuccess = "onSavedSuccess",
+                                      LoadingElementId = "progress"
                                   }
 
             ))
@@ -61,8 +62,28 @@
                 <table>
                     <tr>
                         <td>
+                            <label for="CostCenterId">
+                                Cost Center :</label>
+                        </td>
+                        <td>
+                            <%= Html.DropDownList("CostCenterId", Model.CostCenterList)%>
+                            <%=Html.ValidationMessage("CostCenterId")%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="TransBy">
+                                Supplier :</label>
+                        </td>
+                        <td>
+                            <%= Html.DropDownList("TransBy", Model.TransByList)%>
+                            <%=Html.ValidationMessage("TransBy")%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <label for="PaymentDate">
-                                Tanggal :</label>
+                                Tanggal Pembayaran :</label>
                         </td>
                         <td>
                             <%=Html.TextBox("PaymentDate",
@@ -89,6 +110,16 @@
                         <td>
                             <%=Html.TextBox("CashAccountName", Model.CashAccountName)%>
                             <%=Html.ValidationMessage("CashAccountName")%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="PaymentPic">
+                                Dibayar Oleh :</label>
+                        </td>
+                        <td>
+                            <%=Html.TextBox("PaymentPic", Model.Payment.PaymentPic)%>
+                            <%=Html.ValidationMessage("PaymentPic")%>
                         </td>
                     </tr>
                     <tr>
@@ -146,6 +177,14 @@
                 //$("#list").trigger("reloadGrid");
             }
         });
+        $("#TransBy").change(function () {
+           $("#list").trigger("reloadGrid");
+        });
+
+        $("#btnSave").click(function () {
+           //set value for selected transid
+            $("#SelectedTransId").val(jQuery("#list").jqGrid('getGridParam','selarrrow'));
+        });
 
         $.jgrid.nav.addtext = "Tambah";
         $.jgrid.nav.edittext = "Edit";
@@ -162,9 +201,11 @@ var transStatus = '<%=EnumTransactionStatus.Sales.ToString()%>';
            var transStatus = '<%=EnumTransactionStatus.Purchase.ToString()%>';
         <% } %>
         $("#list").jqGrid({
-            url: '<%= Url.Action("ListSearchTrans", "Inventory") %>',
+            url: '<%= Url.Action("ListTransNotPaid", "Inventory") %>',
             postData: {
-                transStatus: function () { return transStatus; }
+                transStatus: function () { return transStatus; },
+                searchBy: function () { return 'TransBy'; },
+                searchText: function () { return $('#TransBy').val(); }
             },
             datatype: 'json',
             mtype: 'GET',
@@ -266,9 +307,9 @@ function onSavedSuccess(e) {
 function ajaxValidate() {
 var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
 
-//set value for selected transid
-$("#SelectedTransId").val(jQuery("#list").jqGrid('getGridParam','selarrrow'));
-alert($("#SelectedTransId").val());
+////set value for selected transid
+//$("#SelectedTransId").val(jQuery("#list").jqGrid('getGridParam','selarrrow'));
+//alert($("#SelectedTransId").val());
     var validateResult = $('form').validate({
     rules: {
      "PaymentDate": { required: true }

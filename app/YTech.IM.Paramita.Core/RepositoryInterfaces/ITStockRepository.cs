@@ -11,5 +11,7 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
     public interface ITStockRepository : INHibernateRepositoryWithTypedId<TStock, string>
     {
         IList GetSisaStockList(MItem itemId, MWarehouse mWarehouse);
+
+        decimal? GetTotalStockBeforeDate(string warehouseId, DateTime dateFrom);
     }
 }

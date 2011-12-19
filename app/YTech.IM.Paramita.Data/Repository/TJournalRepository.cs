@@ -79,5 +79,19 @@ namespace YTech.IM.Paramita.Data.Repository
             IEnumerable<TJournal> list = q.List<TJournal>();
             return list;
         }
+
+        public void DeleteByEvidenceNo(string evidenceNo)
+        {
+            StringBuilder sql = new StringBuilder();
+            //delete journal by evidence no
+            sql.AppendLine(@" from TJournal where JournalEvidenceNo = :evidenceNo ");
+            IQuery q = Session.CreateQuery(sql.ToString());
+            q.SetString("evidenceNo", evidenceNo);
+            IList<TJournal> listJournal = q.List<TJournal>();
+            foreach (TJournal journal in listJournal)
+            {
+                Session.Delete(journal);
+            }
+        }
     }
 }

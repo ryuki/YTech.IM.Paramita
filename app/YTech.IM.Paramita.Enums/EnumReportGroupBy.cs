@@ -5,12 +5,11 @@ using System.Text;
 
 namespace YTech.IM.Paramita.Enums
 {
-    public enum EnumReferenceTable
+    public enum EnumReportGroupBy
     {
-        Warehouse,
-        JobType,
+        [StringValue("Per Supplier")]
         Supplier,
-        Transaction,
-        Customer
+        [StringValue("Per Tipe Unit")]
+        UnitType
     }
 }

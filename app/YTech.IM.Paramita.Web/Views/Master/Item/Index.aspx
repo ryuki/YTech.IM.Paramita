@@ -2,6 +2,16 @@
     Inherits="System.Web.Mvc.ViewPage<IEnumerable<MItem>>" %>
 
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
+ <div>
+        <label for="ddlSearchBy">
+            Cari berdasar :</label>
+        <select id="ddlSearchBy">
+            <option value="0">Kode Produk</option>
+            <option value="1">Nama</option>
+        </select>
+        <input id="txtSearch" type="text" />
+        <input id="btnSearch" type="button" value="Cari" />
+    </div>
     <table id="list" class="scroll" cellpadding="0" cellspacing="0">
     </table>
     <div id="listPager" class="scroll" style="text-align: center;">
@@ -126,6 +136,21 @@
                 deleteDialog
             );
         });
+
+            $('#btnSearch').click(function () {
+                var newurl = '<%= Url.Action("ListSearch", "Item") %>';
+                var searchby = $("#ddlSearchBy option:selected").val();
+                if (searchby == "0") {
+                    newurl += '?itemId=';
+                }
+                else if (searchby == "1") {
+                    newurl += '?itemName=';
+                }
+                newurl += $("#txtSearch").val();
+                //                alert(newurl);
+                $("#list").jqGrid().setGridParam({ url: newurl }).trigger("reloadGrid");
+
+            });
 
 
 //            alert(brands.toString());

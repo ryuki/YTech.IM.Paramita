@@ -72,6 +72,14 @@
           <DataField>JournalId</DataField>
           <rd:TypeName>YTech.IM.Paramita.Core.Transaction.Accounting.TJournal</rd:TypeName>
         </Field>
+        <Field Name="JournalPic">
+          <DataField>JournalPic</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="JournalPic2">
+          <DataField>JournalPic2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="JournalVoucherNo">
           <DataField>JournalVoucherNo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -147,7 +155,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>9.2845in</Width>
+              <Width>10.73988in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -183,6 +191,12 @@
                                 <Width>1.70833in</Width>
                               </TablixColumn>
                               <TablixColumn>
+                                <Width>1in</Width>
+                              </TablixColumn>
+                              <TablixColumn>
+                                <Width>1in</Width>
+                              </TablixColumn>
+                              <TablixColumn>
                                 <Width>1.38591in</Width>
                               </TablixColumn>
                             </TablixColumns>
@@ -201,7 +215,7 @@
                                               <TextRun>
                                                 <Value>No</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <FontWeight>Bold</FontWeight>
                                                   <Color>White</Color>
@@ -239,7 +253,7 @@
                                               <TextRun>
                                                 <Value>Tanggal</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <FontWeight>Bold</FontWeight>
                                                   <Color>White</Color>
@@ -277,7 +291,7 @@
                                               <TextRun>
                                                 <Value>No Voucher</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <FontWeight>Bold</FontWeight>
                                                   <Color>White</Color>
@@ -315,7 +329,7 @@
                                               <TextRun>
                                                 <Value>No Bukti</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <FontWeight>Bold</FontWeight>
                                                   <Color>White</Color>
@@ -353,7 +367,7 @@
                                               <TextRun>
                                                 <Value>Debet</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <FontWeight>Bold</FontWeight>
                                                   <Color>White</Color>
@@ -391,7 +405,7 @@
                                               <TextRun>
                                                 <Value>Kredit</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <FontWeight>Bold</FontWeight>
                                                   <Color>White</Color>
@@ -429,7 +443,7 @@
                                               <TextRun>
                                                 <Value>Saldo</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <FontWeight>Bold</FontWeight>
                                                   <Color>White</Color>
@@ -458,6 +472,82 @@
                                   </TablixCell>
                                   <TablixCell>
                                     <CellContents>
+                                      <Textbox Name="Textbox22">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>PIC</Value>
+                                                <Style>
+                                                  <FontFamily>Calibri</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>White</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Center</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox22</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#7292cc</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <BackgroundColor>#4c68a2</BackgroundColor>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox17">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>PIC 2</Value>
+                                                <Style>
+                                                  <FontFamily>Calibri</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>White</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Center</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox17</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#7292cc</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <BackgroundColor>#4c68a2</BackgroundColor>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
                                       <Textbox Name="Textbox9">
                                         <CanGrow>true</CanGrow>
                                         <KeepTogether>true</KeepTogether>
@@ -467,7 +557,7 @@
                                               <TextRun>
                                                 <Value>Keterangan</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <FontWeight>Bold</FontWeight>
                                                   <Color>White</Color>
@@ -510,7 +600,7 @@
                                               <TextRun>
                                                 <Value>=rownumber("Tablix1")</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
@@ -546,7 +636,7 @@
                                               <TextRun>
                                                 <Value>=Fields!JournalDate.Value</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <Format>dd-MMM-yyyy</Format>
                                                   <Color>#4d4d4d</Color>
@@ -583,7 +673,7 @@
                                               <TextRun>
                                                 <Value>=Fields!JournalVoucherNo.Value</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
@@ -617,7 +707,7 @@
                                               <TextRun>
                                                 <Value>=Fields!JournalDetEvidenceNo.Value</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
@@ -651,7 +741,7 @@
                                               <TextRun>
                                                 <Value>=iif(Fields!JournalDetStatus.Value="D",Fields!JournalDetAmmount.Value,"")</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <Format>N2</Format>
                                                   <Color>#4d4d4d</Color>
@@ -688,7 +778,7 @@
                                               <TextRun>
                                                 <Value>=iif(Fields!JournalDetStatus.Value="K",Fields!JournalDetAmmount.Value,"")</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <Format>N2</Format>
                                                   <Color>#4d4d4d</Color>
@@ -725,7 +815,7 @@
                                               <TextRun>
                                                 <Value>=Fields!Saldo.Value</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <Format>N2</Format>
                                                   <Color>#4d4d4d</Color>
@@ -753,6 +843,74 @@
                                   </TablixCell>
                                   <TablixCell>
                                     <CellContents>
+                                      <Textbox Name="JournalPic">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!JournalPic.Value</Value>
+                                                <Style>
+                                                  <FontFamily>Calibri</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Color>#4d4d4d</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>JournalPic</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#e5e5e5</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="JournalPic2">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!JournalPic2.Value</Value>
+                                                <Style>
+                                                  <FontFamily>Calibri</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Color>#4d4d4d</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>JournalPic2</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#e5e5e5</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
                                       <Textbox Name="JournalDetDesc">
                                         <CanGrow>true</CanGrow>
                                         <KeepTogether>true</KeepTogether>
@@ -762,7 +920,7 @@
                                               <TextRun>
                                                 <Value>=Fields!JournalDetDesc.Value</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
@@ -801,8 +959,9 @@
                                               <TextRun>
                                                 <Value />
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
                                               </TextRun>
@@ -837,8 +996,9 @@
                                               <TextRun>
                                                 <Value />
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
                                               </TextRun>
@@ -873,8 +1033,9 @@
                                               <TextRun>
                                                 <Value />
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
                                               </TextRun>
@@ -905,10 +1066,11 @@
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value />
+                                                <Value>Total</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
                                               </TextRun>
@@ -941,8 +1103,9 @@
                                               <TextRun>
                                                 <Value>=sum(iif(Fields!JournalDetStatus.Value="D",Fields!JournalDetAmmount.Value,cdec(0)))</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
                                                   <Format>N2</Format>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
@@ -978,8 +1141,9 @@
                                               <TextRun>
                                                 <Value>=sum(iif(Fields!JournalDetStatus.Value="K",Fields!JournalDetAmmount.Value,cdec(0)))</Value>
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
                                                   <Format>N2</Format>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
@@ -1015,8 +1179,9 @@
                                               <TextRun>
                                                 <Value />
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
                                               </TextRun>
@@ -1038,7 +1203,76 @@
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
                                       </Textbox>
-                                      <rd:Selected>true</rd:Selected>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox24">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value />
+                                                <Style>
+                                                  <FontFamily>Calibri</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>#4d4d4d</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox24</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#e5e5e5</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox21">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value />
+                                                <Style>
+                                                  <FontFamily>Calibri</FontFamily>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>#4d4d4d</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox21</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>#e5e5e5</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell>
@@ -1052,8 +1286,9 @@
                                               <TextRun>
                                                 <Value />
                                                 <Style>
-                                                  <FontFamily>Verdana</FontFamily>
+                                                  <FontFamily>Calibri</FontFamily>
                                                   <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
                                                   <Color>#4d4d4d</Color>
                                                 </Style>
                                               </TextRun>
@@ -1089,6 +1324,8 @@
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
+                              <TablixMember />
+                              <TablixMember />
                             </TablixMembers>
                           </TablixColumnHierarchy>
                           <TablixRowHierarchy>
@@ -1104,10 +1341,10 @@
                               </TablixMember>
                             </TablixMembers>
                           </TablixRowHierarchy>
-                          <DataSetName>JournalDetViewModel</DataSetName>
+                          <DataSetName>JournalDetFlowViewModel</DataSetName>
                           <Top>0.33359in</Top>
                           <Height>0.75in</Height>
-                          <Width>8.73988in</Width>
+                          <Width>10.73988in</Width>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1237,12 +1474,18 @@
                   <GroupExpression>=Fields!AccountId.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Fields!AccountId.Value</Value>
+                </SortExpression>
+              </SortExpressions>
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
+        <DataSetName>JournalDetFlowViewModel</DataSetName>
         <Top>0.45604in</Top>
         <Height>1.08359in</Height>
-        <Width>9.2845in</Width>
+        <Width>10.73988in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -1254,7 +1497,7 @@
     <Height>1.66437in</Height>
     <Style />
   </Body>
-  <Width>9.50601in</Width>
+  <Width>10.73988in</Width>
   <Page>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>

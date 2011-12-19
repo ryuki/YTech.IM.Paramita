@@ -12,5 +12,10 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 
 
         IEnumerable<TTrans> GetPagedTransList(string orderCol, string orderBy, int pageIndex, int maxRows, ref int totalRows, string searchBy, string searchText, string transStatus);
+        IEnumerable<TTrans> GetPagedTransNotPaidList(string orderCol, string orderBy, int pageIndex, int maxRows, ref int totalRows, string searchBy, string searchText, string transStatus);
+
+        IEnumerable<TTrans> GetPagedTransNotRefList(string orderCol, string orderBy, int pageIndex, int maxRows, ref int totalRows, string searchBy, string searchText, string transStatus);
+
+        IList<TTrans> GetTransNotRefList(string warehouseId, string transStatus, string transBy);
     }
 }

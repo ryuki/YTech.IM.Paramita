@@ -29,6 +29,13 @@ namespace YTech.IM.Paramita.Web
                 rv.ProcessingMode = ProcessingMode.Local;
                 rv.LocalReport.ReportPath = Server.MapPath(string.Format("~/Views/Transaction/Report/{0}.rdlc", rpt));
 
+                //set params
+                ReportParameter[] parameters = GetReportParam();
+                if (parameters != null)
+                {
+                    rv.LocalReport.SetParameters(parameters);
+                }
+
                 rv.LocalReport.DataSources.Clear();
                 ReportDataSource[] repCol = GetReportData();
                 if (repCol != null)
@@ -50,6 +57,11 @@ namespace YTech.IM.Paramita.Web
             //    ViewState["ReportData"] = Session["ReportData"];
             //}
             return Session["ReportData"] as ReportDataSource[];
+        }
+
+        private ReportParameter[] GetReportParam()
+        {
+            return Session["ReportParam"] as ReportParameter[];
         }
     }
 }

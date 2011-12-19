@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
@@ -16,11 +17,6 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
     [HandleError]
     public class BrandController : Controller
     {
-        //public BrandController()
-        //    : this(new MBrandRepository())
-        //{
-        //}
-
         public BrandController(IMBrandRepository mBrandRepository)
         {
             Check.Require(mBrandRepository != null, "mBrandRepository may not be null");
@@ -168,6 +164,17 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
                     sb.Append(";");
             }
             return Content(sb.ToString());
+        }
+
+        public virtual void Export(FormCollection formCollection)
+        {
+            StringWriter sw = new StringWriter();
+
+            Response.AddHeader("Content-Disposition", "attachment; filename=test.csv");
+            Response.ContentType = "text/csv";
+            Response.ContentEncoding = System.Text.Encoding.GetEncoding("utf-8");
+            Response.Write(formCollection["csvBuffer"]);
+            Response.End();     
         }
     }
 }

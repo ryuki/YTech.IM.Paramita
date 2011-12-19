@@ -69,6 +69,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public bool ShowRecPeriod { get; internal set; }
         public bool ShowItem { get; internal set; }
         public bool ShowAccount { get; internal set; }
+        public bool ShowAccountTo { get; internal set; }
         public bool ShowGenerateDetail { get; internal set; }
 
         public DateTime? DateFrom { get; set; }
@@ -79,6 +80,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public string RecPeriodId { get; set; }
         public string ItemId { get; set; }
         public string AccountId { get; set; }
+        public string AccountIdTo { get; set; }
         public bool GenerateDetail { get; set; }
 
         public SelectList CostCenterList { get; internal set; }

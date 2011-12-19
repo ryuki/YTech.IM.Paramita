@@ -110,7 +110,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
 
                 _mUnitTypeRepository.Save(unitType);
 
-                GenerateEachUnit(unitType);
+                //GenerateEachUnit(unitType);
 
                 _mUnitTypeRepository.DbContext.CommitChanges();
             }

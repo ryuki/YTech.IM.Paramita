@@ -13,5 +13,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel.Reports
         public string CostCenterId { get; set; }
         public string CostCenterName { get; set; }
         public string JournalVoucherNo { get; set; }
+        public string JournalPic { get; set; }
+        public string JournalPic2 { get; set; }
     }
 }

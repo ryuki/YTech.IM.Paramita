@@ -119,8 +119,10 @@
     <Compile Include="NHibernateMaps\Transaction\TTransRefMap.cs" />
     <Compile Include="NHibernateMaps\Unit\TTransUnitMap.cs" />
     <Compile Include="NHibernateMaps\Unit\TUnitMap.cs" />
+    <Compile Include="NHibernateMaps\View\VStockCardFlowMap.cs" />
     <Compile Include="NHibernateMaps\View\VJournalDetFlowMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\VStockCardFlowRepository.cs" />
     <Compile Include="Repository\MJobTypeRepository.cs" />
     <Compile Include="Repository\MProductRepository.cs" />
     <Compile Include="Repository\MUnitTypeRepository.cs" />

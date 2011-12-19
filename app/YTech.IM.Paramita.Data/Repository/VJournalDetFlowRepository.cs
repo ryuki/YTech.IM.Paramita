@@ -15,7 +15,7 @@ namespace YTech.IM.Paramita.Data.Repository
 {
     public class VJournalDetFlowRepository : NHibernateRepositoryWithTypedId<VJournalDetFlow, string>, IVJournalDetFlowRepository
     {
-        public IList<VJournalDetFlow> GetForReport(DateTime? dateFrom, DateTime? dateTo, string costCenterId, string accountId)
+        public IList<VJournalDetFlow> GetForReport(DateTime? dateFrom, DateTime? dateTo, string costCenterId, string accountId, string accountIdTo)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine(@"  select det
@@ -29,7 +29,9 @@ namespace YTech.IM.Paramita.Data.Repository
                 sql.AppendLine(@"   and j.CostCenterId.Id = :costCenterId");
 
             if (!string.IsNullOrEmpty(accountId))
-                sql.AppendLine(@"   and det.AccountId.Id = :accountId");
+                sql.AppendLine(@"   and det.AccountId.Id >= :accountId");
+            if (!string.IsNullOrEmpty(accountIdTo))
+                sql.AppendLine(@"   and det.AccountId.Id <= :accountIdTo");
 
             sql.AppendLine(@"  order by det.AccountId.Id, j.JournalDate, det.RowNumber, j.JournalVoucherNo ");
 
@@ -44,6 +46,8 @@ namespace YTech.IM.Paramita.Data.Repository
 
             if (!string.IsNullOrEmpty(accountId))
                 q.SetString("accountId", accountId);
+            if (!string.IsNullOrEmpty(accountIdTo))
+                q.SetString("accountIdTo", accountIdTo);
 
             return q.List<VJournalDetFlow>();
         }

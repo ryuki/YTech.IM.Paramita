@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
@@ -20,9 +21,19 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public static TransactionFormViewModel Create(EnumTransactionStatus enumTransactionStatus, ITTransRepository transRepository, IMWarehouseRepository mWarehouseRepository, IMSupplierRepository mSupplierRepository, IMUnitTypeRepository mUnitTypeRepository, IMJobTypeRepository mJobTypeRepository)
         {
             TransactionFormViewModel viewModel = new TransactionFormViewModel();
-
-            viewModel.Trans = SetNewTrans(enumTransactionStatus);
+            TTrans trans = SetNewTrans(enumTransactionStatus);
+            viewModel.Trans = trans;
             Helper.CommonHelper.SetViewModelByStatus(viewModel, enumTransactionStatus);
+
+            viewModel.TransFactur = trans.TransFactur;
+            viewModel.TransDate = trans.TransDate;
+            viewModel.TransId = trans.Id;
+            viewModel.TransStatus = trans.TransStatus;
+            viewModel.WarehouseId = trans.WarehouseId;
+            viewModel.WarehouseIdTo = trans.WarehouseIdTo;
+            viewModel.UnitTypeId = trans.UnitTypeId;
+            viewModel.JobTypeId = trans.JobTypeId;
+            viewModel.TransDesc = trans.TransDesc;
 
             IList<MWarehouse> list = mWarehouseRepository.GetAll();
             MWarehouse mWarehouse = new MWarehouse();
@@ -67,13 +78,39 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         {
             TTrans trans = new TTrans();
             trans.TransDate = DateTime.Today;
-            trans.TransFactur = Helper.CommonHelper.GetFacturNo(enumTransactionStatus, false);
+            if (enumTransactionStatus != EnumTransactionStatus.Purchase)
+            {
+                 trans.TransFactur = Helper.CommonHelper.GetFacturNo(enumTransactionStatus, false);
+            }
+           
             trans.SetAssignedIdTo(Guid.NewGuid().ToString());
             trans.TransStatus = enumTransactionStatus.ToString();
             return trans;
         }
 
         public TTrans Trans { get; internal set; }
+
+        public string TransId { get; set; }
+        [Required(ErrorMessage = "No Faktur harus diisi.")]
+        public string TransFactur { get; set; }
+
+        [Required(ErrorMessage = "Pilih gudang.")]
+        public MWarehouse WarehouseId { get; set; }
+        [Required(ErrorMessage = "Pilih gudang tujuan.")]
+        public MWarehouse WarehouseIdTo { get; set; }
+        [Required(ErrorMessage = "Pilih tipe unit.")]
+        public MUnitType UnitTypeId { get; set; }
+        [Required(ErrorMessage = "Tanggal harus diisi.")]
+        public DateTime? TransDate { get; set; }
+        [Required(ErrorMessage = "Pilih supplier.")]
+        public string TransBy { get; set; }
+        [Required(ErrorMessage = "Pilih cara pembayaran.")]
+        public string TransPaymentMethod { get; set; }
+        public string TransStatus { get; set; }
+        public string TransDesc { get; set; }
+        [Required(ErrorMessage = "Pilih jenis pekerjaan.")]
+        public MJobType JobTypeId { get; set; }
+
         public IList<TTransDet> ListOfTransDet { get; internal set; }
 
         public SelectList WarehouseList { get; internal set; }

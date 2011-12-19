@@ -1337,10 +1337,13 @@
                           <Value>LOGO_bw</Value>
                           <Sizing>FitProportional</Sizing>
                           <Top>0.00393in</Top>
-                          <Left>0.00664in</Left>
+                          <Left>0.01389in</Left>
                           <Height>0.62736in</Height>
                           <Width>1.52682in</Width>
                           <ZIndex>9</ZIndex>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1355,7 +1358,6 @@
                         </Border>
                       </Style>
                     </Rectangle>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>

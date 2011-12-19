@@ -1082,26 +1082,29 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox36">
+                    <Textbox Name="TransDetTotal1">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Sum(Fields!TransDetTotal.Value)</Value>
                               <Style>
                                 <FontFamily>Calibri</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>N2</Format>
                                 <Color>#465678</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox36</rd:DefaultName>
+                      <rd:DefaultName>TransDetTotal1</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>#c6daf8</Color>
@@ -1438,7 +1441,7 @@
                       <Paragraph>
                         <TextRuns>
                           <TextRun>
-                            <Value>Supplier</Value>
+                            <Value>=Parameters!ParamGroupByTitle.Value</Value>
                             <Style>
                               <FontFamily>Calibri</FontFamily>
                               <FontSize>9pt</FontSize>
@@ -1475,12 +1478,16 @@
             <TablixMember>
               <Group Name="SupplierName">
                 <GroupExpressions>
-                  <GroupExpression>=Fields!SupplierName.Value</GroupExpression>
+                  <GroupExpression>=iif(Parameters!ParamGroupBy.Value = "Supplier",Fields!SupplierName.Value,
+iif(Parameters!ParamGroupBy.Value = "UnitType",Fields!UnitTypeName.Value,
+Fields!Id.Value))</GroupExpression>
                 </GroupExpressions>
               </Group>
               <SortExpressions>
                 <SortExpression>
-                  <Value>=Fields!SupplierName.Value</Value>
+                  <Value>=iif(Parameters!ParamGroupBy.Value.Equals("Supplier"),Fields!SupplierName.Value,
+iif(Parameters!ParamGroupBy.Value.Equals("UnitType"),Fields!UnitTypeName.Value,
+Fields!Id.Value))</Value>
                 </SortExpression>
               </SortExpressions>
               <TablixHeader>
@@ -1493,7 +1500,9 @@
                       <Paragraph>
                         <TextRuns>
                           <TextRun>
-                            <Value>=Fields!SupplierName.Value</Value>
+                            <Value>=iif(Parameters!ParamGroupBy.Value = "Supplier",Fields!SupplierName.Value,
+iif(Parameters!ParamGroupBy.Value = "UnitType",Fields!UnitTypeName.Value,
+Fields!Id.Value))</Value>
                             <Style>
                               <FontFamily>Calibri</FontFamily>
                               <FontSize>9pt</FontSize>
@@ -1571,6 +1580,8 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
+        <RepeatColumnHeaders>true</RepeatColumnHeaders>
+        <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>TransTotalViewModel</DataSetName>
         <Top>0.60417in</Top>
         <Left>0.01042in</Left>
@@ -1589,7 +1600,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Laporan Rekap Penerimaan Stok Per Supplier</Value>
+                <Value>=Parameters!ParamTitle.Value</Value>
                 <Style>
                   <FontFamily>Calibri</FontFamily>
                   <FontSize>11pt</FontSize>
@@ -1622,6 +1633,20 @@
     <Height>2in</Height>
     <Style />
   </Body>
+  <ReportParameters>
+    <ReportParameter Name="ParamTitle">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamGroupBy">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamGroupByTitle">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <Width>9.01042in</Width>
   <Page>
     <LeftMargin>1in</LeftMargin>

@@ -26,7 +26,7 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Transaction
             mapping.Map(x => x.TransDate, "TRANS_DATE");
             mapping.Map(x => x.TransBy, "TRANS_BY");
             mapping.Map(x => x.TransFactur, "TRANS_FACTUR");
-            mapping.References(x => x.EmployeeId, "EMPLOYEE_ID").Fetch.Join();
+            mapping.References(x => x.EmployeeId, "EMPLOYEE_ID");
             mapping.Map(x => x.TransDueDate, "TRANS_DUE_DATE");
             mapping.Map(x => x.TransPaymentMethod, "TRANS_PAYMENT_METHOD");
             mapping.Map(x => x.TransSubTotal, "TRANS_SUB_TOTAL");
@@ -42,9 +42,14 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Transaction
             mapping.Map(x => x.ModifiedBy, "MODIFIED_BY");
             mapping.Map(x => x.ModifiedDate, "MODIFIED_DATE");
             mapping.Map(x => x.RowVersion, "ROW_VERSION").ReadOnly();
-
-
+            
             mapping.HasMany(x => x.TransDets)
+                .AsBag()
+                .Inverse()
+                .KeyColumn("TRANS_ID")
+                .Cascade.All();
+
+            mapping.HasMany(x => x.TransRefs)
                 .AsBag()
                 .Inverse()
                 .KeyColumn("TRANS_ID")

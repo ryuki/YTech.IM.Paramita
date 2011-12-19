@@ -25,6 +25,7 @@ namespace YTech.IM.Paramita.Data.NHibernateMaps.Payment
             mapping.Map(x => x.PaymentTotal, "PAYMENT_TOTAL");
             mapping.Map(x => x.PaymentStatus, "PAYMENT_STATUS");
             mapping.Map(x => x.PaymentDesc, "PAYMENT_DESC");
+            mapping.Map(x => x.PaymentPic, "PAYMENT_PIC");
 
             mapping.Map(x => x.DataStatus, "DATA_STATUS");
             mapping.Map(x => x.CreatedBy, "CREATED_BY");

@@ -102,7 +102,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>6.1271in</Width>
+              <Width>7.1271in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -117,7 +117,7 @@
                           <TablixBody>
                             <TablixColumns>
                               <TablixColumn>
-                                <Width>6.1271in</Width>
+                                <Width>7.1271in</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
@@ -166,6 +166,9 @@
                                               <TablixColumns>
                                                 <TablixColumn>
                                                   <Width>0.31132in</Width>
+                                                </TablixColumn>
+                                                <TablixColumn>
+                                                  <Width>1in</Width>
                                                 </TablixColumn>
                                                 <TablixColumn>
                                                   <Width>1in</Width>
@@ -363,6 +366,44 @@
                                                             </Paragraph>
                                                           </Paragraphs>
                                                           <rd:DefaultName>Textbox7</rd:DefaultName>
+                                                          <Style>
+                                                            <Border>
+                                                              <Color>#7292cc</Color>
+                                                              <Style>Solid</Style>
+                                                            </Border>
+                                                            <BackgroundColor>#4c68a2</BackgroundColor>
+                                                            <PaddingLeft>2pt</PaddingLeft>
+                                                            <PaddingRight>2pt</PaddingRight>
+                                                            <PaddingTop>2pt</PaddingTop>
+                                                            <PaddingBottom>2pt</PaddingBottom>
+                                                          </Style>
+                                                        </Textbox>
+                                                      </CellContents>
+                                                    </TablixCell>
+                                                    <TablixCell>
+                                                      <CellContents>
+                                                        <Textbox Name="Textbox1">
+                                                          <CanGrow>true</CanGrow>
+                                                          <KeepTogether>true</KeepTogether>
+                                                          <Paragraphs>
+                                                            <Paragraph>
+                                                              <TextRuns>
+                                                                <TextRun>
+                                                                  <Value>No Faktur</Value>
+                                                                  <Style>
+                                                                    <FontFamily>Verdana</FontFamily>
+                                                                    <FontSize>9pt</FontSize>
+                                                                    <FontWeight>Bold</FontWeight>
+                                                                    <Color>White</Color>
+                                                                  </Style>
+                                                                </TextRun>
+                                                              </TextRuns>
+                                                              <Style>
+                                                                <TextAlign>Center</TextAlign>
+                                                              </Style>
+                                                            </Paragraph>
+                                                          </Paragraphs>
+                                                          <rd:DefaultName>Textbox1</rd:DefaultName>
                                                           <Style>
                                                             <Border>
                                                               <Color>#7292cc</Color>
@@ -612,7 +653,7 @@ Fields!StockCardQty.Value,
                                                     </TablixCell>
                                                     <TablixCell>
                                                       <CellContents>
-                                                        <Textbox Name="TransFactur">
+                                                        <Textbox Name="TransFactur1">
                                                           <CanGrow>true</CanGrow>
                                                           <KeepTogether>true</KeepTogether>
                                                           <Paragraphs>
@@ -630,7 +671,7 @@ Fields!StockCardQty.Value,
                                                               <Style />
                                                             </Paragraph>
                                                           </Paragraphs>
-                                                          <rd:DefaultName>TransFactur</rd:DefaultName>
+                                                          <rd:DefaultName>TransFactur1</rd:DefaultName>
                                                           <Style>
                                                             <Border>
                                                               <Color>#e5e5e5</Color>
@@ -642,7 +683,40 @@ Fields!StockCardQty.Value,
                                                             <PaddingBottom>2pt</PaddingBottom>
                                                           </Style>
                                                         </Textbox>
-                                                        <rd:Selected>true</rd:Selected>
+                                                      </CellContents>
+                                                    </TablixCell>
+                                                    <TablixCell>
+                                                      <CellContents>
+                                                        <Textbox Name="StockCardDesc">
+                                                          <CanGrow>true</CanGrow>
+                                                          <KeepTogether>true</KeepTogether>
+                                                          <Paragraphs>
+                                                            <Paragraph>
+                                                              <TextRuns>
+                                                                <TextRun>
+                                                                  <Value>=Fields!StockCardDesc.Value</Value>
+                                                                  <Style>
+                                                                    <FontFamily>Verdana</FontFamily>
+                                                                    <FontSize>9pt</FontSize>
+                                                                    <Color>#4d4d4d</Color>
+                                                                  </Style>
+                                                                </TextRun>
+                                                              </TextRuns>
+                                                              <Style />
+                                                            </Paragraph>
+                                                          </Paragraphs>
+                                                          <rd:DefaultName>StockCardDesc</rd:DefaultName>
+                                                          <Style>
+                                                            <Border>
+                                                              <Color>#e5e5e5</Color>
+                                                              <Style>Solid</Style>
+                                                            </Border>
+                                                            <PaddingLeft>2pt</PaddingLeft>
+                                                            <PaddingRight>2pt</PaddingRight>
+                                                            <PaddingTop>2pt</PaddingTop>
+                                                            <PaddingBottom>2pt</PaddingBottom>
+                                                          </Style>
+                                                        </Textbox>
                                                       </CellContents>
                                                     </TablixCell>
                                                   </TablixCells>
@@ -651,6 +725,7 @@ Fields!StockCardQty.Value,
                                             </TablixBody>
                                             <TablixColumnHierarchy>
                                               <TablixMembers>
+                                                <TablixMember />
                                                 <TablixMember />
                                                 <TablixMember />
                                                 <TablixMember />
@@ -673,7 +748,7 @@ Fields!StockCardQty.Value,
                                             <Top>0.33412in</Top>
                                             <Left>0.1271in</Left>
                                             <Height>0.5in</Height>
-                                            <Width>6in</Width>
+                                            <Width>7in</Width>
                                             <ZIndex>1</ZIndex>
                                             <Style>
                                               <Border>
@@ -748,7 +823,7 @@ Fields!StockCardQty.Value,
                           <DataSetName>StockCardViewModel</DataSetName>
                           <Top>0.27778in</Top>
                           <Height>1in</Height>
-                          <Width>6.1271in</Width>
+                          <Width>7.1271in</Width>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -859,7 +934,7 @@ Fields!StockCardQty.Value,
         <Top>0.11381in</Top>
         <Left>0.03283in</Left>
         <Height>1.40008in</Height>
-        <Width>6.1271in</Width>
+        <Width>7.1271in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -870,7 +945,7 @@ Fields!StockCardQty.Value,
     <Height>2.31368in</Height>
     <Style />
   </Body>
-  <Width>6.15993in</Width>
+  <Width>7.15993in</Width>
   <Page>
     <PageHeader>
       <Height>0.35849in</Height>

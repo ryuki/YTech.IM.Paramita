@@ -20,6 +20,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Inventory
         private void InitMembers()
         {
             TransDets = new List<TTransDet>();
+            TransRefs = new List<TTransRef>();
         }
 
 
@@ -42,6 +43,8 @@ namespace YTech.IM.Paramita.Core.Transaction.Inventory
         public virtual MJobType JobTypeId { get; set; }
 
         public virtual IList<TTransDet> TransDets { get; protected set; }
+
+        public virtual IList<TTransRef> TransRefs { get; protected set; }
 
         public virtual decimal? TransGrandTotal
         {

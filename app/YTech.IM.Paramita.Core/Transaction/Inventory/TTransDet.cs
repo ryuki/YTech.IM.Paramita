@@ -10,7 +10,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Inventory
     {
         public TTransDet() { }
 
-          public TTransDet(TTrans trans)
+        public TTransDet(TTrans trans)
         {
             Check.Require(trans != null, "trans may not be null");
 

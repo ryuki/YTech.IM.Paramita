@@ -18,7 +18,7 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
 {
     public class PaymentViewModel
     {
-        public static PaymentViewModel Create(EnumPaymentType paymentType,ITPaymentRepository tPaymentRepository, ITPaymentDetRepository tPaymentDetRepository)
+        public static PaymentViewModel Create(EnumPaymentType paymentType, ITPaymentRepository tPaymentRepository, ITPaymentDetRepository tPaymentDetRepository, IMSupplierRepository mSupplierRepository, IMCustomerRepository mCustomerRepository, IMCostCenterRepository mCostCenterRepository)
         {
             PaymentViewModel viewModel = new PaymentViewModel();
 
@@ -32,17 +32,33 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
 
             viewModel.Title = string.Format("Pembayaran {0}", paymentType.ToString());
 
+            IList<MCostCenter> list = mCostCenterRepository.GetAll();
+            MCostCenter costCenter = new MCostCenter();
+            costCenter.CostCenterName = "-Pilih Cost Center-";
+            list.Insert(0, costCenter);
+            viewModel.CostCenterList = new SelectList(list, "Id", "CostCenterName");
+
             //get label text
             switch (paymentType)
             {
-                case EnumPaymentType.Piutang :
+                case EnumPaymentType.Piutang:
                     viewModel.CashAccountLabel = "Deposit ke : ";
+
+                    //fill cust
+                    var values = from MCustomer cust in mCustomerRepository.GetAll()
+                                 select new { Id = cust.Id, Name = cust.PersonId != null ? cust.PersonId.PersonName : "-Pilih Konsumen-" };
+                    viewModel.TransByList = new SelectList(values, "Id", "Name");
                     break;
-                case EnumPaymentType.Hutang :
+                case EnumPaymentType.Hutang:
                     viewModel.CashAccountLabel = "Deposit dari : ";
+
+                    IList<MSupplier> listAcc = mSupplierRepository.GetAll();
+                    MSupplier supplier = new MSupplier();
+                    supplier.SupplierName = "-Pilih Supplier-";
+                    listAcc.Insert(0, supplier);
+                    viewModel.TransByList = new SelectList(listAcc, "Id", "SupplierName");
                     break;
             }
-
             return viewModel;
         }
 
@@ -51,7 +67,10 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
         public string CashAccountName { get; internal set; }
         public string CashAccountLabel { get; internal set; }
         public string SelectedTransId { get; internal set; }
+        public string CostCenterId { get; internal set; }
 
         public string Title { get; internal set; }
+        public SelectList TransByList { get; internal set; }
+        public SelectList CostCenterList { get; internal set; }
     }
 }

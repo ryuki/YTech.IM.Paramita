@@ -127,7 +127,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>3.16562in</Height>
+              <Height>4.2177in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -599,6 +599,7 @@
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
                                       </Textbox>
+                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                 </TablixCells>
@@ -949,6 +950,9 @@
                           <Height>0.62736in</Height>
                           <Width>1.52682in</Width>
                           <ZIndex>10</ZIndex>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1317,7 +1321,7 @@
                               <TablixMember />
                             </TablixMembers>
                           </TablixRowHierarchy>
-                          <Top>2.25996in</Top>
+                          <Top>2.88496in</Top>
                           <Left>0.62872in</Left>
                           <Height>0.90566in</Height>
                           <Width>6.03545in</Width>
@@ -1328,6 +1332,75 @@
                             </Border>
                           </Style>
                         </Tablix>
+                        <Textbox Name="Textbox17">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Terbilang :</Value>
+                                  <Style>
+                                    <FontStyle>Italic</FontStyle>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>11pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox12</rd:DefaultName>
+                          <Top>2.24601in</Top>
+                          <Left>0.07148in</Left>
+                          <Height>0.25in</Height>
+                          <Width>1.66949in</Width>
+                          <ZIndex>12</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="JournalPic3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Code.GetNumericSaid(Sum(Fields!JournalDetAmmount.Value)).ToString().Trim &amp; " Rupiah"</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>11pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>JournalPic</rd:DefaultName>
+                          <Top>2.2217in</Top>
+                          <Left>1.81706in</Left>
+                          <Height>0.25in</Height>
+                          <Width>5.40437in</Width>
+                          <ZIndex>13</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
                       </ReportItems>
                       <KeepTogether>true</KeepTogether>
                       <Style>
@@ -1361,7 +1434,7 @@
         <DataSetName>CashJournalViewModel</DataSetName>
         <Top>0.12717in</Top>
         <Left>0.375in</Left>
-        <Height>3.16562in</Height>
+        <Height>4.2177in</Height>
         <Width>7.2929in</Width>
         <Style>
           <Border>
@@ -1370,9 +1443,67 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>3.39656in</Height>
+    <Height>4.56323in</Height>
     <Style />
   </Body>
+  <Code>Public Shared Function GetNumericSaid(ByVal num As Decimal) As String
+
+Dim x = Math.Abs(num)
+
+Dim temp = ""
+If x &lt; 12 Then
+	temp = " " + angka(Math.floor(x))
+ElseIf x &lt; 20 Then
+	temp = GetNumericSaid(x - 10) &amp; " Belas"
+ElseIf x &lt; 100 Then
+	temp = GetNumericSaid(x / 10) &amp; " Puluh" &amp; GetNumericSaid(x Mod 10)
+ElseIf x &lt; 200 Then
+	temp = " Seratus" &amp; GetNumericSaid(x - 100)
+ElseIf x &lt; 1000 Then
+	temp = GetNumericSaid(x / 100) &amp; " Ratus" &amp; GetNumericSaid(x Mod 100)
+ElseIf x &lt; 2000 Then
+	temp = " Seribu" &amp; GetNumericSaid(x - 1000)
+ElseIf x &lt; 1000000 Then
+	temp = GetNumericSaid(x / 1000) &amp; " Ribu" &amp; GetNumericSaid(x Mod 1000)
+ElseIf x &lt; 1000000000 Then
+	temp = GetNumericSaid(x / 1000000) &amp; " Juta" &amp; GetNumericSaid(x Mod 1000000)
+ElseIf x &lt; 1000000000000L Then
+	temp = GetNumericSaid(x / 1000000000) &amp; " Milyar" &amp; GetNumericSaid(x Mod 1000000000)
+ElseIf x &lt; 1000000000000000L Then
+	temp = GetNumericSaid(x / 1000000000000L) &amp; " Trilyun" &amp; GetNumericSaid(x Mod 1000000000000L)
+End If
+Return temp
+End Function
+
+Public Shared Function angka(ByVal index As Integer) As String
+Dim said As String 
+Select Case index
+	Case 1
+	said = "Satu"
+	Case 2
+	said = "Dua"
+	Case 3
+	said = "Tiga"
+	Case 4
+	said = "Empat"
+	Case 5
+	said = "Lima"
+	Case 6
+	said = "Enam"
+	Case 7
+	said = "Tujuh"
+	Case 8
+	said = "Delapan"
+	Case 9
+	said = "Sembilan"
+	Case 10
+	said = "Sepuluh"
+	Case 11
+	said = "Sebelas"
+End Select
+Return said
+End Function
+</Code>
   <Width>7.76081in</Width>
   <Page>
     <PageWidth>9.5in</PageWidth>

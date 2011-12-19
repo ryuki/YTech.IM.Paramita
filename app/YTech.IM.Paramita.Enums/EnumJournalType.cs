@@ -7,8 +7,11 @@ namespace YTech.IM.Paramita.Enums
 {
     public enum EnumJournalType
     {
+        [StringValue("GL")]
         GeneralLedger,
+        [StringValue("KM")]
         CashIn,
+        [StringValue("KK")]
         CashOut
     }
 }

@@ -348,6 +348,9 @@
                           <Height>0.84611in</Height>
                           <Width>1.8289in</Width>
                           <ZIndex>6</ZIndex>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -374,7 +377,7 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox12</rd:DefaultName>
                           <Top>1.5306in</Top>
-                          <Left>0.02083in</Left>
+                          <Left>0.03125in</Left>
                           <Height>0.25in</Height>
                           <Width>1.66949in</Width>
                           <ZIndex>7</ZIndex>
@@ -409,7 +412,7 @@
                           </Paragraphs>
                           <rd:DefaultName>JournalPic</rd:DefaultName>
                           <Top>1.50629in</Top>
-                          <Left>1.76641in</Left>
+                          <Left>1.77683in</Left>
                           <Height>0.25in</Height>
                           <Width>5.40437in</Width>
                           <ZIndex>8</ZIndex>

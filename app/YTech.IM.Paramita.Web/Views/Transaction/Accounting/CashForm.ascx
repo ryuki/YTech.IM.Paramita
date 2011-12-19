@@ -10,7 +10,8 @@
                                            //UpdateTargetId = "status",
                                            InsertionMode = InsertionMode.Replace,
                                            OnBegin = "ajaxValidate",
-                                           OnSuccess = "onSavedSuccess"
+                                           OnSuccess = "onSavedSuccess",
+                                           LoadingElementId = "progress"
                                        }
 
           ))
@@ -426,7 +427,7 @@
                         }
                     },
                    { name: 'JournalDetAmmountDebet', index: 'JournalDetAmmountDebet', width: 200, sortable: false, editable: false, align: 'right', editable: false, editrules: { required: false, number: true, edithidden: true }, hidden: showJournalDetAmmountDebet },
-                   { name: 'JournalDetAmmountKredit', index: 'JournalDetAmmountKredit', width: 200, sortable: false, editable: false, align: 'right', editable: false, editrules: { required: false, number: true, edithidden: true }, hidden: showJournalDetAmmountDebet },
+                   { name: 'JournalDetAmmountKredit', index: 'JournalDetAmmountKredit', width: 200, sortable: false, editable: false, align: 'right', editable: false, editrules: { required: false, number: true, edithidden: true }, hidden: showJournalDetAmmountKredit },
                    { name: 'JournalDetDesc', index: 'BrandDesc', width: 200, sortable: false, align: 'left', editable: true, edittype: 'textarea', editoptions: { rows: "5", cols: "45" }, editrules: { required: false}}],
 
             pager: $('#listPager'),
@@ -483,40 +484,37 @@
     }
 
 
-    function OpenPopupCashAccountSearch() {
-        return OpenPopupAccount('CashAccountId');
-    }
-
-    function OpenPopupAccountSearch() {
-        return OpenPopupAccount('AccountId');
-    }
-
-    function OpenPopupAccount(src) {
-        var popup_frame = $("#popup_frame");
-        var new_url = '<%= ResolveUrl("~/Master/Account/Search") %>?src=' + src;
-        if (popup_frame.attr("src") != new_url) {
-            popup_frame.attr("src", new_url);
-        }
-        $("#popup").dialog("open");
-        return false;
-    }
-
-    function SetAccountDetail(src, accountId, accountName) {
-        //        alert(itemId);
-        //        alert(itemName);
-        //        alert(price);
-        $("#popup").dialog("close");
-        if (src == 'AccountId') {
-            $('#AccountId').attr('value', accountId);
-            $('#AccountName').attr('value', accountName);
+    function OpenPopupCashAccountSearch()
+  {
+          $("#popup_frame").attr("src", "<%= ResolveUrl("~/Master/Account/Search") %>?src=CashAccountId");
+            $("#popup").dialog("open");
+            return false;   
         }
 
-        else if (src == 'CashAccountId') {
-            $('#CashAccountId').attr('value', accountId);
-            $('#CashAccountName').attr('value', accountName);
-
+         function OpenPopupAccountSearch()
+        {
+          $("#popup_frame").attr("src", "<%= ResolveUrl("~/Master/Account/Search") %>?src=AccountId");
+            $("#popup").dialog("open");
+            return false;   
         }
-    }
+
+         function SetAccountDetail(src,accountId, accountName)
+        {
+//        alert(itemId);
+//        alert(itemName);
+//        alert(price);
+  $("#popup").dialog("close");
+  if (src == 'AccountId') {
+     $('#AccountId').attr('value', accountId);
+          $('#AccountName').attr('value', accountName); 
+}
+         
+ else if (src == 'CashAccountId') {
+     $('#CashAccountId').attr('value', accountId);
+          $('#CashAccountName').attr('value', accountName);
+
+  }       
+        }
 
     function SetJournalDetail(src, journalId) {
         $("#popup").dialog("close");

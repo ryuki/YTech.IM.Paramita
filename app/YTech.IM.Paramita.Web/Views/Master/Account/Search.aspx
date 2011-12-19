@@ -52,6 +52,7 @@
                 //                sortname: 'Id',
                 //                sortorder: "asc",
                 viewrecords: true,
+                //multiselect: true,
                 height: 300,
                 caption: 'Daftar Akun',
                 autowidth: true,

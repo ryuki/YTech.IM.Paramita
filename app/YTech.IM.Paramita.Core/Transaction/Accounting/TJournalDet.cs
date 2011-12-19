@@ -9,9 +9,9 @@ namespace YTech.IM.Paramita.Core.Transaction.Accounting
 {
     public class TJournalDet : EntityWithTypedId<string>, IHasAssignedId<string>
     {
-         public TJournalDet() { }
+        public TJournalDet() { }
 
-         public TJournalDet(TJournal journal)
+        public TJournalDet(TJournal journal)
         {
             Check.Require(journal != null, "journal may not be null");
 
@@ -20,7 +20,7 @@ namespace YTech.IM.Paramita.Core.Transaction.Accounting
 
         [DomainSignature]
         [NotNull, NotEmpty]
-         public virtual TJournal JournalId { get; protected set; }
+        public virtual TJournal JournalId { get; protected set; }
         public virtual MAccount AccountId { get; set; }
         public virtual int? JournalDetNo { get; set; }
         public virtual string JournalDetStatus { get; set; }

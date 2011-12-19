@@ -6,7 +6,8 @@
                                            //UpdateTargetId = "status",
                                            InsertionMode = InsertionMode.Replace,
                                            OnBegin = "ajaxValidate",
-                                           OnSuccess = "onSavedSuccess"
+                                           OnSuccess = "onSavedSuccess",
+                                           LoadingElementId = "progress"
                                        }
 
           ))
@@ -265,21 +266,26 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
     }).form();
 }
 
-
-    function CalculateTotal() {
-        var price = $('#TransDetPrice').val().replace(/,/g,"");
-        var qty = $('#TransDetQty').val().replace(/,/g,"");
-        var disc = $('#TransDetDisc').val().replace(/,/g,"");
-        var subtotal = (price * qty)
-        var total = subtotal - (disc * subtotal / 100);
-
-        $('#TransDetTotal').attr('value', total);
-    }
-
     $(function () {
+
+     $.fn.autoNumeric.defaults = {/* plugin defaults */
+        aNum: '0123456789', /*  allowed  numeric values */
+        aNeg: '-', /* allowed negative sign / character */
+        aSep: ',', /* allowed thousand separator character */
+        aDec: '.', /* allowed decimal separator character */
+        aSign: '', /* allowed currency symbol */
+        pSign: 'p', /* placement of currency sign prefix or suffix */
+        mNum: 15, /* max number of numerical characters to the left of the decimal */
+        mDec: 4, /* max number of decimal places */
+        dGroup: 3, /* digital grouping for the thousand separator used in Format */
+        mRound: 'S', /* method used for rounding */
+        aPad: true/* true= always Pad decimals with zeros, false=does not pad with zeros. If the value is 1000, mDec=2 and aPad=true, the output will be 1000.00, if aPad=false the output will be 1000 (no decimals added) Special Thanks to Jonas Johansson */
+    };
+
         $("#newTrans").button();
         //$("#Save").button();
   $("#btnDelete").attr('disabled', 'disabled');
+
 
          <% if (TempData[EnumCommonViewData.SaveState.ToString()] != null)
 {
@@ -296,6 +302,9 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
     });
 
     $(document).ready(function () {
+//    $.fn.autoNumeric.defaults = {/* plugin defaults */
+//        mDec: 4 /* max number of decimal places */
+//    };
      $("form").mouseover(function () {
                 generateTooltips();
             });
@@ -515,7 +524,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             }, footerrow: true, userDataOnFooter: true, altRows: true
         }).navGrid('#listPager',
                 {
-                    edit: true, add: true, del: true, search: false, refresh: true, view: false
+                    edit: false, add: true, del: true, search: false, refresh: true, view: false
                 },
                 editDialog,
                 insertDialog,
@@ -622,4 +631,15 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
         }
 
         } 
+
+    function CalculateTotal() {
+        var price = $('#TransDetPrice').val().replace(/,/g,"");
+        var qty = $('#TransDetQty').val().replace(/,/g,"");
+        var disc = $('#TransDetDisc').val().replace(/,/g,"");
+        var subtotal = (price * qty)
+        var total = subtotal - (disc * subtotal / 100);
+        //alert(total);
+        $('#TransDetTotal').attr('value', total);
+        //alert(total);
+    }
 </script>

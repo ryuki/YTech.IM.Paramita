@@ -5,7 +5,8 @@
                                        {
                                            //UpdateTargetId = "status",
                                            InsertionMode = InsertionMode.Replace,
-                                           OnSuccess = "onSavedSuccess"
+                                           OnSuccess = "onSavedSuccess",
+                                           LoadingElementId = "progress"
                                        }
 
           ))
@@ -114,6 +115,26 @@
         </td>
     </tr>
     <% } %>
+    <% if (ViewData.Model.ShowAccountTo)
+       {	%>
+    <tr>
+        <td>
+            <label for="AccountIdTo">
+               Sampai Akun :</label>
+        </td>
+        <td>
+            <%= Html.TextBox("AccountIdTo", Model.AccountIdTo)%>&nbsp;<img src='<%= Url.Content("~/Content/Images/window16.gif") %>'
+                style='cursor: hand;' id='imgAccountIdTo' />
+        </td>
+    </tr>
+    <tr>
+        <td>
+        </td>
+        <td>
+            <%= Html.TextBox("AccountNameTo", Model.AccountIdTo)%>
+        </td>
+    </tr>
+    <% } %>
      <% if (ViewData.Model.ShowGenerateDetail)
        {	%>
     <tr>
@@ -160,13 +181,17 @@
         });
 
         $('#imgAccountId').click(function () {
-            OpenPopupAccountSearch();
+            OpenPopupAccountSearch('AccountId');
+        });
+
+        $('#imgAccountIdTo').click(function () {
+            OpenPopupAccountSearch('AccountIdTo');
         });
     });
 
-    function OpenPopupAccountSearch() {
+    function OpenPopupAccountSearch(src) {
         var popup_frame = $("#popup_frame");
-        var new_url = '<%= ResolveUrl("~/Master/Account/Search") %>';
+        var new_url = '<%= ResolveUrl("~/Master/Account/Search") %>?src='+src;
         if (popup_frame.attr("src") != new_url) {
             popup_frame.attr("src", new_url);
         }
@@ -174,9 +199,15 @@
         return false;
     }
 
-    function SetAccountDetail(accountId, accountName) {
+    function SetAccountDetail(src,accountId, accountName) {
         $("#popup").dialog("close");
-        $('#AccountId').attr('value', accountId);
-        $('#AccountName').attr('value', accountName);
+        if (src == 'AccountId') {
+            $('#AccountId').attr('value', accountId);
+            $('#AccountName').attr('value', accountName);
+        }
+        else if (src == 'AccountIdTo') {
+            $('#AccountIdTo').attr('value', accountId);
+            $('#AccountNameTo').attr('value', accountName);
+        }
     }
 </script>

@@ -40,8 +40,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private readonly ITTransRepository _tTransRepository;
         private readonly ITPaymentRepository _tPaymentRepository;
         private readonly ITPaymentDetRepository _tPaymentDetRepository;
+        private readonly IMAccountRefRepository _mAccountRefRepository;
+        private readonly IMCustomerRepository _mCustomerRepository;
 
-        public PaymentController(ITJournalRepository tJournalRepository, ITJournalDetRepository tJournalDetRepository, IMCostCenterRepository mCostCenterRepository, IMAccountRepository mAccountRepository, ITRecAccountRepository tRecAccountRepository, ITRecPeriodRepository tRecPeriodRepository, IMBrandRepository mBrandRepository, IMSupplierRepository mSupplierRepository, IMWarehouseRepository mWarehouseRepository, IMItemRepository mItemRepository, ITStockCardRepository tStockCardRepository, ITStockItemRepository tStockItemRepository, ITTransDetRepository tTransDetRepository, ITTransRepository tTransRepository, ITPaymentRepository tPaymentRepository, ITPaymentDetRepository tPaymentDetRepository)
+        public PaymentController(ITJournalRepository tJournalRepository, ITJournalDetRepository tJournalDetRepository, IMCostCenterRepository mCostCenterRepository, IMAccountRepository mAccountRepository, ITRecAccountRepository tRecAccountRepository, ITRecPeriodRepository tRecPeriodRepository, IMBrandRepository mBrandRepository, IMSupplierRepository mSupplierRepository, IMWarehouseRepository mWarehouseRepository, IMItemRepository mItemRepository, ITStockCardRepository tStockCardRepository, ITStockItemRepository tStockItemRepository, ITTransDetRepository tTransDetRepository, ITTransRepository tTransRepository, ITPaymentRepository tPaymentRepository, ITPaymentDetRepository tPaymentDetRepository, IMAccountRefRepository mAccountRefRepository, IMCustomerRepository mCustomerRepository)
         {
             Check.Require(tJournalRepository != null, "tJournalRepository may not be null");
             Check.Require(tJournalDetRepository != null, "tJournalDetRepository may not be null");
@@ -59,6 +61,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             Check.Require(tTransRepository != null, "tTransRepository may not be null");
             Check.Require(tPaymentRepository != null, "tPaymentRepository may not be null");
             Check.Require(tPaymentDetRepository != null, "tPaymentDetRepository may not be null");
+            Check.Require(mAccountRefRepository != null, "mAccountRefRepository may not be null");
+            Check.Require(mCustomerRepository != null, "mCustomerRepository may not be null");
 
 
             this._tJournalRepository = tJournalRepository;
@@ -77,12 +81,16 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             this._tTransRepository = tTransRepository;
             this._tPaymentRepository = tPaymentRepository;
             this._tPaymentDetRepository = tPaymentDetRepository;
+            this._mAccountRefRepository = mAccountRefRepository;
+            this._mCustomerRepository = mCustomerRepository;
         }
+
+
 
         [Transaction]
         public ActionResult Index(EnumPaymentType paymentType)
         {
-            PaymentViewModel viewModel = PaymentViewModel.Create(paymentType, _tPaymentRepository, _tPaymentDetRepository);
+            PaymentViewModel viewModel = PaymentViewModel.Create(paymentType, _tPaymentRepository, _tPaymentDetRepository, _mSupplierRepository, _mCustomerRepository, _mCostCenterRepository);
 
             return View(viewModel);
         }
@@ -135,6 +143,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     payment.PaymentDesc = paymentVM.PaymentDesc;
                     payment.PaymentStatus = paymentVM.PaymentStatus;
                     payment.PaymentType = paymentType.ToString();
+                    payment.PaymentPic = paymentVM.PaymentPic;
                     SavePayment(payment, formCollection, isEdit);
                 }
                 else
@@ -181,7 +190,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             //        if (ListDeleteDetailTrans.Count > 0)
             //            DeleteTransactionDetail(Trans, addStock, calculateStock, ListDeleteDetailTrans.ToArray());
             //}
-            
+
             payment.PaymentDets.Clear();
 
             //save detail
@@ -215,52 +224,63 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 _tPaymentRepository.Save(payment);
 
             //save journal
-            //SaveJournal(payment);
+            SaveJournal(payment, formCollection["TransBy"], formCollection["CashAccountId"], formCollection["CostCenterId"], payment.PaymentDesc);
         }
 
-        //private void SaveJournal(TPayment payment)
-        //{
-        //    TJournal journal = new TJournal();
+        private void SaveJournal(TPayment payment, string transBy, string cashAccountId, string costCenterId, string desc)
+        {
+            TJournal journal = new TJournal();
+            journal.JournalType = EnumJournalType.GeneralLedger.ToString();
+            journal.JournalVoucherNo = Helper.CommonHelper.GetVoucherNo();
+            journal.JournalDate = payment.PaymentDate;
+            journal.JournalDesc = payment.PaymentDesc;
+            journal.JournalPic = payment.PaymentPic;
+            journal.JournalPic2 = transBy;
 
-        //    journal.SetAssignedIdTo(Guid.NewGuid().ToString());
-        //    //journal.CostCenterId = _mCostCenterRepository.Get(formCollection["Journal.CostCenterId"]);
-        //    journal.CreatedDate = DateTime.Now;
-        //    journal.CreatedBy = User.Identity.Name;
-        //    journal.DataStatus = Enums.EnumDataStatus.New.ToString();
-        //    journal.JournalDets.Clear();
+            journal.SetAssignedIdTo(Guid.NewGuid().ToString());
+            journal.CostCenterId = _mCostCenterRepository.Get(costCenterId);
+            journal.CreatedDate = DateTime.Now;
+            journal.CreatedBy = User.Identity.Name;
+            journal.DataStatus = Enums.EnumDataStatus.New.ToString();
+            journal.JournalDets.Clear();
 
-        //    TJournalDet detToInsert;
-        //    decimal total = 0;
-        //    foreach (TJournalDet det in ListJournalDet)
-        //    {
-        //        detToInsert = new TJournalDet(journal);
-        //        detToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
-        //        detToInsert.AccountId = det.AccountId;
+            MAccount accountCash = _mAccountRepository.Get(cashAccountId);
+            MAccountRef accountRef;
+            if (payment.PaymentType == EnumPaymentType.Hutang.ToString())
+            {
+                //search supplier hutang account
+                accountRef = _mAccountRefRepository.GetByRefTableId(EnumReferenceTable.Supplier, transBy);
+                //save debet
+                SaveJournalDet(journal, EnumJournalStatus.D, accountRef.AccountId, payment.PaymentTotal, desc);
+                //save kredit
+                SaveJournalDet(journal, EnumJournalStatus.K, accountCash, payment.PaymentTotal, desc);
+            }
+            else if (payment.PaymentType == EnumPaymentType.Piutang.ToString())
+            {
+                //search Customer piutang account
+                accountRef = _mAccountRefRepository.GetByRefTableId(EnumReferenceTable.Customer, transBy);
+                //save debet
+                SaveJournalDet(journal, EnumJournalStatus.D, accountCash, payment.PaymentTotal, desc);
+                //save kredit
+                SaveJournalDet(journal, EnumJournalStatus.K, accountRef.AccountId, payment.PaymentTotal, desc);
+            }
 
-        //        if (journal.JournalType == EnumJournalType.CashIn.ToString())
-        //        {
-        //            detToInsert.JournalDetStatus = EnumJournalStatus.K.ToString();
-        //        }
-        //        else if (journal.JournalType == EnumJournalType.CashOut.ToString())
-        //        {
-        //            detToInsert.JournalDetStatus = EnumJournalStatus.D.ToString();
-        //        }
-        //        else if (journal.JournalType == EnumJournalType.GeneralLedger.ToString())
-        //        {
-        //            detToInsert.JournalDetStatus = det.JournalDetStatus;
-        //        }
+            _tJournalRepository.Save(journal);
+        }
 
-        //        detToInsert.JournalDetAmmount = det.JournalDetAmmount;
-        //        detToInsert.JournalDetNo = det.JournalDetNo;
-        //        detToInsert.JournalDetDesc = det.JournalDetDesc;
-        //        detToInsert.CreatedBy = User.Identity.Name;
-        //        detToInsert.CreatedDate = DateTime.Now;
-        //        detToInsert.DataStatus = Enums.EnumDataStatus.New.ToString();
-        //        journal.JournalDets.Add(detToInsert);
-
-        //        total += det.JournalDetAmmount.Value;
-        //    }
-        //    _tJournalRepository.Save(journal);
-        //}
+        private void SaveJournalDet(TJournal journal, EnumJournalStatus enumJournalStatus, MAccount accountId, decimal? detAmmount,string desc)
+        {
+            TJournalDet detToInsert = new TJournalDet(journal);
+            detToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
+            detToInsert.AccountId = accountId;
+            detToInsert.JournalDetStatus = enumJournalStatus.ToString();
+            detToInsert.JournalDetAmmount = detAmmount;
+            detToInsert.JournalDetNo = 0;
+            detToInsert.JournalDetDesc = desc;
+            detToInsert.CreatedBy = User.Identity.Name;
+            detToInsert.CreatedDate = DateTime.Now;
+            detToInsert.DataStatus = Enums.EnumDataStatus.New.ToString();
+            journal.JournalDets.Add(detToInsert);
+        }
     }
 }

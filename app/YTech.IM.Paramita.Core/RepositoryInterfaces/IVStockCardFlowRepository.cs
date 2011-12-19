@@ -9,8 +9,8 @@ using YTech.IM.Paramita.Core.View;
 
 namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
-    public interface IVJournalDetFlowRepository : INHibernateRepositoryWithTypedId<VJournalDetFlow, string>
+    public interface IVStockCardFlowRepository : INHibernateRepositoryWithTypedId<VStockCardFlow, string>
     {
-        IList<VJournalDetFlow> GetForReport(DateTime? dateFrom, DateTime? dateTo, string costCenterId, string accountId, string accountIdTo);
+        IList<VStockCardFlow> GetByDateItemWarehouse(DateTime? dateFrom, DateTime? dateTo, string itemId, string warehouseId);
     }
 }

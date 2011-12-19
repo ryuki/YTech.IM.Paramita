@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,8 +32,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         private readonly ITRecAccountRepository _tRecAccountRepository;
         private readonly ITRecPeriodRepository _tRecPeriodRepository;
         private readonly IMAccountCatRepository _mAccountCatRepository;
+        private readonly IMWarehouseRepository _mWarehouseRepository;
+        private readonly IMAccountRefRepository _mAccountRefRepository;
+        private readonly ITStockRepository _tStockRepository;
 
-        public AccountingController(ITJournalRepository tJournalRepository, ITJournalDetRepository tJournalDetRepository, IMCostCenterRepository mCostCenterRepository, IMAccountRepository mAccountRepository, ITRecAccountRepository tRecAccountRepository, ITRecPeriodRepository tRecPeriodRepository, IMAccountCatRepository mAccountCatRepository)
+        public AccountingController(ITJournalRepository tJournalRepository, ITJournalDetRepository tJournalDetRepository, IMCostCenterRepository mCostCenterRepository, IMAccountRepository mAccountRepository, ITRecAccountRepository tRecAccountRepository, ITRecPeriodRepository tRecPeriodRepository, IMAccountCatRepository mAccountCatRepository, IMWarehouseRepository mWarehouseRepository, IMAccountRefRepository mAccountRefRepository,ITStockRepository tStockRepository)
         {
             Check.Require(tJournalRepository != null, "tJournalRepository may not be null");
             Check.Require(tJournalDetRepository != null, "tJournalDetRepository may not be null");
@@ -41,6 +45,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             Check.Require(tRecAccountRepository != null, "tRecAccountRepository may not be null");
             Check.Require(tRecPeriodRepository != null, "tRecPeriodRepository may not be null");
             Check.Require(mAccountCatRepository != null, "mAccountCatRepository may not be null");
+            Check.Require(mWarehouseRepository != null, "mWarehouseRepository may not be null");
+            Check.Require(mAccountRefRepository != null, "mAccountRefRepository may not be null");
+            Check.Require(tStockRepository != null, "tStockRepository may not be null");
 
             this._tJournalRepository = tJournalRepository;
             this._tJournalDetRepository = tJournalDetRepository;
@@ -49,6 +56,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             this._tRecAccountRepository = tRecAccountRepository;
             this._tRecPeriodRepository = tRecPeriodRepository;
             this._mAccountCatRepository = mAccountCatRepository;
+            this._mWarehouseRepository = mWarehouseRepository;
+            this._mAccountRefRepository = mAccountRefRepository;
+            this._tStockRepository = tStockRepository;
         }
 
 
@@ -211,7 +221,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             try
             {
                 _tJournalRepository.DbContext.BeginTransaction();
-                
+
                 //check first
                 TJournal journal1 = _tJournalRepository.Get(formCollection["Journal.Id"]);
                 voucherNo = journal.JournalVoucherNo;
@@ -221,7 +231,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 }
                 else
                 {
-                    voucherNo = Helper.CommonHelper.GetVoucherNo(false);
+                    EnumJournalType journalType = (EnumJournalType)Enum.Parse(typeof(EnumJournalType), journal.JournalType);
+                    voucherNo = Helper.CommonHelper.GetVoucherNo(false, journalType);
                 }
 
                 if (journal == null)
@@ -412,7 +423,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             journalDet.CreatedDate = DateTime.Now;
             journalDet.CreatedBy = User.Identity.Name;
             journalDet.DataStatus = EnumDataStatus.New.ToString();
-            
+
             ListJournalDet.Add(journalDet);
             return Content("Detail transaksi berhasil disimpan");
         }
@@ -477,8 +488,15 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Closing(ClosingViewModel viewModel, FormCollection formCollection)
         {
+            _tRecPeriodRepository.DbContext.BeginTransaction();
+
+            //make same id for journal and recap period to easier delete journal when opening
+            string closingId = Guid.NewGuid().ToString();
+
+            SaveJournalClosing(closingId, viewModel.DateFrom, viewModel.DateTo);
+
             TRecPeriod recPeriod = new TRecPeriod();
-            recPeriod.SetAssignedIdTo(Guid.NewGuid().ToString());
+            recPeriod.SetAssignedIdTo(closingId);
             recPeriod.PeriodFrom = viewModel.DateFrom.Value;
             recPeriod.PeriodTo = viewModel.DateTo.Value;
             recPeriod.PeriodType = EnumPeriodType.Custom.ToString();
@@ -500,6 +518,65 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return RedirectToAction("Closing");
         }
 
+        private void SaveJournalClosing(string closingId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            IList<MWarehouse> listWarehouse = _mWarehouseRepository.GetAll();
+            MAccountRef accountRef;
+            foreach (MWarehouse warehouse in listWarehouse)
+            {
+                string newVoucher = Helper.CommonHelper.GetVoucherNo(false);
+                TJournal journal = new TJournal();
+                journal.SetAssignedIdTo(Guid.NewGuid().ToString());
+                journal.CostCenterId = warehouse.CostCenterId;
+                journal.JournalType = EnumJournalType.GeneralLedger.ToString();
+                journal.JournalVoucherNo = newVoucher;
+                journal.JournalPic = User.Identity.Name;
+                journal.JournalDate = dateTo;
+                journal.JournalEvidenceNo = closingId;
+                //j.JournalAmmount = ammount;
+                journal.JournalDesc = "Hitung HPP";
+
+                journal.DataStatus = EnumDataStatus.New.ToString();
+                journal.CreatedBy = User.Identity.Name;
+                journal.CreatedDate = DateTime.Now;
+                journal.JournalDets.Clear();
+
+                //save persediaan awal
+                decimal? totalStockAwal = _tStockRepository.GetTotalStockBeforeDate(warehouse.Id, dateFrom.Value.AddDays(-1));
+                accountRef = _mAccountRefRepository.GetByRefTableId(EnumReferenceTable.Warehouse, warehouse.Id);
+                SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.D, totalStockAwal, "Saldo Awal Periode");
+
+                //save ikhtiar LR
+                SaveJournalDet(journal, newVoucher, Helper.AccountHelper.GetHppAccount(), EnumJournalStatus.K, totalStockAwal, "Saldo Awal Periode");
+
+                //save persediaan akhir
+                decimal? totalLastStock = _tStockRepository.GetTotalStockBeforeDate(warehouse.Id, dateTo.Value);
+                SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.K, totalLastStock, "Saldo Akhir Periode");
+
+                //save ikhtiar LR
+                SaveJournalDet(journal, newVoucher, Helper.AccountHelper.GetHppAccount(), EnumJournalStatus.D, totalLastStock, "Saldo Akhir Periode");
+
+                _tJournalRepository.Save(journal);
+            }
+
+        }
+
+        private void SaveJournalDet(TJournal journal, string newVoucher, MAccount accountId, EnumJournalStatus journalStatus, decimal? ammount, string desc)
+        {
+            TJournalDet detToInsert = new TJournalDet(journal);
+            detToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
+            detToInsert.AccountId = accountId;
+            detToInsert.JournalDetStatus = journalStatus.ToString();
+            detToInsert.JournalDetEvidenceNo = string.Empty;
+            detToInsert.JournalDetAmmount = ammount;
+            detToInsert.JournalDetNo = 0;
+            detToInsert.JournalDetDesc = desc;
+            detToInsert.CreatedBy = User.Identity.Name;
+            detToInsert.CreatedDate = DateTime.Now;
+            detToInsert.DataStatus = Enums.EnumDataStatus.New.ToString();
+            journal.JournalDets.Add(detToInsert);
+        }
+
         [Transaction]
         public ActionResult Opening()
         {
@@ -518,6 +595,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             {
                 if (!string.IsNullOrEmpty(viewModel.RecPeriodId))
                 {
+                    _tJournalRepository.DeleteByEvidenceNo(viewModel.RecPeriodId);
                     _tRecPeriodRepository.DeleteByRecPeriodId(viewModel.RecPeriodId);
                     _tRecPeriodRepository.DbContext.CommitChanges();
                 }

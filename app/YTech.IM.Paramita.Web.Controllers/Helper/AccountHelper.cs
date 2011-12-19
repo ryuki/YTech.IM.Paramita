@@ -19,7 +19,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
         private static MAccount GetDefaultAccount(EnumReferenceType referenceType)
         {
             IMAccountRepository mAccountRepository = new MAccountRepository();
-            MAccount account = mAccountRepository.Get(CommonHelper.GetReference(referenceType).ReferenceValue);
+            string accountId = CommonHelper.GetReference(referenceType).ReferenceValue;
+            MAccount account = mAccountRepository.Get(accountId);
             return account;
         }
         private static MAccount GetDefaultAccount(DefaultAccount defaultAccount, EnumReferenceType referenceType)

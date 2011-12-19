@@ -100,6 +100,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
 
         public static string GetVoucherNo(bool automatedIncrease)
         {
+            return GetVoucherNo(false, EnumJournalType.GeneralLedger);
+        }
+
+        public static string GetVoucherNo(bool automatedIncrease, EnumJournalType journalType)
+        {
             TReference refer = GetReference(EnumReferenceType.VoucherNo);
             decimal no = Convert.ToDecimal(refer.ReferenceValue) + 1;
             refer.ReferenceValue = no.ToString();
@@ -111,9 +116,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Helper
                 referenceRepository.DbContext.CommitTransaction();
             }
 
-            string formatFactur = "GRAHA/[XXX]/[MONTH]/[YEAR]";
+            string formatFactur = "GRAHA/[TYPE]/[XXX]/[MONTH]/[YEAR]";
             StringBuilder result = new StringBuilder();
             result.Append(formatFactur);
+            result.Replace("[TYPE]", GetStringValue(journalType));
             result.Replace("[XXX]", GetFactur(5, no));
             result.Replace("[MONTH]", DateTime.Today.ToString("MMM").ToUpper());
             result.Replace("[YEAR]", DateTime.Now.Year.ToString());

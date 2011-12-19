@@ -25,25 +25,25 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         public override void SaveJournal(TTrans trans, decimal totalHPP)
         {
-            //string desc = string.Format("Pembelian dari {0}", trans.TransBy);
-            //string newVoucher = Helper.CommonHelper.GetVoucherNo(false);
-            ////save header of journal
-            //TJournal journal = SaveJournalHeader(newVoucher, trans, desc);
-            //MAccountRef accountRef = null;
+            string desc = string.Format("Pembelian dari {0}", trans.TransBy);
+            string newVoucher = Helper.CommonHelper.GetVoucherNo(false);
+            //save header of journal
+            TJournal journal = SaveJournalHeader(trans.WarehouseId.CostCenterId, newVoucher, trans.TransBy, trans.TransDate, trans.TransFactur, desc);
+            MAccountRef accountRef = null;
 
-            ////save pembelian
-            //SaveJournalDet(journal, newVoucher, Helper.AccountHelper.GetPurchaseAccount(), EnumJournalStatus.D, trans.TransGrandTotal.Value, trans, desc);
-            //if (trans.TransPaymentMethod == EnumPaymentMethod.Tunai.ToString())
-            //{
-            //    //save cash
-            //    SaveJournalDet(journal, newVoucher, Helper.AccountHelper.GetCashAccount(), EnumJournalStatus.K, trans.TransGrandTotal.Value, trans, desc);
-            //}
-            //else
-            //{
-            //    accountRef = AccountRefRepository.GetByRefTableId(EnumReferenceTable.Supplier, trans.TransBy);
-            //    //save hutang
-            //    SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.K, trans.TransGrandTotal.Value, trans, desc);
-            //}
+            //save pembelian
+            SaveJournalDet(journal, newVoucher, Helper.AccountHelper.GetPurchaseAccount(), EnumJournalStatus.D, totalHPP, trans.TransFactur, desc);
+            if (trans.TransPaymentMethod == EnumPaymentMethod.Tunai.ToString())
+            {
+                //save cash
+                SaveJournalDet(journal, newVoucher, Helper.AccountHelper.GetCashAccount(), EnumJournalStatus.K, totalHPP, trans.TransFactur, desc);
+            }
+            else
+            {
+                accountRef = AccountRefRepository.GetByRefTableId(EnumReferenceTable.Supplier, trans.TransBy);
+                //save hutang
+                SaveJournalDet(journal, newVoucher, accountRef.AccountId, EnumJournalStatus.K, totalHPP, trans.TransFactur, desc);
+            }
 
             ////save persediaan
             //accountRef = AccountRefRepository.GetByRefTableId(EnumReferenceTable.Warehouse, trans.WarehouseId.Id);
@@ -52,10 +52,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             ////save ikhtiar LR
             //SaveJournalDet(journal, newVoucher, Helper.AccountHelper.GetIkhtiarLRAccount(), EnumJournalStatus.K, totalHPP, trans, desc);
 
-            //JournalRepository.Save(journal);
+            JournalRepository.Save(journal);
 
-            ////save journal ref
-            //SaveJournalRef(trans, journal);
+            //save journal ref
+            SaveJournalRef(journal, trans.Id, trans.TransStatus, trans.TransDesc);
         }
 
         #endregion

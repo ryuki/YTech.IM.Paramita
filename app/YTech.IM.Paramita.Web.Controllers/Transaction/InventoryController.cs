@@ -111,57 +111,92 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [ValidateAntiForgeryToken]      // Helps avoid CSRF attacks
         [Transaction]                   // Wraps a transaction around the action
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Purchase(TTrans Trans, FormCollection formCollection)
+        public ActionResult Purchase(TransactionFormViewModel viewModel, FormCollection formCollection)
         {
-            return SaveTransactionRef(Trans, formCollection);
+            return SaveTransactionRef(viewModel, formCollection);
         }
 
-        private ActionResult SaveTransactionRef(TTrans Trans, FormCollection formCollection)
+        private ActionResult SaveTransactionRef(TransactionFormViewModel viewModel, FormCollection formCollection)
         {
-            _tTransRepository.DbContext.BeginTransaction();
-            if (Trans == null)
-            {
-                Trans = new TTrans();
-            }
-            Trans.SetAssignedIdTo(formCollection["Trans.Id"]);
-            Trans.CreatedDate = DateTime.Now;
-            Trans.CreatedBy = User.Identity.Name;
-            Trans.DataStatus = Enums.EnumDataStatus.New.ToString();
-            Trans.TransSubTotal = ListTransRef.Sum(x => x.TransIdRef.TransSubTotal);
-            _tTransRepository.Save(Trans);
-            _tTransRepository.DbContext.CommitTransaction();
-
-            _tTransRefRepository.DbContext.BeginTransaction();
-            TTransRef detToInsert;
-            foreach (TTransRef det in ListTransRef)
-            {
-                detToInsert = new TTransRef();
-                detToInsert.SetAssignedIdTo(det.Id);
-                detToInsert.TransId = Trans;
-                detToInsert.TransIdRef = det.TransIdRef;
-                detToInsert.TransRefDesc = det.TransRefDesc;
-                detToInsert.TransRefStatus = det.TransRefStatus;
-
-                detToInsert.CreatedBy = User.Identity.Name;
-                detToInsert.CreatedDate = DateTime.Now;
-                detToInsert.DataStatus = EnumDataStatus.New.ToString();
-                _tTransRefRepository.Save(detToInsert);
-            }
+            string Message = string.Empty;
+            bool Success = true;
+            string FacturNo = string.Empty;
             try
             {
+                _tTransRepository.DbContext.BeginTransaction();
+                TTrans trans = new TTrans();
+                //if (Trans == null)
+                //{
+                //    Trans = new TTrans();
+                //}
+                trans.SetAssignedIdTo(viewModel.TransId);
+                trans.TransBy = viewModel.TransBy;
+                trans.TransDate = viewModel.TransDate;
+                trans.WarehouseId = viewModel.WarehouseId;
+                trans.TransFactur = viewModel.TransFactur;
+                trans.TransPaymentMethod = viewModel.TransPaymentMethod;
+                trans.TransStatus = viewModel.TransStatus;
+                trans.UnitTypeId = viewModel.UnitTypeId;
+                trans.JobTypeId = viewModel.JobTypeId;
+                trans.WarehouseIdTo = viewModel.WarehouseIdTo;
+                trans.TransDesc = viewModel.TransDesc;
+
+                trans.CreatedDate = DateTime.Now;
+                trans.CreatedBy = User.Identity.Name;
+                trans.DataStatus = Enums.EnumDataStatus.New.ToString();
+                trans.TransSubTotal = ListTransRef.Sum(x => x.TransIdRef.TransSubTotal);
+                trans.TransRefs.Clear();
+                //_tTransRepository.DbContext.CommitTransaction();
+
+                //_tTransRefRepository.DbContext.BeginTransaction();
+                TTransRef detToInsert;
+                foreach (TTransRef det in ListTransRef)
+                {
+                    detToInsert = new TTransRef(trans);
+                    detToInsert.SetAssignedIdTo(det.Id);
+                    //detToInsert.TransId = trans;
+                    detToInsert.TransIdRef = det.TransIdRef;
+                    detToInsert.TransRefDesc = det.TransRefDesc;
+                    detToInsert.TransRefStatus = det.TransRefStatus;
+
+                    detToInsert.CreatedBy = User.Identity.Name;
+                    detToInsert.CreatedDate = DateTime.Now;
+                    detToInsert.DataStatus = EnumDataStatus.New.ToString();
+                    trans.TransRefs.Add(detToInsert);
+                }
+                _tTransRepository.Save(trans);
+                //save journal
+                SaveJournal(trans, trans.TransSubTotal.Value);
+
                 _tTransRefRepository.DbContext.CommitTransaction();
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Success;
+
+                //if (!isDelete)
+                Message = "Data berhasil disimpan.";
+                //else
+                //    Message = "Data berhasil dihapus.";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _tTransRefRepository.DbContext.RollbackTransaction();
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Failed;
+                Success = false;
+                //if (!isDelete)
+                Message = "Data gagal disimpan.";
+                Message += "Error : " + ex.GetBaseException().Message;
             }
-            if (!Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString()))
+            var e = new
             {
-                return RedirectToAction(Trans.TransStatus);
-            }
-            return RedirectToAction("Index");
+                Success,
+                Message,
+                FacturNo
+            };
+            return Json(e, JsonRequestBehavior.AllowGet);
+            //if (!Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString()))
+            //{
+            //    return RedirectToAction(Trans.TransStatus);
+            //}
+            //return RedirectToAction("Index");
         }
 
         public ActionResult ReturPurchase()
@@ -806,6 +841,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     detToInsert.TransDetPrice = det.TransDet.TransDetPrice;
                     detToInsert.TransDetDisc = det.TransDet.TransDetDisc;
                     detToInsert.TransDetTotal = det.TransDet.TransDetTotal;
+                    detToInsert.TransDetTotal = det.TransDet.TransDetTotal;
+                    detToInsert.TransDetDesc = det.TransDet.TransDetDesc;
                     //if (jobType != null)
                     //    detToInsert.JobTypeId = jobType;
                     //else
@@ -972,7 +1009,54 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                             trans.Id, 
                             trans.TransFactur, 
                             trans.TransDate.HasValue ? trans.TransDate.Value.ToString(Helper.CommonHelper.DateFormat): null,
-                            trans.TransDesc
+                            trans.TransDesc,
+                            trans.TransGrandTotal.HasValue ? trans.TransGrandTotal.Value.ToString(Helper.CommonHelper.NumberFormat): null
+                        }
+                    }).ToArray()
+            };
+
+
+            return Json(jsonData, JsonRequestBehavior.AllowGet);
+        }
+
+        [Transaction]
+        public ActionResult GetListTransNotRef(string transStatus, string warehouseId, string transBy)
+        {
+            IList<TTrans> transList = _tTransRepository.GetTransNotRefList(warehouseId, transStatus, transBy);
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("{0}:{1}", string.Empty, "-Pilih Faktur-");
+            foreach (TTrans trans in transList)
+            {
+                sb.AppendFormat(";{0}:{1}", trans.Id, trans.TransFactur);
+            }
+            return Content(sb.ToString());
+        }
+
+        [Transaction]
+        public ActionResult ListTransNotPaid(string sidx, string sord, int page, int rows, string searchBy, string searchText, string transStatus, string transBy)
+        {
+            int totalRecords = 0;
+            var transList = _tTransRepository.GetPagedTransNotPaidList(sidx, sord, page, rows, ref totalRecords, searchBy, searchText, transStatus);
+            int pageSize = rows;
+            int totalPages = (int)Math.Ceiling((float)totalRecords / (float)pageSize);
+
+            var jsonData = new
+            {
+                total = totalPages,
+                page = page,
+                records = totalRecords,
+                rows = (
+                    from trans in transList
+                    select new
+                    {
+                        i = trans.Id.ToString(),
+                        cell = new string[] {
+                            trans.Id, 
+                            trans.TransFactur, 
+                            trans.TransDate.HasValue ? trans.TransDate.Value.ToString(Helper.CommonHelper.DateFormat): null,
+                            trans.TransDesc,
+                            trans.TransGrandTotal.HasValue ? trans.TransGrandTotal.Value.ToString(Helper.CommonHelper.NumberFormat): null
                         }
                     }).ToArray()
             };
@@ -985,7 +1069,11 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         public ActionResult GetJsonTrans(string transId)
         {
             TTrans trans = _tTransRepository.Get(transId);
-            ConvertListDet(trans.TransDets.ToList());
+
+            if (trans.TransStatus == EnumTransactionStatus.Purchase.ToString())
+                ConvertListDetRef(trans.TransRefs.ToList());
+            else
+                ConvertListDet(trans.TransDets.ToList());
 
             //set new array list for delete id 
             //to prevent deleted id before
@@ -1005,6 +1093,23 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
             };
             return Json(t, JsonRequestBehavior.AllowGet);
+        }
+
+        private void ConvertListDetRef(List<TTransRef> listRef)
+        {
+            ListTransRef = listRef;
+
+            //TTransDet det;
+            //TransDetViewModel detViewModel;
+            //ListTransRef = new List<TTransRef>();
+            //for (int i = 0; i < listDet.Count; i++)
+            //{
+            //    det = listDet[i];
+            //    detViewModel = new TransDetViewModel();
+            //    detViewModel.TransDet = det;
+            //    detViewModel.IsNew = false;
+            //    ListDetTrans.Add(detViewModel);
+            //}
         }
 
         private void ConvertListDet(List<TTransDet> listDet)
