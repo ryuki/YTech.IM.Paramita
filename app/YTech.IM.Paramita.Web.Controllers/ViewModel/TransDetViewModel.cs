@@ -10,5 +10,6 @@ namespace YTech.IM.Paramita.Web.Controllers.ViewModel
     {
         public TTransDet TransDet { get; internal set; }
         public bool IsNew { get; internal set; }
+        public bool IsChanged { get; internal set; }
     }
 }

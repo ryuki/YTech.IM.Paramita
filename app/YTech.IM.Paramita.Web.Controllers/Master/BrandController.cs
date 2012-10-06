@@ -166,6 +166,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Master
             return Content(sb.ToString());
         }
 
+        [ValidateInput(false)]
         public virtual void Export(FormCollection formCollection)
         {
             StringWriter sw = new StringWriter();

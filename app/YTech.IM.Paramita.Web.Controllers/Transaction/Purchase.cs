@@ -27,6 +27,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         {
             string desc = string.Format("Pembelian dari {0}", trans.TransBy);
             string newVoucher = Helper.CommonHelper.GetVoucherNo(false);
+            //delete journal first
+            DeleteJournal(EnumReferenceTable.Transaction, trans.TransStatus, trans.Id);
             //save header of journal
             TJournal journal = SaveJournalHeader(trans.WarehouseId.CostCenterId, newVoucher, trans.TransBy, trans.TransDate, trans.TransFactur, desc);
             MAccountRef accountRef = null;

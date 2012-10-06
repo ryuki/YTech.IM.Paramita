@@ -6,8 +6,10 @@ using YTech.IM.Paramita.Core.Transaction.Inventory;
 
 namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 {
-    public interface ITTransRefRepository : INHibernateRepository<TTransRef>
+    public interface ITTransRefRepository : INHibernateRepositoryWithTypedId<TTransRef, string>
     {
         TTransRef GetByRefId(string transId);
+
+        void DeleteByTransId(string transId);
     }
 }

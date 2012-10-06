@@ -36,11 +36,11 @@
                 Simpan</button>
             <button id="btnPrint" name="btnPrint" type="submit">
                 Cetak Bukti</button>
-            <% if (!ViewData.Model.Journal.JournalType.Equals(EnumJournalType.GeneralLedger.ToString()))
-               { %>
+          <%--  <% if (!ViewData.Model.Journal.JournalType.Equals(EnumJournalType.GeneralLedger.ToString()))
+               { %>--%>
             <button id="btnPrintKwitansi" name="btnPrintKwitansi" type="submit">
                 Cetak Kwitansi</button>
-            <% } %>
+           <%-- <% } %>--%>
             <button id="btnList" name="btnList" type="button">
                 Edit
                 <%= ViewData.Model.Title %></button>

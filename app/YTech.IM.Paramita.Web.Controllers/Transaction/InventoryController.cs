@@ -113,10 +113,18 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Purchase(TransactionFormViewModel viewModel, FormCollection formCollection)
         {
-            return SaveTransactionRef(viewModel, formCollection);
+            if (formCollection["btnSave"] != null)
+            {
+                string msg = string.Empty;
+                return SaveTransactionRef(viewModel, formCollection, false);
+            }
+            else if (formCollection["btnDelete"] != null)
+                return SaveTransactionRef(viewModel, formCollection, true);
+
+            return View();
         }
 
-        private ActionResult SaveTransactionRef(TransactionFormViewModel viewModel, FormCollection formCollection)
+        private ActionResult SaveTransactionRef(TransactionFormViewModel viewModel, FormCollection formCollection, bool isDelete)
         {
             string Message = string.Empty;
             bool Success = true;
@@ -124,57 +132,93 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             try
             {
                 _tTransRepository.DbContext.BeginTransaction();
-                TTrans trans = new TTrans();
-                //if (Trans == null)
-                //{
-                //    Trans = new TTrans();
-                //}
-                trans.SetAssignedIdTo(viewModel.TransId);
-                trans.TransBy = viewModel.TransBy;
-                trans.TransDate = viewModel.TransDate;
-                trans.WarehouseId = viewModel.WarehouseId;
-                trans.TransFactur = viewModel.TransFactur;
-                trans.TransPaymentMethod = viewModel.TransPaymentMethod;
-                trans.TransStatus = viewModel.TransStatus;
-                trans.UnitTypeId = viewModel.UnitTypeId;
-                trans.JobTypeId = viewModel.JobTypeId;
-                trans.WarehouseIdTo = viewModel.WarehouseIdTo;
-                trans.TransDesc = viewModel.TransDesc;
-
-                trans.CreatedDate = DateTime.Now;
-                trans.CreatedBy = User.Identity.Name;
-                trans.DataStatus = Enums.EnumDataStatus.New.ToString();
-                trans.TransSubTotal = ListTransRef.Sum(x => x.TransIdRef.TransSubTotal);
-                trans.TransRefs.Clear();
-                //_tTransRepository.DbContext.CommitTransaction();
-
-                //_tTransRefRepository.DbContext.BeginTransaction();
-                TTransRef detToInsert;
-                foreach (TTransRef det in ListTransRef)
+                TTrans trans = _tTransRepository.Get(viewModel.TransId);
+                if (!isDelete)
                 {
-                    detToInsert = new TTransRef(trans);
-                    detToInsert.SetAssignedIdTo(det.Id);
-                    //detToInsert.TransId = trans;
-                    detToInsert.TransIdRef = det.TransIdRef;
-                    detToInsert.TransRefDesc = det.TransRefDesc;
-                    detToInsert.TransRefStatus = det.TransRefStatus;
+                    bool isEdit = false;
+                    if (trans == null)
+                    {
+                        isEdit = false;
+                        //if 
+                        trans = new TTrans();
+                        trans.SetAssignedIdTo(viewModel.TransId);
+                        trans.CreatedDate = DateTime.Now;
+                        trans.CreatedBy = User.Identity.Name;
+                        trans.DataStatus = Enums.EnumDataStatus.New.ToString();
+                    }
+                    else
+                    {
+                        isEdit = true;
+                        trans.ModifiedDate = DateTime.Now;
+                        trans.ModifiedBy = User.Identity.Name;
+                        trans.DataStatus = Enums.EnumDataStatus.Updated.ToString();
+                    }
 
-                    detToInsert.CreatedBy = User.Identity.Name;
-                    detToInsert.CreatedDate = DateTime.Now;
-                    detToInsert.DataStatus = EnumDataStatus.New.ToString();
-                    trans.TransRefs.Add(detToInsert);
+                    //delete trans ref first
+                    if (isEdit)
+                    {
+                        _tTransRefRepository.DeleteByTransId(trans.Id);
+                    }
+
+                    trans.TransBy = viewModel.TransBy;
+                    trans.TransDate = viewModel.TransDate;
+                    trans.WarehouseId = viewModel.WarehouseId;
+                    trans.TransFactur = viewModel.TransFactur;
+                    trans.TransPaymentMethod = viewModel.TransPaymentMethod;
+                    trans.TransStatus = viewModel.TransStatus;
+                    trans.UnitTypeId = viewModel.UnitTypeId;
+                    trans.JobTypeId = viewModel.JobTypeId;
+                    trans.WarehouseIdTo = viewModel.WarehouseIdTo;
+                    trans.TransDesc = viewModel.TransDesc;
+
+                    trans.TransSubTotal = ListTransRef.Where(x => x.DataStatus != EnumDataStatus.Deleted.ToString()).Sum(x => x.TransIdRef.TransSubTotal);
+                    trans.TransRefs.Clear();
+                    //_tTransRepository.DbContext.CommitTransaction();
+
+                    //_tTransRefRepository.DbContext.BeginTransaction();
+
+                    TTransRef detToInsert;
+                    foreach (TTransRef det in ListTransRef)
+                    {
+                        detToInsert = new TTransRef(trans);
+                        detToInsert.SetAssignedIdTo(det.Id);
+                        //detToInsert.TransId = trans;
+                        detToInsert.TransIdRef = det.TransIdRef;
+                        detToInsert.TransRefDesc = det.TransRefDesc;
+                        detToInsert.TransRefStatus = det.TransRefStatus;
+
+                        detToInsert.CreatedBy = User.Identity.Name;
+                        detToInsert.CreatedDate = DateTime.Now;
+                        detToInsert.DataStatus = EnumDataStatus.New.ToString();
+                        trans.TransRefs.Add(detToInsert);
+                    }
+
+                    if (isEdit)
+                        _tTransRepository.Update(trans);
+                    else
+                        _tTransRepository.Save(trans);
+                    //save journal
+                    SaveJournal(trans, trans.TransSubTotal.Value);
+
                 }
-                _tTransRepository.Save(trans);
-                //save journal
-                SaveJournal(trans, trans.TransSubTotal.Value);
+                else
+                {
+                    if (trans != null)
+                    {
+                        //delete journal first
+                        DeleteJournal(trans);
+                        _tTransRefRepository.DeleteByTransId(trans.Id);
+                        _tTransRepository.Delete(trans);
+                    }
+                }
 
                 _tTransRefRepository.DbContext.CommitTransaction();
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Success;
 
-                //if (!isDelete)
-                Message = "Data berhasil disimpan.";
-                //else
-                //    Message = "Data berhasil dihapus.";
+                if (!isDelete)
+                    Message = "Data berhasil disimpan.";
+                else
+                    Message = "Data berhasil dihapus.";
             }
             catch (Exception ex)
             {
@@ -182,7 +226,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 TempData[EnumCommonViewData.SaveState.ToString()] = EnumSaveState.Failed;
                 Success = false;
                 //if (!isDelete)
-                Message = "Data gagal disimpan.";
+                if (!isDelete)
+                    Message = "Data gagal disimpan.";
+                else
+                    Message = "Data gagal dihapus.";
                 Message += "Error : " + ex.GetBaseException().Message;
             }
             var e = new
@@ -396,8 +443,9 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         [Transaction]
         public virtual ActionResult GetListTransRef(string sidx, string sord, int page, int rows)
         {
+            _tTransRepository.DbContext.BeginTransaction();
             int totalRecords = 0;
-            var transRefs = ListTransRef;
+            //var transRefs = ListTransRef;
             int pageSize = rows;
             int totalPages = (int)Math.Ceiling((float)totalRecords / (float)pageSize);
 
@@ -407,7 +455,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 page = page,
                 records = totalRecords,
                 rows = (
-                    from det in transRefs
+                    from det in ListTransRef
                     select new
                     {
                         i = det.Id.ToString(),
@@ -429,21 +477,22 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
         {
             //remove use native predicate function from list, awesome, no need foreach anymore
             ListDetTrans.Remove(ListDetTrans.Find(ByTransDetId(viewModel.Id)));
-            ListDeleteDetailTrans.Add(viewModel.Id);
+            //ListDeleteDetailTrans.Add(viewModel.Id);
 
             UpdateNumericData(viewModel, formCollection);
-            TTransDet transDetToInsert = new TTransDet();
+            TTransDet transDetToInsert = _tTransDetRepository.Get(viewModel.Id);
             TransferFormValuesTo(transDetToInsert, viewModel);
             transDetToInsert.ItemId = _mItemRepository.Get(formCollection["ItemId"]);
-            transDetToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
-            transDetToInsert.ModifiedDate = DateTime.Now;
-            transDetToInsert.ModifiedBy = User.Identity.Name;
-            transDetToInsert.DataStatus = EnumDataStatus.Updated.ToString();
+            //transDetToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
+            //transDetToInsert.ModifiedDate = DateTime.Now;
+            //transDetToInsert.ModifiedBy = User.Identity.Name;
+            //transDetToInsert.DataStatus = EnumDataStatus.Updated.ToString();
 
 
             TransDetViewModel detViewModel = new TransDetViewModel();
             detViewModel.TransDet = transDetToInsert;
             detViewModel.IsNew = false;
+            detViewModel.IsChanged = true;
             ListDetTrans.Add(detViewModel);
             return Content("Detail transaksi berhasil disimpan");
         }
@@ -503,6 +552,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             TransDetViewModel detViewModel = new TransDetViewModel();
             detViewModel.TransDet = transDetToInsert;
             detViewModel.IsNew = true;
+            detViewModel.IsChanged = true;
             ListDetTrans.Add(detViewModel);
             return Content("Detail transaksi berhasil disimpan");
         }
@@ -740,6 +790,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 {
                     if (tr != null)
                     {
+                        DeleteJournal(tr);
+
                         //call back stock for deleted
                         DeleteTransaction(tr, !addStock, calculateStock);
                     }
@@ -811,7 +863,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             //Trans.CreatedBy = User.Identity.Name;
             //Trans.DataStatus = Enums.EnumDataStatus.New.ToString();
 
-            Trans.TransDets.Clear();
+            //if (!isEdit)
+                Trans.TransDets.Clear();
 
             //save stock card
 
@@ -830,11 +883,17 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 detToSave = new TransDetViewModel();
                 detToSave.IsNew = det.IsNew;
 
-                if (det.IsNew)
+                if (det.IsChanged)
                 {
-
-                    detToInsert = new TTransDet(Trans);
-                    detToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
+                    if (det.IsNew)
+                    {
+                        detToInsert = new TTransDet(Trans);
+                        detToInsert.SetAssignedIdTo(Guid.NewGuid().ToString());
+                    }
+                    else
+                    {
+                        detToInsert = _tTransDetRepository.Get(det.TransDet.Id);
+                    }
                     detToInsert.ItemId = det.TransDet.ItemId;
                     detToInsert.ItemUomId = det.TransDet.ItemUomId;
                     detToInsert.TransDetQty = det.TransDet.TransDetQty;
@@ -847,21 +906,42 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                     //    detToInsert.JobTypeId = jobType;
                     //else
                     //    detToInsert.JobTypeId = det.JobTypeId;
-                    detToInsert.CreatedBy = User.Identity.Name;
-                    detToInsert.CreatedDate = DateTime.Now;
-                    detToInsert.DataStatus = Enums.EnumDataStatus.New.ToString();
+
+                    if (det.IsNew)
+                    {
+                        detToInsert.CreatedBy = User.Identity.Name;
+                        detToInsert.CreatedDate = DateTime.Now;
+                        detToInsert.DataStatus = Enums.EnumDataStatus.New.ToString();
                     Trans.TransDets.Add(detToInsert);
+                    }
+                    else
+                    {
+                        detToInsert.ModifiedBy = User.Identity.Name;
+                        detToInsert.ModifiedDate = DateTime.Now;
+                        detToInsert.DataStatus = Enums.EnumDataStatus.Updated.ToString();
+                        _tTransDetRepository.Update(detToInsert);
+                    }
+
                     detToSave.TransDet = detToInsert;
                 }
-                else
-                {
-                    detToSave.TransDet = det.TransDet;
-                }
+                //else
+                //{
+                //    detToInsert = det.TransDet;
+                //    detToInsert.ModifiedBy = User.Identity.Name;
+                //    detToInsert.ModifiedDate = DateTime.Now;
+                //    detToInsert.DataStatus = Enums.EnumDataStatus.Updated.ToString();
+                //    _tTransDetRepository.Update(detToInsert);
+
+                //    detToSave.TransDet = detToInsert;
+                //}
                 listDetToSave.Add(detToSave);
                 total += det.TransDet.TransDetTotal.HasValue ? det.TransDet.TransDetTotal.Value : 0;
             }
             Trans.TransSubTotal = total;
-            _tTransRepository.Save(Trans);
+            if (isEdit)
+                _tTransRepository.Update(Trans);
+            else
+                _tTransRepository.Save(Trans);
             //_tTransRepository.DbContext.CommitTransaction();
 
             //_tStockCardRepository.DbContext.BeginTransaction();
@@ -939,12 +1019,12 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
                 //delete stock ref for not add stock
                 if (!addStock)
                 {
-                    _tStockRefRepository.DeleteByTransDetId(detailIdList);
+                    _tStockRefRepository.DeleteByTransDetId(detailIdList, User.Identity.Name);
                 }
             }
 
             //delete detail
-            _tTransDetRepository.DeleteById(detailIdList);
+            _tTransDetRepository.DeleteById(detailIdList, User.Identity.Name);
         }
 
         public ActionResult Budgeting()
@@ -1097,7 +1177,15 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 
         private void ConvertListDetRef(List<TTransRef> listRef)
         {
-            ListTransRef = listRef;
+            //ListTransRef = listRef;
+
+            TTransRef tRef = null;
+            foreach (TTransRef transRef in listRef)
+            {
+                //tRef = _tTransRefRepository.Get(transRef.Id);
+                transRef.TransIdRef = _tTransRepository.Get(transRef.TransIdRef.Id);
+                ListTransRef.Add(transRef);
+            }
 
             //TTransDet det;
             //TransDetViewModel detViewModel;
@@ -1120,10 +1208,14 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             for (int i = 0; i < listDet.Count; i++)
             {
                 det = listDet[i];
-                detViewModel = new TransDetViewModel();
-                detViewModel.TransDet = det;
-                detViewModel.IsNew = false;
-                ListDetTrans.Add(detViewModel);
+                if (det.DataStatus != EnumDataStatus.Deleted.ToString())
+                {
+                    detViewModel = new TransDetViewModel();
+                    detViewModel.TransDet = det;
+                    detViewModel.IsNew = false;
+                    detViewModel.IsChanged = false;
+                    ListDetTrans.Add(detViewModel);
+                }
             }
         }
 

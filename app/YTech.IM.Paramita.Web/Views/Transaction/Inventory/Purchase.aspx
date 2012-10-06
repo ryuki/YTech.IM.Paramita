@@ -30,7 +30,7 @@
     <div>
         <span id="toolbar" class="ui-widget-header ui-corner-all"><a id="newTrans" href="<%= Url.Action(ViewData.Model.Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString()) ? "Index" : Model.Trans.TransStatus.ToString(), "Inventory") %>">
             Baru</a>
-            <button id="Save" type="submit">
+            <button id="btnSave" name="btnSave" type="submit">
                 Simpan</button>
         <button id="btnDelete" name="btnDelete" type="submit">
             Hapus</button>
@@ -326,9 +326,9 @@ function onSavedSuccess(e) {
 //            alert(src);
 //            alert(transId);
             $("#popup").dialog("close");
-            alert("close");
+            //alert("close");
             var trans = $.parseJSON($.ajax({ url: '<%= Url.Action("GetJsonTrans","Inventory") %>?transId=' + transId, async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the trans.'); } }).responseText);
-            alert(trans);
+            //alert(trans);
             if (trans) {
                 if (trans.TransDate) {
                     var transDate = new Date(parseInt(trans.TransDate.substr(6)));

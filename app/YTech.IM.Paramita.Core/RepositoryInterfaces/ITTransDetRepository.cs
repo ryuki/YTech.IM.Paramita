@@ -18,6 +18,6 @@ namespace YTech.IM.Paramita.Core.RepositoryInterfaces
 
         IList<TTransDet> GetListById(object[] detailIdList);
 
-        void DeleteById(object[] detailIdList);
+        void DeleteById(object[] detailIdList, string userName);
     }
 }

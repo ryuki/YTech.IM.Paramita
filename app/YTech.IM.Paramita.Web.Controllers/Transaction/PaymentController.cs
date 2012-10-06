@@ -234,8 +234,8 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             journal.JournalVoucherNo = Helper.CommonHelper.GetVoucherNo();
             journal.JournalDate = payment.PaymentDate;
             journal.JournalDesc = payment.PaymentDesc;
-            journal.JournalPic = payment.PaymentPic;
-            journal.JournalPic2 = transBy;
+            journal.JournalPic2 = payment.PaymentPic;
+            journal.JournalPic = transBy;
 
             journal.SetAssignedIdTo(Guid.NewGuid().ToString());
             journal.CostCenterId = _mCostCenterRepository.Get(costCenterId);

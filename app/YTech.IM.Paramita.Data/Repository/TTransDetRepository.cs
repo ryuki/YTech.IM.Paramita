@@ -20,13 +20,15 @@ namespace YTech.IM.Paramita.Data.Repository
             sql.AppendLine(@"   select det
                                 from TTransDet as det
                                     left outer join det.TransId trans
-                                    where trans.TransStatus = :TransStatus ");
+                                where det.DataStatus <> :dataStatus 
+                                    and trans.TransStatus = :TransStatus ");
             if (item != null)
                 sql.AppendLine(@"   and det.ItemId = :item");
             if (warehouse != null)
                 sql.AppendLine(@"   and trans.WarehouseId = :warehouse");
             IQuery q = Session.CreateQuery(sql.ToString());
-            q.SetString("TransStatus", "Budgeting");
+            q.SetString("dataStatus", EnumDataStatus.Deleted.ToString());
+            q.SetString("TransStatus", EnumTransactionStatus.Budgeting.ToString());
             if (item != null)
                 q.SetEntity("item", item);
             if (warehouse != null)
@@ -41,7 +43,8 @@ namespace YTech.IM.Paramita.Data.Repository
                 @"   select sum(det.TransDetQty)
                                 from TTransDet as det
                                     left outer join det.TransId trans
-                                    where trans.TransStatus = :TransStatus ");
+                                where det.DataStatus <> :dataStatus 
+                                    and  trans.TransStatus = :TransStatus ");
             if (item != null)
                 sql.AppendLine(@"   and det.ItemId = :item");
             if (warehouse != null)
@@ -50,6 +53,7 @@ namespace YTech.IM.Paramita.Data.Repository
                 sql.AppendLine(@"   and trans.TransDate between :dateFrom and :dateTo ");
 
             IQuery q = Session.CreateQuery(sql.ToString());
+            q.SetString("dataStatus", EnumDataStatus.Deleted.ToString());
             q.SetString("TransStatus", transStatus);
             if (item != null)
                 q.SetEntity("item", item);
@@ -73,7 +77,8 @@ namespace YTech.IM.Paramita.Data.Repository
                 @"   select det
                         from TTransDet as det
                             left outer join det.TransId trans
-                        where trans.TransStatus = :TransStatus ");
+                        where det.DataStatus <> :dataStatus 
+                            and trans.TransStatus = :TransStatus ");
             if (dateFrom.HasValue && dateTo.HasValue)
                 sql.AppendLine(@"   and trans.TransDate between :dateFrom and :dateTo");
             if (!string.IsNullOrEmpty(warehouseId))
@@ -82,6 +87,7 @@ namespace YTech.IM.Paramita.Data.Repository
             sql.AppendLine(@"   order by trans.TransDate, trans.TransFactur, det.TransDetNo ");
 
             IQuery q = Session.CreateQuery(sql.ToString());
+            q.SetString("dataStatus", EnumDataStatus.Deleted.ToString());
             q.SetString("TransStatus", transStatus.ToString());
             if (dateFrom.HasValue && dateTo.HasValue)
             {
@@ -99,21 +105,31 @@ namespace YTech.IM.Paramita.Data.Repository
             StringBuilder sql = new StringBuilder();
             sql.AppendLine(@"   select det
                                 from TTransDet det
-                                        where det.Id in (:detailIdList) ");
+                                        where  det.DataStatus <> :dataStatus 
+                                    and det.Id in (:detailIdList) ");
 
             IQuery q = Session.CreateQuery(sql.ToString());
+            q.SetString("dataStatus", EnumDataStatus.Deleted.ToString());
             q.SetParameterList("detailIdList", detailIdList);
             return q.List<TTransDet>();
         }
 
-        public void DeleteById(object[] detailIdList)
+        public void DeleteById(object[] detailIdList, string userName)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine(@"   delete
+            //            sql.AppendLine(@"   delete
+            //                                from TTransDet det
+            //                                        where det.Id in (:detailIdList) ");
+            sql.AppendLine(@"   update
                                 from TTransDet det
+                                set DataStatus = :dataStatus,
+                                    ModifiedBy = :userName,
+                                    ModifiedDate = getDate()
                                         where det.Id in (:detailIdList) ");
 
             IQuery q = Session.CreateQuery(sql.ToString());
+            q.SetString("dataStatus", EnumDataStatus.Deleted.ToString());
+            q.SetString("userName", userName);
             q.SetParameterList("detailIdList", detailIdList);
             q.ExecuteUpdate();
         }

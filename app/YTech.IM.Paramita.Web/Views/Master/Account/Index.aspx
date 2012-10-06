@@ -135,7 +135,15 @@
                 editDialog,
                 insertDialog,
                 deleteDialog
-            );
+            )
+            .navButtonAdd('#listPager', {
+                caption: "Export ke Excel",
+                buttonicon: "ui-icon-save",
+                onClickButton: function () {
+                    exportExcel($(this));
+                },
+                position: "last"
+            });
 
             function GetParents() {
                 var parents = $.ajax({ url: '<%= Url.Action("GetList", "Account") %>?accountCatId=' + $('#AccountCatId option:selected').val(), async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the parents.'); } }).responseText;

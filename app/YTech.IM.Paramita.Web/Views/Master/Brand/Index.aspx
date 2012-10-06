@@ -101,7 +101,7 @@
                 deleteDialog
             )
             .navButtonAdd('#listPager', {
-                caption: "Export to Excel",
+                caption: "Export ke Excel",
                 buttonicon: "ui-icon-save",
                 onClickButton: function () {
                     exportExcel($(this));
@@ -109,43 +109,7 @@
                 position: "last"
             });
         });
-
-        function exportExcel(grid) {
-            //alert('export to excel');
-            var mya = new Array();
-            mya = grid.getDataIDs();  // Get All IDs
-            var data = grid.getRowData(mya[0]);     // Get First row to get the labels
-            var columnNames = grid.jqGrid('getGridParam', 'colNames');
-//            for (i = 0; i < columnNames.length; i++) {
-//                alert(columnNames[i]);
-//            }
-            var colNames = new Array();
-            var ii = 0;
-            var j = 1;
-            var html = "";
-            for (var i in data) {
-                //alert(columnNames[j]);
-                html = html + columnNames[j] + ",";
-                colNames[ii++] = i;
-                j++;
-            }    // capture col names
-            html = html + "\n";   // Output header with end of line
-            for (i = 0; i < mya.length; i++) {
-                data = grid.getRowData(mya[i]); // get each row
-                for (j = 0; j < colNames.length; j++) {
-                    html = html + data[colNames[j]] + ","; // output each column as tab delimited
-                }
-                html = html + "\n";  // output each row with end of line
-
-            }
-            html = html + "\n";  // end of line at the end
-            //alert(html);
-            document.forms[0].csvBuffer.value = html;
-            document.forms[0].method = 'POST';
-            document.forms[0].action = '<%= Url.Action("Export", "Brand") %>';  // send it to server which will open this contents in excel file
-            document.forms[0].target = '_blank';
-            document.forms[0].submit();
-        }      
+   
     </script>
 </asp:Content>
 
@@ -160,7 +124,7 @@
         <p></p>
     </div>
 
-    <form method="post">
+    <%--<form method="post">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
-</form>
+</form>--%>
 </asp:Content>

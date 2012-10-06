@@ -112,7 +112,15 @@
                 editDialog,
                 insertDialog,
                 deleteDialog
-            );
+            )
+            .navButtonAdd('#listPager', {
+                caption: "Export ke Excel",
+                buttonicon: "ui-icon-save",
+                onClickButton: function () {
+                    exportExcel($(this));
+                },
+                position: "last"
+            });
         });       
 
                 var departments = $.ajax({ url: '<%= Url.Action("GetList","Department") %>', async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the Department.'); } }).responseText;

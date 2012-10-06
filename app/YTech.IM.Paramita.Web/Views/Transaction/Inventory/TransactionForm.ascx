@@ -1,17 +1,18 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl<TransactionFormViewModel>" %>
 <%--<% using (Html.BeginForm())
    { %>--%>
-<% using (Ajax.BeginForm(new AjaxOptions
-                                       {
-                                           //UpdateTargetId = "status",
-                                           InsertionMode = InsertionMode.Replace,
-                                           OnBegin = "ajaxValidate",
-                                           OnSuccess = "onSavedSuccess",
-                                           LoadingElementId = "progress"
-                                       }
+<%
+    using (Ajax.BeginForm(new AjaxOptions
+                              {
+                                  //UpdateTargetId = "status",
+                                  InsertionMode = InsertionMode.Replace,
+                                  OnBegin = "ajaxValidate",
+                                  OnSuccess = "onSavedSuccess",
+                                  LoadingElementId = "progress"
+                              }
 
-          ))
-   {%>
+        ))
+    {%>
 <div id="status">
 </div>
 <div class="ui-state-highlight ui-corner-all" style="padding: 5pt; margin-bottom: 5pt;
@@ -21,14 +22,19 @@
         <span id="error_msg"></span>.<br clear="all" />
     </p>
 </div>
-<%= Html.AntiForgeryToken() %>
-<%= Html.Hidden("Trans.Id", (ViewData.Model.Trans != null) ? ViewData.Model.Trans.Id : "")%>
-<%= Html.Hidden("Trans.TransStatus", (ViewData.Model.Trans != null) ? ViewData.Model.Trans.TransStatus : "")%>
-<%= Html.Hidden("IsGenerateFactur", ViewData.Model.IsGenerateFactur)%>
-<%= Html.Hidden("IsAddStock", ViewData.Model.IsAddStock.ToString())%>
-<%= Html.Hidden("IsCalculateStock", ViewData.Model.IsCalculateStock.ToString())%>
+<%=Html.AntiForgeryToken()%>
+<%=Html.Hidden("Trans.Id", (ViewData.Model.Trans != null) ? ViewData.Model.Trans.Id : "")%>
+<%=Html.Hidden("Trans.TransStatus",
+                                      (ViewData.Model.Trans != null) ? ViewData.Model.Trans.TransStatus : "")%>
+<%=Html.Hidden("IsGenerateFactur", ViewData.Model.IsGenerateFactur)%>
+<%=Html.Hidden("IsAddStock", ViewData.Model.IsAddStock.ToString())%>
+<%=Html.Hidden("IsCalculateStock", ViewData.Model.IsCalculateStock.ToString())%>
 <div>
-    <span id="toolbar" class="ui-widget-header ui-corner-all"><a id="newTrans" href="<%= Url.Action(ViewData.Model.Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString()) ? "Index" : Model.Trans.TransStatus.ToString(), "Inventory") %>">
+    <span id="toolbar" class="ui-widget-header ui-corner-all"><a id="newTrans" href="<%=
+            Url.Action(
+                ViewData.Model.Trans.TransStatus.Equals(EnumTransactionStatus.PurchaseOrder.ToString())
+                    ? "Index"
+                    : Model.Trans.TransStatus.ToString(), "Inventory")%>">
         Baru</a>
         <button id="btnSave" type="submit" name="btnSave">
             Simpan</button>
@@ -39,7 +45,7 @@
         <%-- <%= ViewData.Model.Title %>--%>
         <button id="btnList" name="btnList" type="button">
             Edit
-            <%= ViewData.Model.Title %></button>
+            <%=ViewData.Model.Title%></button>
     </span>
 </div>
 <table>
@@ -50,122 +56,141 @@
     <tr>
         <td>
             <table>
-                <% if (ViewData.Model.ViewDate)
-                   {	%>
+                <%
+        if (ViewData.Model.ViewDate)
+        {%>
                 <tr>
                     <td>
                         <label for="Trans_TransDate">
                             Tanggal :</label>
                     </td>
                     <td>
-                        <%= Html.TextBox("Trans.TransDate", (Model.Trans.TransDate.HasValue) ? Model.Trans.TransDate.Value.ToString("dd-MMM-yyyy") : "")%>
-                        <%= Html.ValidationMessage("Trans.TransDate")%>
+                        <%=Html.TextBox("Trans.TransDate",
+                                           (Model.Trans.TransDate.HasValue)
+                                               ? Model.Trans.TransDate.Value.ToString("dd-MMM-yyyy")
+                                               : "")%>
+                        <%=Html.ValidationMessage("Trans.TransDate")%>
                     </td>
                 </tr>
-                <% } %>
-                <% if (ViewData.Model.ViewFactur)
-                   {	%>
+                <%
+        }%>
+                <%
+        if (ViewData.Model.ViewFactur)
+        {%>
                 <tr>
                     <td>
                         <label for="Trans_TransFactur">
                             No Faktur :</label>
                     </td>
                     <td>
-                        <%= Html.TextBox("Trans.TransFactur", Model.Trans.TransFactur)%>
-                        <%= Html.ValidationMessage("Trans.TransFactur")%>
+                        <%=Html.TextBox("Trans.TransFactur", Model.Trans.TransFactur)%>
+                        <%=Html.ValidationMessage("Trans.TransFactur")%>
                     </td>
                 </tr>
-                <% } %>
-                <% if (ViewData.Model.ViewPaymentMethod)
-                   {	%>
+                <%
+        }%>
+                <%
+        if (ViewData.Model.ViewPaymentMethod)
+        {%>
                 <tr>
                     <td>
                         <label for="Trans_TransPaymentMethod">
                             Cara Pembayaran :</label>
                     </td>
                     <td>
-                        <%= Html.DropDownList("Trans.TransPaymentMethod", Model.PaymentMethodList)%>
-                        <%= Html.ValidationMessage("Trans.TransPaymentMethod")%>
+                        <%=Html.DropDownList("Trans.TransPaymentMethod", Model.PaymentMethodList)%>
+                        <%=Html.ValidationMessage("Trans.TransPaymentMethod")%>
                     </td>
                 </tr>
-                <% } %>
+                <%
+        }%>
             </table>
         </td>
         <td>
             <table>
-                <% if (ViewData.Model.ViewSupplier)
-                   {	%>
+                <%
+        if (ViewData.Model.ViewSupplier)
+        {%>
                 <tr>
                     <td>
                         <label for="Trans_TransBy">
                             Supplier :</label>
                     </td>
                     <td>
-                        <%= Html.DropDownList("Trans.TransBy", Model.SupplierList)%>
-                        <%= Html.ValidationMessage("Trans.TransBy")%>
+                        <%=Html.DropDownList("Trans.TransBy", Model.SupplierList)%>
+                        <%=Html.ValidationMessage("Trans.TransBy")%>
                     </td>
                 </tr>
-                <% } %>
-                <% if (ViewData.Model.ViewWarehouse)
-                   {	%>
+                <%
+        }%>
+                <%
+        if (ViewData.Model.ViewWarehouse)
+        {%>
                 <tr>
                     <td>
                         <label for="Trans_WarehouseId">
                             Gudang :</label>
                     </td>
                     <td>
-                        <%= Html.DropDownList("Trans.WarehouseId", Model.WarehouseList)%>
-                        <%= Html.ValidationMessage("Trans.WarehouseId")%>
+                        <%=Html.DropDownList("Trans.WarehouseId", Model.WarehouseList)%>
+                        <%=Html.ValidationMessage("Trans.WarehouseId")%>
                     </td>
                 </tr>
-                <% } %>
-                <% if (ViewData.Model.ViewWarehouseTo)
-                   {	%>
+                <%
+        }%>
+                <%
+        if (ViewData.Model.ViewWarehouseTo)
+        {%>
                 <tr>
                     <td>
                         <label for="Trans_WarehouseIdTo">
                             Ke Gudang :</label>
                     </td>
                     <td>
-                        <%= Html.DropDownList("Trans.WarehouseIdTo", Model.WarehouseToList)%>
-                        <%= Html.ValidationMessage("Trans.WarehouseIdTo")%>
+                        <%=Html.DropDownList("Trans.WarehouseIdTo", Model.WarehouseToList)%>
+                        <%=Html.ValidationMessage("Trans.WarehouseIdTo")%>
                     </td>
                 </tr>
-                <% } %>
+                <%
+        }%>
             </table>
         </td>
         <td>
             <table>
-                <% if (ViewData.Model.ViewUnitType)
-                   {%>
+                <%
+        if (ViewData.Model.ViewUnitType)
+        {%>
                 <tr>
                     <td>
                         <label for="Trans_UnitTypeId">
                             Tipe Unit :</label>
                     </td>
                     <td>
-                        <%= Html.DropDownList("Trans.UnitTypeId", Model.UnitTypeList) %>
-                        <%= Html.ValidationMessage("Trans.UnitTypeId") %>
+                        <%=Html.DropDownList("Trans.UnitTypeId", Model.UnitTypeList)%>
+                        <%=Html.ValidationMessage("Trans.UnitTypeId")%>
                     </td>
                 </tr>
-                <%}%>
+                <%
+        }%>
             </table>
         </td>
         <td>
             <table>
-                <% if (ViewData.Model.ViewJobType)
-                   {%>
+                <%
+        if (ViewData.Model.ViewJobType)
+        {%>
                 <tr>
                     <td>
                         <label for="Trans_JobTypeId">
                             Jenis Pekerjaan :</label>
                     </td>
                     <td>
-                        <%= Html.DropDownList("Trans.JobTypeId", Model.JobTypeList) %>
-                        <%= Html.ValidationMessage("Trans.JobTypeId") %>
+                        <%=Html.DropDownList("Trans.JobTypeId", Model.JobTypeList)%>
+                        <%=Html.ValidationMessage("Trans.JobTypeId")%>
                     </td>
                 </tr>
-                <%}%>
+                <%
+        }%>
             </table>
         </td>
     </tr>
@@ -183,7 +208,10 @@
 <div id='popup'>
     <iframe width='100%' height='380px' id="popup_frame" frameborder="0"></iframe>
 </div>
-<% } %>
+<%
+    }%>
+
+    
 <script language="javascript" type="text/javascript">
 
 
@@ -199,7 +227,7 @@ function onSavedSuccess(e) {
         if (msg) {
 
             if (msg == "redirect") {
-                var urlreport = '<%= ResolveUrl("~/ReportViewer.aspx?rpt=RptPrintFactur") %>';
+                var urlreport = '<%=ResolveUrl("~/ReportViewer.aspx?rpt=RptPrintFactur")%>';
                    // alert(urlreport);
                 window.open(urlreport);
             }
@@ -222,33 +250,68 @@ function onSavedSuccess(e) {
 
 
 function ajaxValidate() {
-var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
+var imgerror = '<%=Url.Content("~/Content/Images/cross.gif")%>';
     return $('form').validate({
     rules: {
-       <% if (ViewData.Model.ViewFactur)
-                   {	%> "Trans.TransFactur": { required: true  } <% } %>
-     <% if (ViewData.Model.ViewDate)
-                   {	%>
-        ,"Trans.TransDate": { required: true } <% } %>
-         <% if (ViewData.Model.ViewSupplier)
-                   {	%> ,"Trans.TransBy": { required: true  } <% } %>
-         <% if (ViewData.Model.ViewWarehouse)
-                   {	%> ,"Trans.WarehouseId": { required: true  }<% } %>
-        <% if (ViewData.Model.ViewWarehouseTo)
-                   {	%> ,"Trans.WarehouseIdTo": { required: true  }<% } %>
-        <% if (ViewData.Model.ViewUnitType)
-                   {	%> ,"Trans.UnitTypeId": { required: true  }<% } %>
-        <% if (ViewData.Model.ViewJobType)
-                   {	%> ,"Trans.JobTypeId": { required: true  }<% } %>
+       <%
+    if (ViewData.Model.ViewFactur)
+    {%> "Trans.TransFactur": { required: true  } <%
+    }%>
+     <%
+    if (ViewData.Model.ViewDate)
+    {%>
+        ,"Trans.TransDate": { required: true } <%
+    }%>
+         <%
+    if (ViewData.Model.ViewSupplier)
+    {%> ,"Trans.TransBy": { required: true  } <%
+    }%>
+         <%
+    if (ViewData.Model.ViewWarehouse)
+    {%> ,"Trans.WarehouseId": { required: true  }<%
+    }%>
+        <%
+    if (ViewData.Model.ViewWarehouseTo)
+    {%> ,"Trans.WarehouseIdTo": { required: true  }<%
+    }%>
+        <%
+    if (ViewData.Model.ViewUnitType)
+    {%> ,"Trans.UnitTypeId": { required: true  }<%
+    }%>
+        <%
+    if (ViewData.Model.ViewJobType)
+    {%> ,"Trans.JobTypeId": { required: true  }<%
+    }%>
     },
     messages: {
-        <% if (ViewData.Model.ViewFactur) {	%>  "Trans.TransFactur": "<img id='TransFacturerror' src='"+imgerror+"' hovertext='No Faktur harus diisi' />"<% } %>
-       <% if (ViewData.Model.ViewDate) {	%> ,"Trans.TransDate": "<img id='TransDateerror' src='"+imgerror+"' hovertext='Tanggal tidak boleh kosong' />" <% } %>
-        <% if (ViewData.Model.ViewSupplier) {	%>  ,"Trans.TransBy": "<img id='TransByerror' src='"+imgerror+"' hovertext='Pilih Supplier' />"<% } %>
-        <% if (ViewData.Model.ViewWarehouse) {	%>  ,"Trans.WarehouseId": "<img id='WarehouseIderror' src='"+imgerror+"' hovertext='Pilih Gudang' />"<% } %>
-        <% if (ViewData.Model.ViewWarehouseTo) {	%>  ,"Trans.WarehouseIdTo": "<img id='WarehouseIdToerror' src='"+imgerror+"' hovertext='Pilih Gudang Tujuan' />"<% } %>
-        <% if (ViewData.Model.ViewUnitType) {	%>  ,"Trans.UnitTypeId": "<img id='UnitTypeIdToerror' src='"+imgerror+"' hovertext='Pilih Tipe Unit' />"<% } %>
-        <% if (ViewData.Model.ViewJobType) {	%>  ,"Trans.JobTypeId": "<img id='JobTypeIdToerror' src='"+imgerror+"' hovertext='Pilih Jenis Pekerjaan' />"<% } %>
+        <%
+    if (ViewData.Model.ViewFactur)
+    {%>  "Trans.TransFactur": "<img id='TransFacturerror' src='"+imgerror+"' hovertext='No Faktur harus diisi' />"<%
+    }%>
+       <%
+    if (ViewData.Model.ViewDate)
+    {%> ,"Trans.TransDate": "<img id='TransDateerror' src='"+imgerror+"' hovertext='Tanggal tidak boleh kosong' />" <%
+    }%>
+        <%
+    if (ViewData.Model.ViewSupplier)
+    {%>  ,"Trans.TransBy": "<img id='TransByerror' src='"+imgerror+"' hovertext='Pilih Supplier' />"<%
+    }%>
+        <%
+    if (ViewData.Model.ViewWarehouse)
+    {%>  ,"Trans.WarehouseId": "<img id='WarehouseIderror' src='"+imgerror+"' hovertext='Pilih Gudang' />"<%
+    }%>
+        <%
+    if (ViewData.Model.ViewWarehouseTo)
+    {%>  ,"Trans.WarehouseIdTo": "<img id='WarehouseIdToerror' src='"+imgerror+"' hovertext='Pilih Gudang Tujuan' />"<%
+    }%>
+        <%
+    if (ViewData.Model.ViewUnitType)
+    {%>  ,"Trans.UnitTypeId": "<img id='UnitTypeIdToerror' src='"+imgerror+"' hovertext='Pilih Tipe Unit' />"<%
+    }%>
+        <%
+    if (ViewData.Model.ViewJobType)
+    {%>  ,"Trans.JobTypeId": "<img id='JobTypeIdToerror' src='"+imgerror+"' hovertext='Pilih Jenis Pekerjaan' />"<%
+    }%>
         },
         invalidHandler: function(form, validator) {
           var errors = validator.numberOfInvalids();
@@ -287,16 +350,20 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
   $("#btnDelete").attr('disabled', 'disabled');
 
 
-         <% if (TempData[EnumCommonViewData.SaveState.ToString()] != null)
-{
-    if (TempData[EnumCommonViewData.SaveState.ToString()].Equals(EnumSaveState.Failed))
-    {%>
+         <%
+    if (TempData[EnumCommonViewData.SaveState.ToString()] != null)
+    {
+        if (TempData[EnumCommonViewData.SaveState.ToString()].Equals(EnumSaveState.Failed))
+        {%>
    $("#btnPrint").attr('disabled', 'disabled');
     <%
+        }
     }
-} else { %>
+    else
+    {%>
   $("#btnPrint").attr('disabled', 'disabled');
-<% } %>
+<%
+    }%>
 
         $("#Trans_TransDate").datepicker({ dateFormat: "dd-M-yy" });
     });
@@ -325,13 +392,13 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             });
 
         $("#btnList").click(function () {
-        var urlList = '<%= ResolveUrl("~/Transaction/Inventory/ListTransaction") %>';
+        var urlList = '<%=ResolveUrl("~/Transaction/Inventory/ListTransaction")%>';
           $("#popup_frame").attr("src", urlList+"?src=cc&transStatus="+$("#Trans_TransStatus").val());
             $("#popup").dialog("open");
                                });
 
       var editDialog = {
-            url: '<%= Url.Action("Update", "Inventory") %>'
+            url: '<%=Url.Action("Update", "Inventory")%>'
                 , closeAfterAdd: true
                 , closeAfterEdit: true
                 , modal: true
@@ -356,10 +423,11 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                         OpenPopupItemSearch();
                         });
 
-                        <% if (ViewData.Model.ViewPrice)
-               {%> 
+                        <%
+    if (ViewData.Model.ViewPrice)
+    {%> 
 //                    $('#ItemId').change(function () {
-//                        var price = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/Get") %>/' + $('#ItemId :selected').val(), async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
+//                        var price = $.ajax({ url: '<%=ResolveUrl("~/Master/Item/Get")%>/' + $('#ItemId :selected').val(), async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
 //                        $('#TransDetPrice').attr('value', price);
 //                        CalculateTotal(); 
 //                    });
@@ -373,7 +441,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                         CalculateTotal();
                     });
                    <%
-               }%>  
+    }%>  
                 }
                 , width: "400"
                 , afterComplete: function (response, postdata, formid) {
@@ -382,7 +450,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 }
         };
         var insertDialog = {
-            url: '<%= Url.Action("Insert", "Inventory") %>'
+            url: '<%=Url.Action("Insert", "Inventory")%>'
                 , closeAfterAdd: true
                 , closeAfterEdit: true
                 , modal: true
@@ -395,16 +463,18 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 , afterShowForm: function (eparams) {
                     RemoveAttribute("Id","disabled");  
                     $('#TransDetQty').attr('value', '1');
-                     <% if (ViewData.Model.ViewPrice)
-               {%> 
+                     <%
+    if (ViewData.Model.ViewPrice)
+    {%> 
                     $('#TransDetPrice').attr('value', '0');
                     $('#TransDetDisc').attr('value', '0');
                     $('#TransDetTotal').attr('value', '0');
 
-                       <% if (ViewData.Model.ViewPrice)
-               {%> 
+                       <%
+        if (ViewData.Model.ViewPrice)
+        {%> 
 //                    $('#ItemId').change(function () {
-//                        var price = $.ajax({ url: '<%= ResolveUrl("~/Master/Item/Get") %>/' + $('#ItemId :selected').val(), async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
+//                        var price = $.ajax({ url: '<%=ResolveUrl("~/Master/Item/Get")%>/' + $('#ItemId :selected').val(), async: false, cache: false, success: function (data, result) { if (!result) alert('Failure to retrieve the items.'); } }).responseText;
 //                        $('#TransDetPrice').attr('value', price);
 //                        CalculateTotal(); 
 //                    });
@@ -418,9 +488,9 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                         CalculateTotal();
                     });
                    <%
-               }%>  
+        }%>  
                    <%
-               }%>  
+    }%>  
                   
                      $('#imgItemId').click(function(){
                         OpenPopupItemSearch();
@@ -433,7 +503,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
                 , width: "400"
         };
         var deleteDialog = {
-            url: '<%= Url.Action("Delete", "Inventory") %>'
+            url: '<%=Url.Action("Delete", "Inventory")%>'
                 , modal: true
                 , width: "400"
                 , afterComplete: function (response, postdata, formid) {
@@ -449,7 +519,11 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
         $.jgrid.edit.editCaption = "Edit Detail";
         $.jgrid.del.caption = "Hapus Detail";
         $.jgrid.del.msg = "Anda yakin menghapus Detail yang dipilih?";
-        var imgLov = '<%= Url.Content("~/Content/Images/window16.gif") %>';
+        var imgLov = '<%=Url.Content("~/Content/Images/window16.gif")%>';
+        var allowedit = false;
+       <% if (ViewData.Model.TransStatus == EnumTransactionStatus.Budgeting.ToString()) { %>
+    allowedit = true;
+     <% } %>
         $("#list").jqGrid({
             url: '<%= Url.Action("List", "Inventory", new { usePrice = ViewData.Model.ViewPrice} ) %>',
             datatype: 'json',
@@ -524,7 +598,7 @@ var imgerror = '<%= Url.Content("~/Content/Images/cross.gif") %>';
             }, footerrow: true, userDataOnFooter: true, altRows: true
         }).navGrid('#listPager',
                 {
-                    edit: false, add: true, del: true, search: false, refresh: true, view: false
+                    edit: allowedit, add: true, del: true, search: false, refresh: true, view: false
                 },
                 editDialog,
                 insertDialog,

@@ -21,7 +21,17 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
 {
     public partial class InventoryController
     {
+        private void DeleteJournal(TTrans trans)
+        {
+            SaveOrDeleteJournal(trans, 0, true);
+        }
+
         private void SaveJournal(TTrans trans, decimal totalHPP)
+        {
+            SaveOrDeleteJournal(trans, totalHPP, false);
+        }
+
+        private void SaveOrDeleteJournal(TTrans trans, decimal totalHPP, bool isDelete)
         {
             AbstractTransaction tr = null;
             //set class to its transaction
@@ -60,7 +70,10 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             tr.AccountRefRepository = _mAccountRefRepository;
             tr.JournalRepository = _tJournalRepository;
             tr.JournalRefRepository = _tJournalRefRepository;
-            tr.SaveJournal(trans, totalHPP);
+            if (isDelete)
+                tr.DeleteJournal(EnumReferenceTable.Transaction, trans.TransStatus, trans.Id);
+            else
+                tr.SaveJournal(trans, totalHPP);
         }
     }
 }

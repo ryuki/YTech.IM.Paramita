@@ -132,7 +132,15 @@
                 editDialog,
                 insertDialog,
                 deleteDialog
-            );
+            )
+            .navButtonAdd('#listPager', {
+                caption: "Export ke Excel",
+                buttonicon: "ui-icon-save",
+                onClickButton: function () {
+                    exportExcel($(this));
+                },
+                position: "last"
+            });
         });
 
         function OpenPopupAccountSearch() { 

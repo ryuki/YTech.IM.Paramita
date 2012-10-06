@@ -11,7 +11,7 @@ using YTech.IM.Paramita.Core.Transaction.Inventory;
 
 namespace YTech.IM.Paramita.Data.Repository
 {
-    public class TTransRefRepository : NHibernateRepository<TTransRef>, ITTransRefRepository
+    public class TTransRefRepository : NHibernateRepositoryWithTypedId<TTransRef, string>, ITTransRefRepository
     {
         public TTransRef GetByRefId(string transId)
         {
@@ -24,6 +24,18 @@ namespace YTech.IM.Paramita.Data.Repository
             q.SetString("transId", transId);
             q.SetMaxResults(1);
             return q.UniqueResult<TTransRef>();
+        }
+
+        public void DeleteByTransId(string transId)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendLine(@"   delete
+                                from TTransRef as ref
+                                    where ref.TransId.Id = :transId ");
+
+            IQuery q = Session.CreateQuery(sql.ToString());
+            q.SetString("transId", transId);
+            q.ExecuteUpdate();
         }
     }
 }

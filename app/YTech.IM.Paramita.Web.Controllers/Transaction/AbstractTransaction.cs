@@ -56,7 +56,7 @@ namespace YTech.IM.Paramita.Web.Controllers.Transaction
             return j;
         }
 
-        protected void DeleteJournal(EnumReferenceTable referenceTable, string referenceType, string referenceId)
+        public void DeleteJournal(EnumReferenceTable referenceTable, string referenceType, string referenceId)
         {
             TJournalRef journalRef = JournalRefRepository.GetByReference(referenceTable,
                                                                          referenceType, referenceId);
